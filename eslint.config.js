@@ -31,7 +31,7 @@ export default [
 
   ...tseslint.configs.recommended,
 
-  // общие настройки окружения / парсера / плагинов
+  // общие настройки окружения и плагинов
   {
     plugins: {
       '@typescript-eslint': tseslint.plugin,
@@ -49,10 +49,8 @@ export default [
         ...globals.es2022,
       },
       parserOptions: {
-        parser: tseslint.parser,
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: ['./tsconfig.eslint.json'],
       },
     },
 
@@ -84,6 +82,17 @@ export default [
   // правила для TS/TSX
   {
     files: ['**/*.{ts,tsx}'],
+
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: ['./tsconfig.eslint.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+
     rules: {
       ...prettierPlugin.configs.recommended.rules,
       ...eslintConfigPrettier.rules,
@@ -120,7 +129,10 @@ export default [
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
       ],
 
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
