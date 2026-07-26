@@ -10,5 +10,6 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "cSpell.words": ["ассеты", "парсера", "резолвить"],
   "jest.jestCommandLine": "npm test -- --config jest.config.ts",
-  "jest.rootPath": "."
+  "jest.rootPath": ".",
+  "js/ts.tsdk.path": "./node_modules/typescript/lib"
 }
