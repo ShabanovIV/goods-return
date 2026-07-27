@@ -1,0 +1,20 @@
+@use '../../../styles/buttons/primary.scss';
+@use '../../../styles/buttons/secondary.scss';
+
+.primary {
+  @include primary.button(
+    $background: var(--color-accent),
+    $hover-background: var(--color-accent-hover),
+    $focus-color: var(--color-focus-ring)
+  );
+}
+
+.secondary {
+  @include secondary.button(
+    $border-color: var(--color-border),
+    $color: var(--color-text),
+    $hover-border-color: var(--color-accent-border),
+    $focus-color: var(--color-focus-ring),
+    $background: var(--color-card)
+  );
+}
