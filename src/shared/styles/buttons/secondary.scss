@@ -1,0 +1,13 @@
+@use './base';
+
+@mixin button($border-color, $color, $hover-border-color, $focus-color, $background: #ffffff) {
+  @include base.button($focus-color: $focus-color);
+
+  border-color: $border-color;
+  background: $background;
+  color: $color;
+
+  &:hover {
+    border-color: $hover-border-color;
+  }
+}
