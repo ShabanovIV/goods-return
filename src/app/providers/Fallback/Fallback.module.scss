@@ -1,0 +1,119 @@
+@use '../../../shared/styles/buttons/primary.scss';
+@use '../../../shared/styles/buttons/secondary.scss';
+
+.root {
+  display: grid;
+  min-height: 100dvh;
+  padding: var(--padding);
+  place-items: center;
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+.card {
+  width: 100%;
+  max-width: 35rem;
+  padding: 1.75rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: 1.125rem;
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-md);
+}
+
+.icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 999rem;
+  background-color: var(--color-accent-soft);
+
+  svg {
+    width: 1.375rem;
+    height: 1.375rem;
+    fill: var(--color-accent);
+  }
+}
+
+.title {
+  margin: 0.875rem 0 0.5rem;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.125rem;
+}
+
+.retryButton {
+  @include primary.button(
+    $background: var(--color-accent),
+    $hover-background: var(--color-accent-hover),
+    $focus-color: var(--color-focus-ring)
+  );
+}
+
+.homeButton {
+  @include secondary.button(
+    $border-color: var(--color-border),
+    $color: var(--color-text),
+    $hover-border-color: var(--color-accent-border),
+    $focus-color: var(--color-focus-ring),
+    $background: var(--color-card)
+  );
+}
+
+.details {
+  margin-top: 0.875rem;
+}
+
+.detailsToggle {
+  padding: 0.5rem 0;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+
+  &:focus-visible {
+    border-radius: 0.625rem;
+    outline: 0.125rem solid var(--color-focus-ring);
+    outline-offset: 0.125rem;
+  }
+}
+
+.detailsToggle::-webkit-details-marker {
+  display: none;
+}
+
+.detailsBox {
+  max-height: 15rem;
+  margin: 0.625rem 0 0;
+  padding: 0.75rem 0.875rem;
+  overflow: auto;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-strong);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
