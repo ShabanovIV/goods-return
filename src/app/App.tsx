@@ -1,10 +1,10 @@
 import s from './App.module.scss';
+import { AppRouter } from './router/AppRouter';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <div className={s.root} data-testid="app-root">
-      <h1>Landing-Box</h1>
-      <p>Стартовый каркас работает ✅</p>
+      <AppRouter />
     </div>
   );
 };
