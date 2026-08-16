@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import '@testing-library/jest-dom';
 // eslint-disable-next-line import-x/no-nodejs-modules -- Jest needs the Node encoder polyfill.
 import { TextDecoder, TextEncoder } from 'util';
