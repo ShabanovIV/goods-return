@@ -1,0 +1,27 @@
+export {
+  claimApi,
+  useAddAttachmentMutation,
+  useGetAttachmentTypesQuery,
+  useGetClientDemandsQuery,
+  useGetFlawsQuery,
+  useGetReasonsQuery,
+  useLazyGetAttachmentTypesQuery,
+  useLazyGetClientDemandsQuery,
+  useLazyGetFlawsQuery,
+  useLazyGetReasonsQuery,
+} from './model/claimApi';
+export type {
+  AddAttachmentQueryParams,
+  AddAttachmentResponse,
+  AttachmentType,
+  ClaimActionResponse,
+  ClaimDataResponse,
+  ClaimDictionaryItem,
+  ClaimErrorResponse,
+  ClaimFlaw,
+  GetAttachmentTypesResponse,
+  GetClientDemandsResponse,
+  GetFlawsQueryParams,
+  GetFlawsResponse,
+  GetReasonsResponse,
+} from './types/claim';
