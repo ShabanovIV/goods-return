@@ -6,5 +6,9 @@ import { TextDecoder, TextEncoder } from 'util';
 
 Object.assign(globalThis, { TextDecoder, TextEncoder });
 Object.assign(globalThis, {
+  __API_URL__: '/',
+  __DEVELOPMENT_TOKEN__: undefined,
+});
+Object.assign(globalThis, {
   fetch: jest.fn(() => Promise.reject(new Error('Unexpected request in test'))),
 });

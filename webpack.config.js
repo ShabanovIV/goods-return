@@ -1,13 +1,33 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import webpack from 'webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const envPath = path.resolve(__dirname, '.env');
+
+const { error: dotenvError } = dotenv.config({ path: envPath, quiet: true });
+
+if (dotenvError && dotenvError.code !== 'ENOENT') {
+  throw new Error(`Не удалось прочитать файл переменных окружения "${envPath}".`, {
+    cause: dotenvError,
+  });
+}
 
 export default (_, argv) => {
   const isProd = argv.mode === 'production';
+  const apiUrlEnvName = isProd ? 'PRODUCTION_API_URL' : 'DEVELOPMENT_API_URL';
+  const apiUrl = process.env[apiUrlEnvName];
+  const developmentToken = isProd ? undefined : process.env.DEVELOPMENT_TOKEN || undefined;
+
+  if (!apiUrl) {
+    throw new Error(
+      `Не задана обязательная переменная окружения ${apiUrlEnvName}. Задайте её в системном окружении, CI/CD или файле .env.`,
+    );
+  }
 
   const styleOrExtract = isProd ? MiniCssExtractPlugin.loader : 'style-loader';
 
@@ -161,6 +181,10 @@ export default (_, argv) => {
     },
 
     plugins: [
+      new webpack.DefinePlugin({
+        __API_URL__: JSON.stringify(apiUrl),
+        __DEVELOPMENT_TOKEN__: JSON.stringify(developmentToken),
+      }),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public', 'index.html'),
       }),
