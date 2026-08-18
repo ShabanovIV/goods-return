@@ -1,8 +1,8 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
+import { FormStep } from 'src/shared/ui/FormStep';
 import { AttachmentList } from './AttachmentList';
 import { AttachmentPicker } from './AttachmentPicker';
 import { AttachmentRequirements } from './AttachmentRequirements';
-import s from './ClaimFormPage.module.scss';
 
 type AttachmentsStepProps = {
   attachments: ClaimAttachment[];
@@ -29,12 +29,12 @@ export const AttachmentsStep = ({
   onRetryTypes,
   onRemoveAttachment,
 }: AttachmentsStepProps) => (
-  <section className={s.stepSection} aria-labelledby="attachments-title">
-    <div className={s.sectionHeading}>
-      <p className={s.eyebrow}>Шаг 3 из 4</p>
-      <h1 id="attachments-title">Добавьте подтверждающие файлы</h1>
-      <p>Фотографии и видео помогут быстрее разобраться в ситуации.</p>
-    </div>
+  <FormStep
+    description="Фотографии и видео помогут быстрее разобраться в ситуации."
+    step={3}
+    title="Добавьте подтверждающие файлы"
+    titleId="attachments-title"
+  >
     <AttachmentPicker
       attachmentTypes={attachmentTypes}
       isTypesLoading={isTypesLoading}
@@ -50,5 +50,5 @@ export const AttachmentsStep = ({
       showErrors={showErrors}
     />
     <AttachmentList attachments={attachments} onRemoveAttachment={onRemoveAttachment} />
-  </section>
+  </FormStep>
 );

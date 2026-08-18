@@ -3,7 +3,7 @@ import { Alert } from 'src/shared/ui/Alert';
 import { Button } from 'src/shared/ui/Button';
 import { FormField } from 'src/shared/ui/FormField';
 import { Select } from 'src/shared/ui/Select';
-import s from './ClaimFormPage.module.scss';
+import styles from './AttachmentsStep.module.scss';
 type AttachmentPickerProps = {
   attachmentTypes: AttachmentType[];
   isTypesLoading: boolean;
@@ -36,7 +36,7 @@ const FileAction = ({
   symbol,
 }: FileActionProps) => (
   <label
-    className={`${secondary ? s.fileButtonSecondary : s.fileButton} ${disabled ? s.fileButtonDisabled : ''}`}
+    className={`${secondary ? styles.fileButtonSecondary : styles.fileButton} ${disabled ? styles.fileButtonDisabled : ''}`}
   >
     <span aria-hidden="true">{symbol}</span>
     {label}
@@ -80,7 +80,7 @@ export const AttachmentPicker = ({
 
   const disabled = isTypesLoading || (!selectedType && attachmentTypes.length > 0);
   return (
-    <div className={s.uploadPanel}>
+    <div className={styles.uploadPanel}>
       {attachmentTypes.length > 0 && (
         <FormField htmlFor="attachment-type" label="Тип вложения">
           <Select
@@ -98,7 +98,7 @@ export const AttachmentPicker = ({
           </Select>
         </FormField>
       )}
-      <div className={s.uploadActions}>
+      <div className={styles.uploadActions}>
         <FileAction
           disabled={disabled}
           label="Выбрать файлы"
@@ -116,7 +116,7 @@ export const AttachmentPicker = ({
           symbol="◎"
         />
       </div>
-      <p className={s.uploadHint}>
+      <p className={styles.uploadHint}>
         Файлы пока остаются на устройстве и отправятся одной группой после подтверждения претензии.
         Ограничения по формату и размеру определяет сервер.
       </p>

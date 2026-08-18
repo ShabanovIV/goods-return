@@ -22,31 +22,6 @@
     padding-block: 1.25rem 2rem;
   }
 
-  .optionGrid,
-  .uploadActions {
-    grid-template-columns: 1fr;
-  }
-
-  .quantityBlock {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .quantityControl {
-    width: 100%;
-    grid-template-columns: 1fr 4rem 1fr;
-  }
-
-  .attachmentCard {
-    align-items: start;
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .attachmentActions {
-    display: flex;
-    grid-column: 2;
-  }
-
   .actionBarInner {
     button {
       flex: 1 1 auto;
@@ -62,9 +37,5 @@
 @media (prefers-reduced-motion: reduce) {
   .spinner {
     animation-duration: 1.8s;
-  }
-
-  .productCard {
-    transition: none;
   }
 }

@@ -2,13 +2,13 @@ import type { DocumentDetail } from 'src/entities/Document';
 import { Alert } from 'src/shared/ui/Alert';
 import { Checkbox } from 'src/shared/ui/Checkbox';
 import { FieldError } from 'src/shared/ui/FieldError';
+import { FormStep } from 'src/shared/ui/FormStep';
 import { List } from 'src/shared/ui/List';
-import s from './ClaimFormPage.module.scss';
-import type { ClaimFormState } from '../model/claimForm';
+import styles from './ProductStep.module.scss';
 
 type ProductStepProps = {
   products: DocumentDetail[];
-  selectedLines: ClaimFormState['selectedLines'];
+  selectedLines: Record<string, number>;
   showErrors: boolean;
   onToggle: (product: DocumentDetail) => void;
   onAmountChange: (product: DocumentDetail, amount: number) => void;
@@ -24,18 +24,16 @@ export const ProductStep = ({
   const selectedCount = Object.keys(selectedLines).length;
 
   return (
-    <section className={s.stepSection} aria-labelledby="products-title">
-      <div className={s.sectionHeading}>
-        <p className={s.eyebrow}>Шаг 1 из 4</p>
-        <h1 id="products-title">Какие товары вас беспокоят?</h1>
-        <p>Выберите одну или несколько позиций и укажите количество.</p>
-      </div>
-
+    <FormStep
+      description="Выберите одну или несколько позиций и укажите количество."
+      step={1}
+      title="Какие товары вас беспокоят?"
+      titleId="products-title"
+    >
       {showErrors && selectedCount === 0 && <Alert>Выберите хотя бы один товар.</Alert>}
-
-      <div className={s.productList}>
+      <div className={styles.productList}>
         {products.length === 0 && (
-          <div className={s.emptyProducts}>
+          <div className={styles.emptyProducts}>
             <span aria-hidden="true">⌁</span>
             <strong>В документе нет товаров для возврата</strong>
             <p>Проверьте ссылку или обратитесь в поддержку.</p>
@@ -52,25 +50,26 @@ export const ProductStep = ({
               isSelected && (!Number.isInteger(amount) || amount < 1 || amount > maxAmount);
 
             return (
-              <article className={`${s.productCard} ${isSelected ? s.productCardSelected : ''}`}>
-                <label className={s.productChoice}>
+              <article
+                className={`${styles.productCard} ${isSelected ? styles.productCardSelected : ''}`}
+              >
+                <label className={styles.productChoice}>
                   <Checkbox
                     checked={isSelected}
                     disabled={maxAmount === 0}
                     onChange={() => onToggle(product)}
                   />
-                  <span className={s.productInfo}>
+                  <span className={styles.productInfo}>
                     <strong>{product.productName}</strong>
                     <span>
                       {maxAmount > 0 ? `Доступно: ${maxAmount} шт.` : 'Недоступно для возврата'}
                     </span>
                   </span>
                 </label>
-
                 {isSelected && (
-                  <div className={s.quantityBlock}>
-                    <span className={s.quantityLabel}>Количество для претензии</span>
-                    <div className={s.quantityControl}>
+                  <div className={styles.quantityBlock}>
+                    <span className={styles.quantityLabel}>Количество для претензии</span>
+                    <div className={styles.quantityControl}>
                       <button
                         type="button"
                         aria-label={`Уменьшить количество ${product.productName}`}
@@ -89,9 +88,7 @@ export const ProductStep = ({
                         type="number"
                         value={amount}
                         onChange={(event) => onAmountChange(product, Number(event.target.value))}
-                        onBlur={() => {
-                          if (hasAmountError) onAmountChange(product, 1);
-                        }}
+                        onBlur={() => hasAmountError && onAmountChange(product, 1)}
                       />
                       <button
                         type="button"
@@ -112,6 +109,6 @@ export const ProductStep = ({
           }}
         />
       </div>
-    </section>
+    </FormStep>
   );
 };

@@ -1,8 +1,13 @@
+.reviewList {
+  display: grid;
+  gap: 0.875rem;
+}
+
 .reviewCard {
   padding: 1.125rem;
   border: 0.0625rem solid var(--color-border);
   border-radius: 1.25rem;
-  background: #fff;
+  background: var(--color-card);
   box-shadow: 0 0.25rem 1rem rgba(33, 33, 33, 0.04);
 }
 

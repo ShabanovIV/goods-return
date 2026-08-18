@@ -1,7 +1,7 @@
-import { AttachmentsStep } from './AttachmentsStep';
+import { AttachmentsStep } from 'src/features/ManageClaimAttachments';
+import { ReviewStep, type ReviewSection } from 'src/features/ReviewClaim';
+import { ProductStep } from 'src/features/SelectClaimProducts';
 import { ClaimDetailsContainer } from './ClaimDetailsContainer';
-import { ProductStep } from './ProductStep';
-import { ReviewStep } from './ReviewStep';
 import { getRequestErrorMessage } from '../lib/getRequestErrorMessage';
 import { useClaimData } from '../model/useClaimData';
 import { useClaimFormState } from '../model/useClaimFormState';
@@ -9,6 +9,12 @@ import { useClaimFormState } from '../model/useClaimFormState';
 type ClaimFormStepProps = {
   data: ReturnType<typeof useClaimData>;
   state: ReturnType<typeof useClaimFormState>;
+};
+
+const reviewStep: Record<ReviewSection, 0 | 1 | 2> = {
+  products: 0,
+  details: 1,
+  attachments: 2,
 };
 
 export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
@@ -76,7 +82,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
       demand={selectedDemand}
       flaws={selectedFlaws}
       attachments={formState.attachments}
-      onEdit={state.setStep}
+      onEdit={(section) => state.setStep(reviewStep[section])}
     />
   );
 };

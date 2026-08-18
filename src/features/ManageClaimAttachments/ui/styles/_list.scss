@@ -1,3 +1,8 @@
+.attachmentList {
+  display: grid;
+  gap: 0.875rem;
+}
+
 .attachmentCard {
   display: grid;
   padding: 1rem;
@@ -5,7 +10,7 @@
   border-radius: 1.125rem;
   align-items: center;
   gap: 0.875rem;
-  background: #fff;
+  background: var(--color-card);
   grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
@@ -55,4 +60,38 @@
 .attachmentActions {
   display: grid;
   gap: 0.375rem;
+}
+
+.emptyAttachments {
+  display: grid;
+  min-height: 8rem;
+  border: 0.0625rem dashed #c8cdcd;
+  border-radius: 1.25rem;
+  align-content: center;
+  justify-items: center;
+  gap: 0.375rem;
+  color: var(--color-muted);
+  text-align: center;
+
+  span {
+    color: var(--color-accent);
+    font-size: 2rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  .attachmentCard {
+    align-items: start;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .attachmentActions {
+    display: flex;
+    grid-column: 2;
+  }
 }

@@ -1,7 +1,7 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
 import { Button } from 'src/shared/ui/Button';
 import { List } from 'src/shared/ui/List';
-import s from './ClaimFormPage.module.scss';
+import styles from './AttachmentsStep.module.scss';
 
 const formatFileSize = (size: number) => {
   if (size < 1024) return `${size} Б`;
@@ -21,9 +21,9 @@ type AttachmentListProps = {
 };
 
 export const AttachmentList = ({ attachments, onRemoveAttachment }: AttachmentListProps) => (
-  <div className={s.attachmentList} aria-live="polite">
+  <div className={styles.attachmentList} aria-live="polite">
     {attachments.length === 0 ? (
-      <div className={s.emptyAttachments}>
+      <div className={styles.emptyAttachments}>
         <span aria-hidden="true">⌁</span>
         <p>Здесь появятся добавленные файлы.</p>
       </div>
@@ -32,21 +32,21 @@ export const AttachmentList = ({ attachments, onRemoveAttachment }: AttachmentLi
         items={attachments}
         getKey={(attachment) => attachment.localId}
         renderItem={(attachment) => (
-          <article className={s.attachmentCard}>
-            <div className={s.fileIcon} aria-hidden="true">
+          <article className={styles.attachmentCard}>
+            <div className={styles.fileIcon} aria-hidden="true">
               {attachment.mimeType.startsWith('image/') ? 'IMG' : 'FILE'}
             </div>
-            <div className={s.attachmentInfo}>
+            <div className={styles.attachmentInfo}>
               <strong>{attachment.fileName}</strong>
               <span>
                 {formatFileSize(attachment.size)}
                 {attachment.attachmentTypeName ? ` · ${attachment.attachmentTypeName}` : ''}
               </span>
-              <span className={s[`status-${attachment.status}`]}>
+              <span className={styles[`status-${attachment.status}`]}>
                 {statusText[attachment.status]}
               </span>
             </div>
-            <div className={s.attachmentActions}>
+            <div className={styles.attachmentActions}>
               <Button
                 aria-label={`Удалить ${attachment.fileName}`}
                 size="small"

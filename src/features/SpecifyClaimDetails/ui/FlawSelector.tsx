@@ -2,7 +2,7 @@ import type { ClaimFlaw } from 'src/entities/Claim';
 import { Checkbox } from 'src/shared/ui/Checkbox';
 import { FieldError } from 'src/shared/ui/FieldError';
 import { List } from 'src/shared/ui/List';
-import s from './ClaimFormPage.module.scss';
+import styles from './ClaimDetailsStep.module.scss';
 import { DictionaryError } from './DictionaryError';
 
 type FlawSelectorProps = {
@@ -26,7 +26,7 @@ export const FlawSelector = ({
   onToggle,
   showErrors,
 }: FlawSelectorProps) => (
-  <fieldset className={s.flawFieldset} disabled={!enabled || isLoading}>
+  <fieldset className={styles.flawFieldset} disabled={!enabled || isLoading}>
     <legend>Недостатки товара</legend>
     {!enabled && <p>Сначала выберите причину обращения.</p>}
     {enabled && isLoading && <p>Обновляем список недостатков…</p>}
@@ -34,12 +34,12 @@ export const FlawSelector = ({
     {!isLoading && !errorMessage && enabled && flaws.length === 0 && (
       <p>Для выбранных товаров недостатки не найдены.</p>
     )}
-    <div className={s.optionGrid}>
+    <div className={styles.optionGrid}>
       <List
         items={flaws}
         getKey={(flaw) => flaw.id}
         renderItem={(flaw) => (
-          <label className={s.checkOption}>
+          <label className={styles.checkOption}>
             <Checkbox checked={flawIds.includes(flaw.id)} onChange={() => onToggle(flaw.id)} />
             <span>{flaw.name}</span>
           </label>

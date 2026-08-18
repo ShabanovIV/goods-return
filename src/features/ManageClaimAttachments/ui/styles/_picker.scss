@@ -3,7 +3,7 @@
   padding: 1rem;
   border: 0.0625rem solid var(--color-border);
   border-radius: 1.25rem;
-  background: #fff;
+  background: var(--color-card);
 }
 
 .uploadPanel {
@@ -45,12 +45,12 @@
 
 .fileButton {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-card);
 }
 
 .fileButtonSecondary {
   border: 0.0625rem solid var(--color-border);
-  background: #fff;
+  background: var(--color-card);
   color: var(--color-text-strong);
 }
 
@@ -76,5 +76,11 @@
     margin: 0.5rem 0 0;
     padding-left: 1.25rem;
     gap: 0.25rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  .uploadActions {
+    grid-template-columns: 1fr;
   }
 }

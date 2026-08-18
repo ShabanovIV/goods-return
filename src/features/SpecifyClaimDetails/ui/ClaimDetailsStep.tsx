@@ -1,7 +1,8 @@
 import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
 import { FormField } from 'src/shared/ui/FormField';
+import { FormStep } from 'src/shared/ui/FormStep';
 import { Select } from 'src/shared/ui/Select';
-import s from './ClaimFormPage.module.scss';
+import styles from './ClaimDetailsStep.module.scss';
 import { DictionaryError } from './DictionaryError';
 import { FlawSelector } from './FlawSelector';
 
@@ -39,14 +40,13 @@ export const ClaimDetailsStep = ({
   onDemandChange,
   onFlawToggle,
 }: ClaimDetailsStepProps) => (
-  <section className={s.stepSection} aria-labelledby="claim-title">
-    <div className={s.sectionHeading}>
-      <p className={s.eyebrow}>Шаг 2 из 4</p>
-      <h1 id="claim-title">Расскажите, что произошло</h1>
-      <p>Ответы помогут быстрее передать обращение нужному специалисту.</p>
-    </div>
-
-    <div className={s.formFields}>
+  <FormStep
+    description="Ответы помогут быстрее передать обращение нужному специалисту."
+    step={2}
+    title="Расскажите, что произошло"
+    titleId="claim-title"
+  >
+    <div className={styles.formFields}>
       <FormField
         error={
           showErrors && !reasonId && !reasons.errorMessage ? 'Выберите причину обращения.' : ''
@@ -76,7 +76,6 @@ export const ClaimDetailsStep = ({
           </Select>
         )}
       </FormField>
-
       <FormField
         error={
           showErrors && !clientDemandId && !demands.errorMessage
@@ -108,7 +107,6 @@ export const ClaimDetailsStep = ({
           </Select>
         )}
       </FormField>
-
       <FlawSelector
         enabled={flawsEnabled}
         errorMessage={flaws.errorMessage}
@@ -120,5 +118,5 @@ export const ClaimDetailsStep = ({
         showErrors={showErrors}
       />
     </div>
-  </section>
+  </FormStep>
 );

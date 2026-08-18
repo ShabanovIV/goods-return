@@ -1,4 +1,4 @@
-import { ClaimDetailsStep } from './ClaimDetailsStep';
+import { ClaimDetailsStep } from 'src/features/SpecifyClaimDetails';
 import { getRequestErrorMessage } from '../lib/getRequestErrorMessage';
 import { useClaimData } from '../model/useClaimData';
 import { useClaimFormState } from '../model/useClaimFormState';
