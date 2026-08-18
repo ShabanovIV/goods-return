@@ -9,6 +9,7 @@ export {
   useLazyGetFlawsQuery,
   useLazyGetReasonsQuery,
 } from './api/claimApi';
+export { useAddAttachmentsMutation, useCreateClaimMutation } from './api/submitClaimApi';
 export type {
   AddAttachmentsQueryParams,
   AddAttachmentsResponse,
