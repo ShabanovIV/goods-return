@@ -1,0 +1,6 @@
+{
+  "customSyntax": "postcss-scss",
+  "rules": {
+    "unit-disallowed-list": ["px"]
+  }
+}
