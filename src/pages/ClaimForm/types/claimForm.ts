@@ -1,7 +1,5 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
 
-export const CLAIM_STEPS = ['Товары', 'Обращение', 'Вложения', 'Проверка'] as const;
-
 export type ClaimStep = 0 | 1 | 2 | 3;
 
 export type ClaimFormState = {
@@ -22,12 +20,3 @@ export type PersistedClaimDraft = {
   clientDemandId: string;
   flawIds: string[];
 };
-
-export const createEmptyClaimForm = (): ClaimFormState => ({
-  step: 0,
-  selectedLines: {},
-  reasonId: '',
-  clientDemandId: '',
-  flawIds: [],
-  attachments: [],
-});

@@ -1,10 +1,10 @@
 import { useSubmitClaim } from 'src/features/SubmitClaim';
-import type { ClaimStep } from './claimFormTypes';
 import { isClaimStepValid } from './claimFormValidation';
 import { useClaimData } from './useClaimData';
 import { removeClaimDraft } from './useClaimDraft';
 import { useClaimFormState } from './useClaimFormState';
 import { getRequestErrorMessage } from '../lib/getRequestErrorMessage';
+import type { ClaimStep } from '../types/claimForm';
 
 type UseClaimFormNavigationArguments = {
   data: ReturnType<typeof useClaimData>;

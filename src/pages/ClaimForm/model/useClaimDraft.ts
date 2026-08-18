@@ -6,7 +6,8 @@ import {
   isPersistedClaimDraft,
   toPersistedClaimDraft,
 } from './claimDraft';
-import { createEmptyClaimForm, type ClaimFormState } from './claimFormTypes';
+import { createEmptyClaimForm } from './claimFormState';
+import type { ClaimFormState } from '../types/claimForm';
 
 const configuration = configHelperFactory();
 

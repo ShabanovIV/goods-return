@@ -29,4 +29,4 @@ export type {
   GetFlawsQueryParams,
   GetFlawsResponse,
   GetReasonsResponse,
-} from './model/claimTypes';
+} from './types/claim';

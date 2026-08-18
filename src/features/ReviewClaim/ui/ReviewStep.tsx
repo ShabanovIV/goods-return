@@ -5,8 +5,7 @@ import { Button } from 'src/shared/ui/Button';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { List } from 'src/shared/ui/List';
 import styles from './ReviewStep.module.scss';
-
-export type ReviewSection = 'attachments' | 'details' | 'products';
+import type { ReviewSection } from '../types/reviewClaim';
 
 type ReviewStepProps = {
   products: DocumentDetail[];

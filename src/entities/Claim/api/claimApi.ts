@@ -6,7 +6,7 @@ import type {
   GetFlawsQueryParams,
   GetFlawsResponse,
   GetReasonsResponse,
-} from '../model/claimTypes';
+} from '../types/claim';
 
 const BASE_URL = 'claim';
 

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import type { ClaimFlaw } from 'src/entities/Claim';
-import type { ClaimFormState } from './claimFormTypes';
+import type { ClaimFormState } from '../types/claimForm';
 
 type UseClaimFormConsistencyArguments = {
   flaws: ClaimFlaw[];

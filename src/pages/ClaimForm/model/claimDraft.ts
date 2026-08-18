@@ -1,4 +1,4 @@
-import type { ClaimFormState, PersistedClaimDraft } from './claimFormTypes';
+import type { ClaimFormState, PersistedClaimDraft } from '../types/claimForm';
 
 export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraft => ({
   version: 1,
