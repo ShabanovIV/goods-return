@@ -34,39 +34,6 @@
   text-transform: uppercase;
 }
 
-.pageAlert,
-.fieldError,
-.dictionaryError {
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
 .pageAlert {
-  display: flex;
   margin-bottom: 1rem;
-  padding: 0.875rem 1rem;
-  border: 0.0625rem solid #e7c7a3;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  background: #fff8ef;
-  color: #704616;
-
-  button {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-}
-
-.fieldError {
-  padding: 0.875rem 1rem;
-  border: 0.0625rem solid rgba(208, 59, 53, 0.25);
-  background: #fff4f3;
-  color: var(--color-error);
 }

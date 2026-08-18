@@ -1,4 +1,6 @@
 import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
+import { FormField } from 'src/shared/ui/FormField';
+import { Select } from 'src/shared/ui/Select';
 import s from './ClaimFormPage.module.scss';
 import { DictionaryError } from './DictionaryError';
 import { FlawSelector } from './FlawSelector';
@@ -45,16 +47,22 @@ export const ClaimDetailsStep = ({
     </div>
 
     <div className={s.formFields}>
-      <div className={s.formField}>
-        <label htmlFor="claim-reason">Причина обращения</label>
+      <FormField
+        error={
+          showErrors && !reasonId && !reasons.errorMessage ? 'Выберите причину обращения.' : ''
+        }
+        htmlFor="claim-reason"
+        label="Причина обращения"
+      >
         {reasons.errorMessage ? (
           <DictionaryError message={reasons.errorMessage} onRetry={reasons.retry} />
         ) : (
-          <select
+          <Select
             id="claim-reason"
             value={reasonId}
             disabled={reasons.isLoading}
             aria-invalid={showErrors && !reasonId}
+            aria-describedby={showErrors && !reasonId ? 'claim-reason-error' : undefined}
             onChange={(event) => onReasonChange(event.target.value)}
           >
             <option value="">
@@ -65,23 +73,28 @@ export const ClaimDetailsStep = ({
                 {reason.name}
               </option>
             ))}
-          </select>
+          </Select>
         )}
-        {showErrors && !reasonId && !reasons.errorMessage && (
-          <span className={s.inputError}>Выберите причину обращения.</span>
-        )}
-      </div>
+      </FormField>
 
-      <div className={s.formField}>
-        <label htmlFor="client-demand">Какого решения вы ожидаете?</label>
+      <FormField
+        error={
+          showErrors && !clientDemandId && !demands.errorMessage
+            ? 'Выберите ожидаемое решение.'
+            : ''
+        }
+        htmlFor="client-demand"
+        label="Какого решения вы ожидаете?"
+      >
         {demands.errorMessage ? (
           <DictionaryError message={demands.errorMessage} onRetry={demands.retry} />
         ) : (
-          <select
+          <Select
             id="client-demand"
             value={clientDemandId}
             disabled={demands.isLoading}
             aria-invalid={showErrors && !clientDemandId}
+            aria-describedby={showErrors && !clientDemandId ? 'client-demand-error' : undefined}
             onChange={(event) => onDemandChange(event.target.value)}
           >
             <option value="">
@@ -92,12 +105,9 @@ export const ClaimDetailsStep = ({
                 {demand.name}
               </option>
             ))}
-          </select>
+          </Select>
         )}
-        {showErrors && !clientDemandId && !demands.errorMessage && (
-          <span className={s.inputError}>Выберите ожидаемое решение.</span>
-        )}
-      </div>
+      </FormField>
 
       <FlawSelector
         enabled={flawsEnabled}

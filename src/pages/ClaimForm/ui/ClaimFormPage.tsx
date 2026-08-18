@@ -1,4 +1,6 @@
 import { useParams } from 'react-router-dom';
+import { Alert } from 'src/shared/ui/Alert';
+import { IconButton } from 'src/shared/ui/IconButton';
 import { DocumentError, LoadingDocument, MissingDocument } from './ClaimDocumentState';
 import { ClaimFormFooter } from './ClaimFormFooter';
 import { ClaimFormHeader } from './ClaimFormHeader';
@@ -68,16 +70,17 @@ const ClaimFormPage = () => {
       <ClaimFormHeader draftMessage={draft.draftMessage} step={state.formState.step} />
       <main className={s.main}>
         {state.pageError && (
-          <div className={s.pageAlert} role="alert">
-            <span>{state.pageError}</span>
-            <button
-              type="button"
-              aria-label="Закрыть сообщение"
-              onClick={() => state.setPageError('')}
-            >
-              ×
-            </button>
-          </div>
+          <Alert
+            className={s.pageAlert}
+            tone="warning"
+            action={
+              <IconButton aria-label="Закрыть сообщение" onClick={() => state.setPageError('')}>
+                ×
+              </IconButton>
+            }
+          >
+            {state.pageError}
+          </Alert>
         )}
         <ClaimFormStep data={data} state={state} />
       </main>

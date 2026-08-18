@@ -1,4 +1,5 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
+import { Alert } from 'src/shared/ui/Alert';
 import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 
@@ -23,11 +24,7 @@ export const AttachmentRequirements = ({
 
   return (
     <>
-      {showErrors && hasMissing && (
-        <div className={s.fieldError} role="alert">
-          Добавьте обязательные вложения, указанные ниже.
-        </div>
-      )}
+      {showErrors && hasMissing && <Alert>Добавьте обязательные вложения, указанные ниже.</Alert>}
       {requiredTypes.length > 0 && (
         <div className={s.requirements}>
           <strong>Обязательные материалы</strong>

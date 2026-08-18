@@ -1,0 +1,20 @@
+.select {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0 2.75rem 0 1rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-card);
+  color: var(--color-text-strong);
+  cursor: pointer;
+
+  &:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.1875rem var(--color-focus-ring);
+    outline: 0;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+}

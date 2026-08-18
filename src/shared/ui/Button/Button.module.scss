@@ -1,0 +1,61 @@
+@use '../../styles/buttons/primary.scss';
+@use '../../styles/buttons/secondary.scss';
+
+.primary {
+  @include primary.button(
+    $background: var(--color-accent),
+    $hover-background: var(--color-accent-hover),
+    $focus-color: var(--color-focus-ring)
+  );
+}
+
+.secondary {
+  @include secondary.button(
+    $border-color: var(--color-border),
+    $color: var(--color-text),
+    $hover-border-color: var(--color-accent-border),
+    $focus-color: var(--color-focus-ring),
+    $background: var(--color-card)
+  );
+}
+
+.text,
+.danger {
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+
+  &:focus-visible {
+    outline: 0.125rem solid var(--color-focus-ring);
+    outline-offset: 0.125rem;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.text {
+  color: var(--color-accent-strong);
+}
+
+.danger {
+  color: var(--color-error);
+}
+
+.small {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.medium {
+  font-size: 0.875rem;
+}
+
+.large {
+  min-height: 3.25rem;
+  padding: 1rem 1.75rem;
+}

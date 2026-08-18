@@ -1,4 +1,5 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
+import { Button } from 'src/shared/ui/Button';
 import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 
@@ -46,13 +47,14 @@ export const AttachmentList = ({ attachments, onRemoveAttachment }: AttachmentLi
               </span>
             </div>
             <div className={s.attachmentActions}>
-              <button
-                type="button"
+              <Button
                 aria-label={`Удалить ${attachment.fileName}`}
+                size="small"
+                variant="text"
                 onClick={() => onRemoveAttachment(attachment.localId)}
               >
                 Удалить
-              </button>
+              </Button>
             </div>
           </article>
         )}

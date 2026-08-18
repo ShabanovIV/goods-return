@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
 import type { DocumentDetail } from 'src/entities/Document';
+import { Button } from 'src/shared/ui/Button';
 import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 import type { ClaimAttachment, ClaimStep } from '../model/claimForm';
@@ -26,9 +27,9 @@ const ReviewCard = ({ title, step, onEdit, children }: ReviewCardProps) => (
   <section className={s.reviewCard}>
     <div className={s.reviewCardHeading}>
       <h2>{title}</h2>
-      <button type="button" onClick={() => onEdit(step)}>
+      <Button size="small" variant="text" onClick={() => onEdit(step)}>
         Изменить
-      </button>
+      </Button>
     </div>
     {children}
   </section>

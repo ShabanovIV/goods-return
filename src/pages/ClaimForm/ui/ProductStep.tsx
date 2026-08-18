@@ -1,4 +1,7 @@
 import type { DocumentDetail } from 'src/entities/Document';
+import { Alert } from 'src/shared/ui/Alert';
+import { Checkbox } from 'src/shared/ui/Checkbox';
+import { FieldError } from 'src/shared/ui/FieldError';
 import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 import type { ClaimFormState } from '../model/claimForm';
@@ -28,11 +31,7 @@ export const ProductStep = ({
         <p>Выберите одну или несколько позиций и укажите количество.</p>
       </div>
 
-      {showErrors && selectedCount === 0 && (
-        <div className={s.fieldError} role="alert">
-          Выберите хотя бы один товар.
-        </div>
-      )}
+      {showErrors && selectedCount === 0 && <Alert>Выберите хотя бы один товар.</Alert>}
 
       <div className={s.productList}>
         {products.length === 0 && (
@@ -55,15 +54,11 @@ export const ProductStep = ({
             return (
               <article className={`${s.productCard} ${isSelected ? s.productCardSelected : ''}`}>
                 <label className={s.productChoice}>
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     checked={isSelected}
                     disabled={maxAmount === 0}
                     onChange={() => onToggle(product)}
                   />
-                  <span className={s.customCheckbox} aria-hidden="true">
-                    {isSelected ? '✓' : ''}
-                  </span>
                   <span className={s.productInfo}>
                     <strong>{product.productName}</strong>
                     <span>
@@ -108,7 +103,7 @@ export const ProductStep = ({
                       </button>
                     </div>
                     {showErrors && hasAmountError && (
-                      <span className={s.inputError}>Укажите целое число от 1 до {maxAmount}.</span>
+                      <FieldError>Укажите целое число от 1 до {maxAmount}.</FieldError>
                     )}
                   </div>
                 )}

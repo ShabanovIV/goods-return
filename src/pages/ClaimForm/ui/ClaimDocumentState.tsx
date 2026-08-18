@@ -1,4 +1,4 @@
-import { Button } from 'src/shared/ui/buttons/Button';
+import { Button } from 'src/shared/ui/Button';
 import s from './ClaimFormPage.module.scss';
 
 export const MissingDocument = () => (

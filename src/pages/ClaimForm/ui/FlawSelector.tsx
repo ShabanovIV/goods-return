@@ -1,4 +1,6 @@
 import type { ClaimFlaw } from 'src/entities/Claim';
+import { Checkbox } from 'src/shared/ui/Checkbox';
+import { FieldError } from 'src/shared/ui/FieldError';
 import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 import { DictionaryError } from './DictionaryError';
@@ -38,21 +40,14 @@ export const FlawSelector = ({
         getKey={(flaw) => flaw.id}
         renderItem={(flaw) => (
           <label className={s.checkOption}>
-            <input
-              type="checkbox"
-              checked={flawIds.includes(flaw.id)}
-              onChange={() => onToggle(flaw.id)}
-            />
-            <span className={s.customCheckbox} aria-hidden="true">
-              {flawIds.includes(flaw.id) ? '✓' : ''}
-            </span>
+            <Checkbox checked={flawIds.includes(flaw.id)} onChange={() => onToggle(flaw.id)} />
             <span>{flaw.name}</span>
           </label>
         )}
       />
     </div>
     {showErrors && flaws.length > 0 && flawIds.length === 0 && (
-      <span className={s.inputError}>Выберите хотя бы один недостаток.</span>
+      <FieldError>Выберите хотя бы один недостаток.</FieldError>
     )}
   </fieldset>
 );

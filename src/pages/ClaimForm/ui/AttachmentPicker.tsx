@@ -1,5 +1,8 @@
 import type { AttachmentType } from 'src/entities/Claim';
-import { Button } from 'src/shared/ui/buttons/Button';
+import { Alert } from 'src/shared/ui/Alert';
+import { Button } from 'src/shared/ui/Button';
+import { FormField } from 'src/shared/ui/FormField';
+import { Select } from 'src/shared/ui/Select';
 import s from './ClaimFormPage.module.scss';
 
 type AttachmentPickerProps = {
@@ -63,12 +66,15 @@ export const AttachmentPicker = ({
 }: AttachmentPickerProps) => {
   if (typesError) {
     return (
-      <div className={s.dictionaryError} role="alert">
-        <span>{typesError}</span>
-        <Button type="button" variant="secondary" onClick={onRetryTypes}>
-          Повторить
-        </Button>
-      </div>
+      <Alert
+        action={
+          <Button size="small" variant="secondary" onClick={onRetryTypes}>
+            Повторить
+          </Button>
+        }
+      >
+        {typesError}
+      </Alert>
     );
   }
 
@@ -76,9 +82,8 @@ export const AttachmentPicker = ({
   return (
     <div className={s.uploadPanel}>
       {attachmentTypes.length > 0 && (
-        <div className={s.formField}>
-          <label htmlFor="attachment-type">Тип вложения</label>
-          <select
+        <FormField htmlFor="attachment-type" label="Тип вложения">
+          <Select
             id="attachment-type"
             value={selectedType}
             disabled={isTypesLoading}
@@ -90,8 +95,8 @@ export const AttachmentPicker = ({
                 {type.name}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
       )}
       <div className={s.uploadActions}>
         <FileAction

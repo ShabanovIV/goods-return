@@ -1,5 +1,5 @@
-import { Button } from 'src/shared/ui/buttons/Button';
-import s from './ClaimFormPage.module.scss';
+import { Alert } from 'src/shared/ui/Alert';
+import { Button } from 'src/shared/ui/Button';
 
 type DictionaryErrorProps = {
   message: string;
@@ -7,10 +7,13 @@ type DictionaryErrorProps = {
 };
 
 export const DictionaryError = ({ message, onRetry }: DictionaryErrorProps) => (
-  <div className={s.dictionaryError} role="alert">
-    <span>{message}</span>
-    <Button type="button" variant="secondary" onClick={onRetry}>
-      Повторить
-    </Button>
-  </div>
+  <Alert
+    action={
+      <Button size="small" variant="secondary" onClick={onRetry}>
+        Повторить
+      </Button>
+    }
+  >
+    {message}
+  </Alert>
 );

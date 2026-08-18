@@ -1,0 +1,10 @@
+.field {
+  display: grid;
+  gap: 0.5rem;
+
+  > label {
+    color: var(--color-text-strong);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+}
