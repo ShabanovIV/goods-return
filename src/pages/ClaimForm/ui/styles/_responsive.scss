@@ -1,0 +1,41 @@
+@media (max-width: 36rem) {
+  .headerInner,
+  .main,
+  .actionBarInner,
+  .progress {
+    width: min(100% - 1.25rem, 48rem);
+  }
+
+  .headerInner {
+    min-height: 3.75rem;
+  }
+
+  .progressStep small {
+    display: none;
+  }
+
+  .progress {
+    padding-top: 0.25rem;
+  }
+
+  .main {
+    padding-block: 1.25rem 2rem;
+  }
+
+  .actionBarInner {
+    button {
+      flex: 1 1 auto;
+      padding-inline: 1rem;
+    }
+  }
+
+  .nextButton {
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1.8s;
+  }
+}

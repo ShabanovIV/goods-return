@@ -1,0 +1,55 @@
+.stateIcon,
+.successIcon {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  font-weight: 800;
+  place-items: center;
+}
+
+.stateIcon {
+  background: #fff4f3;
+  color: var(--color-error);
+}
+
+.successIcon {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.25rem solid var(--color-accent-soft);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+.claimNumber {
+  display: grid;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  gap: 0.25rem;
+  background: var(--color-accent-soft);
+
+  span {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+  }
+
+  strong {
+    color: var(--color-accent-strong);
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

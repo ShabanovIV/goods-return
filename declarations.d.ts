@@ -1,3 +1,6 @@
+declare const __API_URL__: string;
+declare const __DEVELOPMENT_TOKEN__: string | undefined;
+
 // CSS Modules
 declare module '*.module.scss' {
   const classes: Record<string, string>;

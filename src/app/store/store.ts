@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { endpointCallApi } from 'src/entities/EndpointCall';
+import { claimApi } from 'src/entities/Claim';
+import { documentApi } from 'src/entities/Document';
 
 export const store = configureStore({
   reducer: {
-    [endpointCallApi.reducerPath]: endpointCallApi.reducer,
+    [claimApi.reducerPath]: claimApi.reducer,
+    [documentApi.reducerPath]: documentApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(endpointCallApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(claimApi.middleware, documentApi.middleware),
 });
 
 declare global {

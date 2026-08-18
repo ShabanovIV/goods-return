@@ -1,0 +1,52 @@
+.productList {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.productCard {
+  overflow: hidden;
+  border: 0.125rem solid transparent;
+  border-radius: 1.25rem;
+  background: var(--color-card);
+  box-shadow: 0 0.25rem 1.25rem rgba(33, 33, 33, 0.06);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.productCardSelected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0.75rem 2rem rgba(0, 185, 191, 0.12);
+}
+
+.productChoice {
+  display: flex;
+  min-height: 6rem;
+  padding: 1.125rem;
+  align-items: flex-start;
+  gap: 0.875rem;
+  cursor: pointer;
+}
+
+.productInfo {
+  display: grid;
+  min-width: 0;
+  gap: 0.375rem;
+
+  strong {
+    color: var(--color-text-strong);
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  span {
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .productCard {
+    transition: none;
+  }
+}

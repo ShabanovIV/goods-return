@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import InfoIcon from 'src/shared/assets/icons/info.svg';
-import { Button } from 'src/shared/ui/buttons/Button/Button';
+import { Button } from 'src/shared/ui/Button';
 import s from './Fallback.module.scss';
 
 type FallbackProps = {

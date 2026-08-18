@@ -1,0 +1,27 @@
+.alert {
+  display: flex;
+  padding: 0.875rem 1rem;
+  border: 0.0625rem solid transparent;
+  border-radius: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.error {
+  border-color: rgba(208, 59, 53, 0.25);
+  background: #fff4f3;
+  color: var(--color-error);
+}
+
+.warning {
+  border-color: #e7c7a3;
+  background: #fff8ef;
+  color: #704616;
+}
+
+.action {
+  flex: 0 0 auto;
+}

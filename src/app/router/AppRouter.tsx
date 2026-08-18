@@ -1,15 +1,14 @@
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-const RequestConsolePage = lazy(() => import('src/pages/RequestConsole'));
+const ClaimFormPage = lazy(() => import('src/pages/ClaimForm'));
 
 export const AppRouter = () => {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div aria-label="Загрузка страницы" />}>
       <Routes>
-        <Route path="/" element={<Navigate to="/request-console" replace />} />
-        <Route path="/request-console" element={<RequestConsolePage />} />
-        <Route path="*" element={<Navigate to="/request-console" replace />} />
+        <Route path="/invoices/:documentId" element={<ClaimFormPage />} />
+        <Route path="*" element={<ClaimFormPage />} />
       </Routes>
     </Suspense>
   );

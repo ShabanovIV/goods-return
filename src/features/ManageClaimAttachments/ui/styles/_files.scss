@@ -1,0 +1,69 @@
+.fileList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0.625rem;
+  list-style: none;
+}
+
+.fileItem {
+  display: grid;
+  padding: 0.75rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: 0.875rem;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-card);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.fileIcon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+  font-size: 0.5625rem;
+  font-weight: 800;
+  place-items: center;
+}
+
+.fileInfo {
+  display: grid;
+  min-width: 0;
+  gap: 0.125rem;
+
+  strong {
+    overflow: hidden;
+    color: var(--color-text-strong);
+    font-size: 0.8125rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    color: var(--color-muted);
+    font-size: 0.6875rem;
+  }
+
+  .status-uploaded {
+    color: #198251;
+  }
+
+  .status-selected {
+    color: var(--color-accent-strong);
+  }
+}
+
+@media (max-width: 36rem) {
+  .fileItem {
+    align-items: start;
+    grid-template-columns: auto minmax(0, 1fr);
+
+    > button {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+}

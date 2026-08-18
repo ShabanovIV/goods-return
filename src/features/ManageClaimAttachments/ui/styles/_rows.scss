@@ -1,0 +1,86 @@
+.typeRows {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.typeRow {
+  display: grid;
+  padding: 1rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: 1.25rem;
+  gap: 0.875rem;
+  background: var(--color-card);
+}
+
+.typeRowError {
+  border-color: rgba(208, 59, 53, 0.45);
+}
+
+.typeRowHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.typeInfo {
+  display: grid;
+  gap: 0.25rem;
+
+  strong {
+    color: var(--color-text-strong);
+    font-size: 0.9375rem;
+  }
+
+  span {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+  }
+}
+
+.addButton {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-card);
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 700;
+  place-items: center;
+
+  input {
+    position: absolute;
+    width: 0.0625rem;
+    height: 0.0625rem;
+    opacity: 0;
+  }
+
+  &:focus-within {
+    outline: 0.1875rem solid var(--color-focus-ring);
+    outline-offset: 0.125rem;
+  }
+}
+
+.emptyType,
+.stepMessage,
+.uploadHint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.emptyType {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: var(--color-surface-muted);
+}
+
+@media (max-width: 36rem) {
+  .typeRow {
+    padding: 0.875rem;
+  }
+}
