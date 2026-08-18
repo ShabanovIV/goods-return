@@ -46,8 +46,6 @@ export const ReviewStep = ({
   onEdit,
 }: ReviewStepProps) => {
   const selectedProducts = products.filter((product) => selectedLines[product.lineId]);
-  const readyAttachments = attachments.filter((attachment) => attachment.status !== 'needs-file');
-
   return (
     <FormStep
       description="После отправки мы зарегистрируем претензию и покажем её номер."
@@ -87,10 +85,10 @@ export const ReviewStep = ({
           </dl>
         </ReviewCard>
         <ReviewCard title="Вложения" onEdit={() => onEdit('attachments')}>
-          {readyAttachments.length ? (
+          {attachments.length ? (
             <ul className={styles.reviewItems}>
               <List
-                items={readyAttachments}
+                items={attachments}
                 getKey={(attachment) => attachment.localId}
                 renderItem={(attachment) => (
                   <li>

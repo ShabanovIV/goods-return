@@ -11,7 +11,7 @@ export type ClaimAttachmentMetadata = {
   attachmentTypeName?: string;
 };
 
-export type AttachmentStatus = 'selected' | 'uploaded' | 'needs-file';
+export type AttachmentStatus = 'selected' | 'uploaded';
 export type ClaimAttachment = ClaimAttachmentMetadata & {
   lastModified: number;
   status: AttachmentStatus;

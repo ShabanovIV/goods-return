@@ -67,7 +67,7 @@ export const useClaimDraft = ({
     if (!isHydrated || claimNumber) return undefined;
     const hasDraft =
       Object.keys(formState.selectedLines).length > 0 ||
-      Boolean(formState.reasonId || formState.clientDemandId || formState.attachments.length);
+      Boolean(formState.reasonId || formState.clientDemandId);
     if (!hasDraft) return undefined;
     const preventAccidentalClose = (event: BeforeUnloadEvent) => event.preventDefault();
     window.addEventListener('beforeunload', preventAccidentalClose);

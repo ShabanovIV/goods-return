@@ -1,4 +1,4 @@
-import type { ClaimFormState, PersistedAttachment, PersistedClaimDraft } from './claimFormTypes';
+import type { ClaimFormState, PersistedClaimDraft } from './claimFormTypes';
 
 export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraft => ({
   version: 1,
@@ -8,10 +8,6 @@ export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraf
   reasonId: state.reasonId,
   clientDemandId: state.clientDemandId,
   flawIds: state.flawIds,
-  attachments: state.attachments.map(({ file: _file, status, ...attachment }) => ({
-    ...attachment,
-    status: status === 'uploaded' ? 'uploaded' : 'needs-file',
-  })),
 });
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -26,22 +22,6 @@ const isSelectedLines = (value: unknown): value is Record<string, number> =>
     (amount) => typeof amount === 'number' && Number.isInteger(amount) && amount > 0,
   );
 
-const isPersistedAttachment = (value: unknown): value is PersistedAttachment => {
-  if (!isRecord(value)) return false;
-
-  return (
-    typeof value.localId === 'string' &&
-    typeof value.fileName === 'string' &&
-    typeof value.size === 'number' &&
-    typeof value.mimeType === 'string' &&
-    typeof value.lastModified === 'number' &&
-    (value.status === 'uploaded' || value.status === 'needs-file') &&
-    (value.attachmentType === undefined || typeof value.attachmentType === 'number') &&
-    (value.attachmentTypeOrder === undefined || typeof value.attachmentTypeOrder === 'number') &&
-    (value.attachmentTypeName === undefined || typeof value.attachmentTypeName === 'string')
-  );
-};
-
 export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDraft => {
   if (!isRecord(value)) return false;
 
@@ -55,9 +35,7 @@ export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDr
     isSelectedLines(value.selectedLines) &&
     typeof value.reasonId === 'string' &&
     typeof value.clientDemandId === 'string' &&
-    isStringArray(value.flawIds) &&
-    Array.isArray(value.attachments) &&
-    value.attachments.every(isPersistedAttachment)
+    isStringArray(value.flawIds)
   );
 };
 
@@ -67,7 +45,7 @@ export const fromPersistedClaimDraft = (draft: PersistedClaimDraft): ClaimFormSt
   reasonId: draft.reasonId,
   clientDemandId: draft.clientDemandId,
   flawIds: draft.flawIds,
-  attachments: draft.attachments.map((attachment) => ({ ...attachment })),
+  attachments: [],
 });
 
 export const getDraftKey = (documentId: string) => `goods-return:claim-draft:v1:${documentId}`;

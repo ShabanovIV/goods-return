@@ -47,14 +47,10 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
   if (formState.step === 1) return <ClaimDetailsContainer data={data} state={state} />;
 
   if (formState.step === 2) {
-    const attachmentType = data.attachmentTypes.find(
-      (type) => String(type.order) === state.selectedAttachmentType,
-    );
     return (
       <AttachmentsStep
         attachments={formState.attachments}
         attachmentTypes={data.attachmentTypes}
-        selectedType={state.selectedAttachmentType}
         isTypesLoading={data.attachmentTypesQuery.isLoading}
         typesError={
           data.attachmentTypesQuery.error
@@ -62,8 +58,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
             : undefined
         }
         showErrors={state.showErrors}
-        onTypeChange={state.setSelectedAttachmentType}
-        onFilesSelected={(files) => state.addFiles(files, attachmentType)}
+        onFilesSelected={(attachmentType, files) => state.addFiles(files, attachmentType)}
         onRetryTypes={data.attachmentTypesQuery.refetch}
         onRemoveAttachment={state.removeFile}
       />

@@ -5,14 +5,12 @@ import {
   toPersistedClaimDraft,
 } from './claimForm';
 
-test('persists only attachment metadata and restores an unfinished file safely', () => {
-  const file = new File(['photo'], 'damage.jpg', {
-    type: 'image/jpeg',
-    lastModified: 123,
-  });
+test('does not persist selected attachment files or metadata', () => {
+  const file = new File(['photo'], 'damage.jpg', { type: 'image/jpeg', lastModified: 123 });
   const draft = toPersistedClaimDraft({
     ...createEmptyClaimForm(),
     step: 2,
+    reasonId: 'reason-1',
     attachments: [
       {
         localId: 'attachment-1',
@@ -26,37 +24,17 @@ test('persists only attachment metadata and restores an unfinished file safely',
     ],
   });
 
-  expect(draft.attachments[0]).not.toHaveProperty('file');
-  expect(draft.attachments[0].status).toBe('needs-file');
+  expect(draft).not.toHaveProperty('attachments');
   expect(isPersistedClaimDraft(draft)).toBe(true);
-
-  const restored = fromPersistedClaimDraft(draft);
-  expect(restored.attachments[0].status).toBe('needs-file');
-  expect(restored.attachments[0]).not.toHaveProperty('file');
+  expect(fromPersistedClaimDraft(draft)).toMatchObject({ reasonId: 'reason-1', attachments: [] });
 });
 
-test('keeps successfully uploaded attachment metadata in the draft', () => {
-  const draft = toPersistedClaimDraft({
-    ...createEmptyClaimForm(),
-    attachments: [
-      {
-        localId: 'attachment-2',
-        fileName: 'video.mp4',
-        size: 1024,
-        mimeType: 'video/mp4',
-        lastModified: 456,
-        attachmentType: 2,
-        attachmentTypeOrder: 20,
-        attachmentTypeName: 'Видео дефекта',
-        status: 'uploaded',
-      },
-    ],
-  });
+test('ignores attachment metadata from an older saved draft', () => {
+  const legacyDraft = {
+    ...toPersistedClaimDraft(createEmptyClaimForm()),
+    attachments: [{ fileName: 'old-photo.jpg', status: 'needs-file' }],
+  };
 
-  expect(draft.attachments[0]).toMatchObject({
-    fileName: 'video.mp4',
-    attachmentType: 2,
-    attachmentTypeOrder: 20,
-    status: 'uploaded',
-  });
+  expect(isPersistedClaimDraft(legacyDraft)).toBe(true);
+  expect(fromPersistedClaimDraft(legacyDraft).attachments).toEqual([]);
 });

@@ -13,10 +13,6 @@ export type ClaimFormState = {
   attachments: ClaimAttachment[];
 };
 
-export type PersistedAttachment = Omit<ClaimAttachment, 'file' | 'status'> & {
-  status: 'uploaded' | 'needs-file';
-};
-
 export type PersistedClaimDraft = {
   version: 1;
   savedAt: string;
@@ -25,7 +21,6 @@ export type PersistedClaimDraft = {
   reasonId: string;
   clientDemandId: string;
   flawIds: string[];
-  attachments: PersistedAttachment[];
 };
 
 export const createEmptyClaimForm = (): ClaimFormState => ({

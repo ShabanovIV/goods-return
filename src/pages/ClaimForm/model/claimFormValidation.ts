@@ -49,17 +49,12 @@ export const isClaimStepValid = (step: ClaimStep, context: ClaimValidationContex
   }
 
   if (step === 2) {
-    const readyAttachments = formState.attachments.filter((item) => item.status !== 'needs-file');
     const requirementsMet = attachmentTypes.every(
       (type) =>
-        readyAttachments.filter((item) => item.attachmentTypeOrder === type.order).length >=
+        formState.attachments.filter((item) => item.attachmentTypeOrder === type.order).length >=
         type.minAmount,
     );
-    return Boolean(
-      areAttachmentTypesReady &&
-      requirementsMet &&
-      !formState.attachments.some((item) => item.status === 'needs-file'),
-    );
+    return Boolean(areAttachmentTypesReady && requirementsMet);
   }
 
   return true;

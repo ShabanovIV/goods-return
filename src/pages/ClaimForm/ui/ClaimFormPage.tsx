@@ -32,13 +32,10 @@ const ClaimFormPage = () => {
   });
 
   useClaimFormConsistency({
-    attachmentTypes: data.attachmentTypes,
     flaws: data.flaws,
     flawsLoaded: data.flawsQuery.isSuccess,
-    selectedAttachmentType: state.selectedAttachmentType,
     setFormState: state.setFormState,
     setPageError: state.setPageError,
-    setSelectedAttachmentType: state.setSelectedAttachmentType,
   });
 
   if (!documentId) return <MissingDocument />;

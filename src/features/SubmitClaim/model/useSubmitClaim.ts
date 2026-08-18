@@ -40,9 +40,9 @@ export const useSubmitClaim = () => {
       reasonId,
       clientDemandId,
       flawIds,
-      attachments: attachments
-        .filter((attachment) => attachment.status !== 'needs-file')
-        .map(({ lastModified: _lastModified, status: _status, file: _file, ...item }) => item),
+      attachments: attachments.map(
+        ({ lastModified: _lastModified, status: _status, file: _file, ...item }) => item,
+      ),
     }).unwrap();
     if (!response.success) throw new Error(response.error);
 

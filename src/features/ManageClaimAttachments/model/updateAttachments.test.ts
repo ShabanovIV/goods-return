@@ -22,25 +22,29 @@ test('adds selected files with attachment type metadata', () => {
   });
 });
 
-test('replaces restored metadata and removes the selected attachment locally', () => {
-  const restored: ClaimAttachment = {
+test('rejects the same physical file for another type and removes it locally', () => {
+  const existing: ClaimAttachment = {
     localId: 'attachment-1',
     fileName: 'damage.jpg',
     size: 5,
     mimeType: 'image/jpeg',
     lastModified: 123,
-    status: 'needs-file',
+    attachmentType: 1,
+    attachmentTypeOrder: 10,
+    status: 'selected',
   };
   const file = new File(['photo'], 'damage.jpg', {
     type: 'image/jpeg',
     lastModified: 123,
   });
   const result = addSelectedFiles({
-    attachments: [restored],
+    attachments: [existing],
     files: [file],
+    attachmentType: { order: 20, type: 2, name: 'Фото этикетки', minAmount: 0 },
   });
 
   expect(result.attachments).toHaveLength(1);
-  expect(result.attachments[0]).toMatchObject({ localId: 'attachment-1', status: 'selected' });
+  expect(result.attachments[0]).toBe(existing);
+  expect(result.error).toContain('уже добавлен');
   expect(removeAttachment(result.attachments, 'attachment-1')).toEqual([]);
 });

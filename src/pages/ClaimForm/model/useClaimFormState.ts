@@ -7,7 +7,6 @@ export const useClaimFormState = () => {
   const [formState, setFormState] = useState(createEmptyClaimForm);
   const [showErrors, setShowErrors] = useState(false);
   const [pageError, setPageError] = useState('');
-  const [selectedAttachmentType, setSelectedAttachmentType] = useState('');
   const [claimNumber, setClaimNumber] = useState('');
 
   const setStep = (step: ClaimStep) => {
@@ -56,11 +55,9 @@ export const useClaimFormState = () => {
     pageError,
     removeFile,
     resetForm,
-    selectedAttachmentType,
     setClaimNumber,
     setFormState,
     setPageError,
-    setSelectedAttachmentType,
     setShowErrors,
     setStep,
     showErrors,

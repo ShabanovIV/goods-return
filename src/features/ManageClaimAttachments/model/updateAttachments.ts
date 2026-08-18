@@ -25,18 +25,17 @@ export const addSelectedFiles = ({
 
   files.forEach((file) => {
     const fingerprint = getFileFingerprint(file);
-    const existingIndex = nextAttachments.findIndex(
+    const existing = nextAttachments.some(
       (attachment) => getAttachmentFingerprint(attachment) === fingerprint,
     );
-    const existing = existingIndex >= 0 ? nextAttachments[existingIndex] : undefined;
 
-    if ((existing && existing.status !== 'needs-file') || processedFingerprints.has(fingerprint)) {
+    if (existing || processedFingerprints.has(fingerprint)) {
       duplicateNames.push(file.name);
       return;
     }
 
     const attachment: ClaimAttachment = {
-      localId: existing?.localId ?? createLocalId(),
+      localId: createLocalId(),
       fileName: file.name,
       size: file.size,
       mimeType: file.type || 'application/octet-stream',
@@ -49,8 +48,7 @@ export const addSelectedFiles = ({
     };
 
     processedFingerprints.add(fingerprint);
-    if (existingIndex >= 0) nextAttachments[existingIndex] = attachment;
-    else nextAttachments.push(attachment);
+    nextAttachments.push(attachment);
   });
 
   return {
