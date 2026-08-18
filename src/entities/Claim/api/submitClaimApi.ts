@@ -1,12 +1,12 @@
-import { claimApi } from 'src/entities/Claim';
+import { toUrlSearchParams } from 'src/shared/api';
+import { claimApi } from './claimApi';
+import { createAttachmentsFormData } from '../lib/createAttachmentsFormData';
 import type {
   AddAttachmentsQueryParams,
   AddAttachmentsResponse,
   CreateClaimQueryParams,
   CreateClaimResponse,
-} from 'src/entities/Claim';
-import { toUrlSearchParams } from 'src/shared/api';
-import { createAttachmentsFormData } from '../lib/createAttachmentsFormData';
+} from '../model/claimTypes';
 
 const wait = (milliseconds: number) =>
   new Promise<void>((resolve) => {

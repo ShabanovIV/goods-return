@@ -1,5 +1,8 @@
-import type { ClaimAttachment } from 'src/entities/Claim';
-import { useAddAttachmentsMutation, useCreateClaimMutation } from '../api/submitClaimApi';
+import {
+  type ClaimAttachment,
+  useAddAttachmentsMutation,
+  useCreateClaimMutation,
+} from 'src/entities/Claim';
 
 type SubmitClaimArguments = {
   documentId: string;
