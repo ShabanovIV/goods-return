@@ -15,35 +15,19 @@ type AttachmentPickerProps = {
 };
 
 type FileActionProps = {
-  accept?: string;
-  capture?: 'environment';
   disabled: boolean;
   label: string;
   multiple?: boolean;
   onFilesSelected: (files: readonly File[]) => void;
-  secondary?: boolean;
   symbol: string;
 };
 
-const FileAction = ({
-  accept,
-  capture,
-  disabled,
-  label,
-  multiple,
-  onFilesSelected,
-  secondary,
-  symbol,
-}: FileActionProps) => (
-  <label
-    className={`${secondary ? styles.fileButtonSecondary : styles.fileButton} ${disabled ? styles.fileButtonDisabled : ''}`}
-  >
+const FileAction = ({ disabled, label, multiple, onFilesSelected, symbol }: FileActionProps) => (
+  <label className={`${styles.fileButton} ${disabled ? styles.fileButtonDisabled : ''}`}>
     <span aria-hidden="true">{symbol}</span>
     {label}
     <input
       type="file"
-      accept={accept}
-      capture={capture}
       disabled={disabled}
       multiple={multiple}
       onChange={(event) => {
@@ -105,15 +89,6 @@ export const AttachmentPicker = ({
           multiple
           onFilesSelected={onFilesSelected}
           symbol="＋"
-        />
-        <FileAction
-          accept="image/*"
-          capture="environment"
-          disabled={disabled}
-          label="Снять фото"
-          onFilesSelected={onFilesSelected}
-          secondary
-          symbol="◎"
         />
       </div>
       <p className={styles.uploadHint}>
