@@ -64,6 +64,16 @@ export default [
         }),
       ],
     },
+
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "VariableDeclaration[kind='let']",
+          message: 'Используйте const вместо let.',
+        },
+      ],
+    },
   },
 
   // декларации — не трогаем import-x правилами

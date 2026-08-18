@@ -82,7 +82,7 @@ const ClaimFormPage = () => {
   );
 
   useEffect(() => {
-    let isCurrent = true;
+    const hydrationController = new AbortController();
     setIsHydrated(false);
     setFormState(createEmptyClaimForm());
     setDraftMessage('Восстанавливаем черновик…');
@@ -92,7 +92,7 @@ const ClaimFormPage = () => {
     configuration
       .getConfiguration(getDraftKey(documentId), null, isPersistedClaimDraft)
       .then((draft) => {
-        if (!isCurrent) return;
+        if (hydrationController.signal.aborted) return;
         if (draft) {
           setFormState(fromPersistedClaimDraft(draft));
           setDraftMessage('Черновик восстановлен');
@@ -101,14 +101,15 @@ const ClaimFormPage = () => {
         }
       })
       .catch(() => {
-        if (isCurrent) setDraftMessage('Не удалось восстановить черновик');
+        if (!hydrationController.signal.aborted)
+          setDraftMessage('Не удалось восстановить черновик');
       })
       .finally(() => {
-        if (isCurrent) setIsHydrated(true);
+        if (!hydrationController.signal.aborted) setIsHydrated(true);
       });
 
     return () => {
-      isCurrent = false;
+      hydrationController.abort();
     };
   }, [documentId]);
 
