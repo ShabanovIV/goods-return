@@ -1,4 +1,5 @@
 import type { ClaimFlaw } from 'src/entities/Claim';
+import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 import { DictionaryError } from './DictionaryError';
 
@@ -32,19 +33,23 @@ export const FlawSelector = ({
       <p>Для выбранных товаров недостатки не найдены.</p>
     )}
     <div className={s.optionGrid}>
-      {flaws.map((flaw) => (
-        <label className={s.checkOption} key={flaw.id}>
-          <input
-            type="checkbox"
-            checked={flawIds.includes(flaw.id)}
-            onChange={() => onToggle(flaw.id)}
-          />
-          <span className={s.customCheckbox} aria-hidden="true">
-            {flawIds.includes(flaw.id) ? '✓' : ''}
-          </span>
-          <span>{flaw.name}</span>
-        </label>
-      ))}
+      <List
+        items={flaws}
+        getKey={(flaw) => flaw.id}
+        renderItem={(flaw) => (
+          <label className={s.checkOption}>
+            <input
+              type="checkbox"
+              checked={flawIds.includes(flaw.id)}
+              onChange={() => onToggle(flaw.id)}
+            />
+            <span className={s.customCheckbox} aria-hidden="true">
+              {flawIds.includes(flaw.id) ? '✓' : ''}
+            </span>
+            <span>{flaw.name}</span>
+          </label>
+        )}
+      />
     </div>
     {showErrors && flaws.length > 0 && flawIds.length === 0 && (
       <span className={s.inputError}>Выберите хотя бы один недостаток.</span>

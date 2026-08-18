@@ -1,4 +1,5 @@
 import type { DocumentDetail } from 'src/entities/Document';
+import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 import type { ClaimFormState } from '../model/claimForm';
 
@@ -41,79 +42,80 @@ export const ProductStep = ({
             <p>Проверьте ссылку или обратитесь в поддержку.</p>
           </div>
         )}
-        {products.map((product) => {
-          const amount = selectedLines[product.lineId];
-          const isSelected = amount !== undefined;
-          const maxAmount = Math.max(0, Math.floor(product.amount));
-          const hasAmountError =
-            isSelected && (!Number.isInteger(amount) || amount < 1 || amount > maxAmount);
+        <List
+          items={products}
+          getKey={(product) => product.lineId}
+          renderItem={(product) => {
+            const amount = selectedLines[product.lineId];
+            const isSelected = amount !== undefined;
+            const maxAmount = Math.max(0, Math.floor(product.amount));
+            const hasAmountError =
+              isSelected && (!Number.isInteger(amount) || amount < 1 || amount > maxAmount);
 
-          return (
-            <article
-              className={`${s.productCard} ${isSelected ? s.productCardSelected : ''}`}
-              key={product.lineId}
-            >
-              <label className={s.productChoice}>
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  disabled={maxAmount === 0}
-                  onChange={() => onToggle(product)}
-                />
-                <span className={s.customCheckbox} aria-hidden="true">
-                  {isSelected ? '✓' : ''}
-                </span>
-                <span className={s.productInfo}>
-                  <strong>{product.productName}</strong>
-                  <span>
-                    {maxAmount > 0 ? `Доступно: ${maxAmount} шт.` : 'Недоступно для возврата'}
+            return (
+              <article className={`${s.productCard} ${isSelected ? s.productCardSelected : ''}`}>
+                <label className={s.productChoice}>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    disabled={maxAmount === 0}
+                    onChange={() => onToggle(product)}
+                  />
+                  <span className={s.customCheckbox} aria-hidden="true">
+                    {isSelected ? '✓' : ''}
                   </span>
-                </span>
-              </label>
+                  <span className={s.productInfo}>
+                    <strong>{product.productName}</strong>
+                    <span>
+                      {maxAmount > 0 ? `Доступно: ${maxAmount} шт.` : 'Недоступно для возврата'}
+                    </span>
+                  </span>
+                </label>
 
-              {isSelected && (
-                <div className={s.quantityBlock}>
-                  <span className={s.quantityLabel}>Количество для претензии</span>
-                  <div className={s.quantityControl}>
-                    <button
-                      type="button"
-                      aria-label={`Уменьшить количество ${product.productName}`}
-                      disabled={amount <= 1}
-                      onClick={() => onAmountChange(product, amount - 1)}
-                    >
-                      −
-                    </button>
-                    <input
-                      aria-label={`Количество ${product.productName}`}
-                      aria-invalid={hasAmountError}
-                      inputMode="numeric"
-                      min={1}
-                      max={maxAmount}
-                      step={1}
-                      type="number"
-                      value={amount}
-                      onChange={(event) => onAmountChange(product, Number(event.target.value))}
-                      onBlur={() => {
-                        if (hasAmountError) onAmountChange(product, 1);
-                      }}
-                    />
-                    <button
-                      type="button"
-                      aria-label={`Увеличить количество ${product.productName}`}
-                      disabled={amount >= maxAmount}
-                      onClick={() => onAmountChange(product, amount + 1)}
-                    >
-                      +
-                    </button>
+                {isSelected && (
+                  <div className={s.quantityBlock}>
+                    <span className={s.quantityLabel}>Количество для претензии</span>
+                    <div className={s.quantityControl}>
+                      <button
+                        type="button"
+                        aria-label={`Уменьшить количество ${product.productName}`}
+                        disabled={amount <= 1}
+                        onClick={() => onAmountChange(product, amount - 1)}
+                      >
+                        −
+                      </button>
+                      <input
+                        aria-label={`Количество ${product.productName}`}
+                        aria-invalid={hasAmountError}
+                        inputMode="numeric"
+                        min={1}
+                        max={maxAmount}
+                        step={1}
+                        type="number"
+                        value={amount}
+                        onChange={(event) => onAmountChange(product, Number(event.target.value))}
+                        onBlur={() => {
+                          if (hasAmountError) onAmountChange(product, 1);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        aria-label={`Увеличить количество ${product.productName}`}
+                        disabled={amount >= maxAmount}
+                        onClick={() => onAmountChange(product, amount + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    {showErrors && hasAmountError && (
+                      <span className={s.inputError}>Укажите целое число от 1 до {maxAmount}.</span>
+                    )}
                   </div>
-                  {showErrors && hasAmountError && (
-                    <span className={s.inputError}>Укажите целое число от 1 до {maxAmount}.</span>
-                  )}
-                </div>
-              )}
-            </article>
-          );
-        })}
+                )}
+              </article>
+            );
+          }}
+        />
       </div>
     </section>
   );

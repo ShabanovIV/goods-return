@@ -1,4 +1,5 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
+import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 
 type AttachmentRequirementsProps = {
@@ -31,11 +32,15 @@ export const AttachmentRequirements = ({
         <div className={s.requirements}>
           <strong>Обязательные материалы</strong>
           <ul>
-            {requiredTypes.map((type) => (
-              <li key={type.order}>
-                {type.name}: {countFor(type.order)} из {type.minAmount}
-              </li>
-            ))}
+            <List
+              items={requiredTypes}
+              getKey={(type) => type.order}
+              renderItem={(type) => (
+                <li>
+                  {type.name}: {countFor(type.order)} из {type.minAmount}
+                </li>
+              )}
+            />
           </ul>
         </div>
       )}

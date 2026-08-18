@@ -1,4 +1,5 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
+import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 
 const formatFileSize = (size: number) => {
@@ -26,32 +27,36 @@ export const AttachmentList = ({ attachments, onRemoveAttachment }: AttachmentLi
         <p>Здесь появятся добавленные файлы.</p>
       </div>
     ) : (
-      attachments.map((attachment) => (
-        <article className={s.attachmentCard} key={attachment.localId}>
-          <div className={s.fileIcon} aria-hidden="true">
-            {attachment.mimeType.startsWith('image/') ? 'IMG' : 'FILE'}
-          </div>
-          <div className={s.attachmentInfo}>
-            <strong>{attachment.fileName}</strong>
-            <span>
-              {formatFileSize(attachment.size)}
-              {attachment.attachmentTypeName ? ` · ${attachment.attachmentTypeName}` : ''}
-            </span>
-            <span className={s[`status-${attachment.status}`]}>
-              {statusText[attachment.status]}
-            </span>
-          </div>
-          <div className={s.attachmentActions}>
-            <button
-              type="button"
-              aria-label={`Удалить ${attachment.fileName}`}
-              onClick={() => onRemoveAttachment(attachment.localId)}
-            >
-              Удалить
-            </button>
-          </div>
-        </article>
-      ))
+      <List
+        items={attachments}
+        getKey={(attachment) => attachment.localId}
+        renderItem={(attachment) => (
+          <article className={s.attachmentCard}>
+            <div className={s.fileIcon} aria-hidden="true">
+              {attachment.mimeType.startsWith('image/') ? 'IMG' : 'FILE'}
+            </div>
+            <div className={s.attachmentInfo}>
+              <strong>{attachment.fileName}</strong>
+              <span>
+                {formatFileSize(attachment.size)}
+                {attachment.attachmentTypeName ? ` · ${attachment.attachmentTypeName}` : ''}
+              </span>
+              <span className={s[`status-${attachment.status}`]}>
+                {statusText[attachment.status]}
+              </span>
+            </div>
+            <div className={s.attachmentActions}>
+              <button
+                type="button"
+                aria-label={`Удалить ${attachment.fileName}`}
+                onClick={() => onRemoveAttachment(attachment.localId)}
+              >
+                Удалить
+              </button>
+            </div>
+          </article>
+        )}
+      />
     )}
   </div>
 );

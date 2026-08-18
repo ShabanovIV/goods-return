@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
 import type { DocumentDetail } from 'src/entities/Document';
+import { List } from 'src/shared/ui/List';
 import s from './ClaimFormPage.module.scss';
 import type { ClaimAttachment, ClaimStep } from '../model/claimForm';
 
@@ -56,12 +57,16 @@ export const ReviewStep = ({
       <div className={s.reviewList}>
         <ReviewCard title="Товары" step={0} onEdit={onEdit}>
           <ul className={s.reviewItems}>
-            {selectedProducts.map((product) => (
-              <li key={product.lineId}>
-                <strong>{product.productName}</strong>
-                <span>{selectedLines[product.lineId]} шт.</span>
-              </li>
-            ))}
+            <List
+              items={selectedProducts}
+              getKey={(product) => product.lineId}
+              renderItem={(product) => (
+                <li>
+                  <strong>{product.productName}</strong>
+                  <span>{selectedLines[product.lineId]} шт.</span>
+                </li>
+              )}
+            />
           </ul>
         </ReviewCard>
 
@@ -85,12 +90,16 @@ export const ReviewStep = ({
         <ReviewCard title="Вложения" step={2} onEdit={onEdit}>
           {readyAttachments.length ? (
             <ul className={s.reviewItems}>
-              {readyAttachments.map((attachment) => (
-                <li key={attachment.localId}>
-                  <strong>{attachment.fileName}</strong>
-                  <span>{attachment.attachmentTypeName ?? 'Файл'}</span>
-                </li>
-              ))}
+              <List
+                items={readyAttachments}
+                getKey={(attachment) => attachment.localId}
+                renderItem={(attachment) => (
+                  <li>
+                    <strong>{attachment.fileName}</strong>
+                    <span>{attachment.attachmentTypeName ?? 'Файл'}</span>
+                  </li>
+                )}
+              />
             </ul>
           ) : (
             <p className={s.reviewEmpty}>Вложения не добавлены.</p>
