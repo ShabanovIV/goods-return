@@ -18,9 +18,6 @@ export const ClaimFormHeader = ({ draftMessage, step }: ClaimFormHeaderProps) =>
           <small>{draftMessage}</small>
         </span>
       </div>
-      <span className={s.secureBadge}>
-        <span aria-hidden="true">◇</span> Данные защищены
-      </span>
     </div>
     <nav className={s.progress} aria-label="Этапы оформления">
       {CLAIM_STEPS.map((label, index) => (
