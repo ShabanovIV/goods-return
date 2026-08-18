@@ -1,9 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from 'src/shared/api/baseQuery';
 import { toUrlSearchParams } from 'src/shared/api/toUrlSearchParams';
+import { createAttachmentsFormData } from '../lib/createAttachmentsFormData';
 import type {
-  AddAttachmentQueryParams,
-  AddAttachmentResponse,
+  AddAttachmentsQueryParams,
+  AddAttachmentsResponse,
+  CreateClaimQueryParams,
+  CreateClaimResponse,
   GetAttachmentTypesResponse,
   GetClientDemandsResponse,
   GetFlawsQueryParams,
@@ -12,6 +15,11 @@ import type {
 } from '../types/claim';
 
 const BASE_URL = 'claim';
+
+const wait = (milliseconds: number) =>
+  new Promise<void>((resolve) => {
+    window.setTimeout(resolve, milliseconds);
+  });
 
 export const claimApi = createApi({
   reducerPath: 'claimApi',
@@ -36,18 +44,13 @@ export const claimApi = createApi({
         params: toUrlSearchParams(params),
       }),
     }),
-    addAttachment: builder.mutation<AddAttachmentResponse, AddAttachmentQueryParams>({
-      query: ({ documentId, file }) => {
-        const body = new FormData();
-        body.append('file', file);
-
-        return {
-          url: `${BASE_URL}/addAttachment`,
-          method: 'POST',
-          params: toUrlSearchParams({ documentId }),
-          body,
-        };
-      },
+    addAttachments: builder.mutation<AddAttachmentsResponse, AddAttachmentsQueryParams>({
+      query: ({ documentId, files }) => ({
+        url: `${BASE_URL}/addAttachment`,
+        method: 'POST',
+        params: toUrlSearchParams({ documentId }),
+        body: createAttachmentsFormData(files),
+      }),
     }),
     getAttachmentTypes: builder.query<GetAttachmentTypesResponse, void>({
       query: () => ({
@@ -55,11 +58,28 @@ export const claimApi = createApi({
         method: 'POST',
       }),
     }),
+    createClaim: builder.mutation<CreateClaimResponse, CreateClaimQueryParams>({
+      queryFn: async () => {
+        await wait(700);
+        const claimId = crypto.randomUUID?.() ?? `claim-${Date.now()}`;
+
+        return {
+          data: {
+            success: true,
+            data: {
+              claimId,
+              claimNumber: `GR-${Date.now().toString().slice(-8)}`,
+            },
+          },
+        };
+      },
+    }),
   }),
 });
 
 export const {
-  useAddAttachmentMutation,
+  useAddAttachmentsMutation,
+  useCreateClaimMutation,
   useGetAttachmentTypesQuery,
   useGetClientDemandsQuery,
   useGetFlawsQuery,

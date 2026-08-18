@@ -1,3 +1,4 @@
+import { deleteConfiguration } from '../lib/deleteConfiguration';
 import { deserializeConfiguration } from '../lib/deserializeConfiguration';
 import { readConfiguration } from '../lib/readConfiguration';
 import { serializeConfiguration } from '../lib/serializeConfiguration';
@@ -11,6 +12,7 @@ type ConfigHelperFactory = {
     validate: (value: unknown) => value is T,
   ): Promise<T>;
   setConfiguration<T>(key: string, value: T): Promise<void>;
+  removeConfiguration(key: string): Promise<void>;
 };
 
 export const configHelperFactory = (): ConfigHelperFactory => {
@@ -40,8 +42,13 @@ export const configHelperFactory = (): ConfigHelperFactory => {
     await writeConfiguration(key, serializedValue, configHelper);
   };
 
+  const removeConfiguration = async (key: string): Promise<void> => {
+    await deleteConfiguration(key, configHelper);
+  };
+
   return {
     getConfiguration,
+    removeConfiguration,
     setConfiguration,
   };
 };

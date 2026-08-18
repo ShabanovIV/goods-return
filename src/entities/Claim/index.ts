@@ -1,6 +1,7 @@
 export {
   claimApi,
-  useAddAttachmentMutation,
+  useAddAttachmentsMutation,
+  useCreateClaimMutation,
   useGetAttachmentTypesQuery,
   useGetClientDemandsQuery,
   useGetFlawsQuery,
@@ -11,14 +12,17 @@ export {
   useLazyGetReasonsQuery,
 } from './model/claimApi';
 export type {
-  AddAttachmentQueryParams,
-  AddAttachmentResponse,
+  AddAttachmentsQueryParams,
+  AddAttachmentsResponse,
   AttachmentType,
+  ClaimAttachmentMetadata,
   ClaimActionResponse,
   ClaimDataResponse,
   ClaimDictionaryItem,
   ClaimErrorResponse,
   ClaimFlaw,
+  CreateClaimQueryParams,
+  CreateClaimResponse,
   GetAttachmentTypesResponse,
   GetClientDemandsResponse,
   GetFlawsQueryParams,

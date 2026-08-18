@@ -7,4 +7,7 @@ export const localStorageConfigHelper: ConfigHelper = {
   async set(key: string, value: string): Promise<void> {
     localStorage.setItem(key, value);
   },
+  async remove(key: string): Promise<void> {
+    localStorage.removeItem(key);
+  },
 };

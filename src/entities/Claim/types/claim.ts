@@ -3,9 +3,31 @@ export type GetFlawsQueryParams = {
   reason: string;
 };
 
-export type AddAttachmentQueryParams = {
+export type AddAttachmentsQueryParams = {
   documentId: string;
-  file: File;
+  files: File[];
+};
+
+export type ClaimAttachmentMetadata = {
+  localId: string;
+  fileName: string;
+  size: number;
+  mimeType: string;
+  attachmentType?: number;
+  attachmentTypeOrder?: number;
+  attachmentTypeName?: string;
+};
+
+export type CreateClaimQueryParams = {
+  documentId: string;
+  lines: {
+    lineId: string;
+    amount: number;
+  }[];
+  reasonId: string;
+  clientDemandId: string;
+  flawIds: string[];
+  attachments: ClaimAttachmentMetadata[];
 };
 
 export type ClaimErrorResponse = {
@@ -43,5 +65,9 @@ export type AttachmentType = {
 export type GetReasonsResponse = ClaimDataResponse<ClaimDictionaryItem[]>;
 export type GetClientDemandsResponse = ClaimDataResponse<ClaimDictionaryItem[]>;
 export type GetFlawsResponse = ClaimDataResponse<{ flaws: ClaimFlaw[] }>;
-export type AddAttachmentResponse = ClaimActionResponse;
+export type AddAttachmentsResponse = ClaimActionResponse;
 export type GetAttachmentTypesResponse = ClaimDataResponse<AttachmentType[]>;
+export type CreateClaimResponse = ClaimDataResponse<{
+  claimId: string;
+  claimNumber: string;
+}>;
