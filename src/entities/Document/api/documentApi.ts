@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from 'src/shared/api/baseQuery';
-import { toUrlSearchParams } from 'src/shared/api/toUrlSearchParams';
-import { DocumentQueryParams, DocumentResponse } from '../types/document';
+import { baseQuery, toUrlSearchParams } from 'src/shared/api';
+import type { DocumentQueryParams, DocumentResponse } from '../model/documentTypes';
 
 const BASE_URL = 'document';
 
@@ -10,10 +9,10 @@ export const documentApi = createApi({
   baseQuery,
   endpoints: (builder) => ({
     getDocument: builder.query<DocumentResponse, DocumentQueryParams>({
-      query: (documentQueryParams) => ({
+      query: (params) => ({
         url: `${BASE_URL}/getdocument`,
         method: 'POST',
-        params: toUrlSearchParams(documentQueryParams),
+        params: toUrlSearchParams(params),
       }),
     }),
   }),

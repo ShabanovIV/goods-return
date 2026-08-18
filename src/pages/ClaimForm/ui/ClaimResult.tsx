@@ -1,4 +1,4 @@
-import { Button } from 'src/shared/ui/buttons/Button/Button';
+import { Button } from 'src/shared/ui/buttons/Button';
 import s from './ClaimFormPage.module.scss';
 
 type ClaimResultProps = {

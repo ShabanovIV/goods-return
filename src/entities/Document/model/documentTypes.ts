@@ -1,6 +1,4 @@
-export type DocumentQueryParams = {
-  documentId: string;
-};
+export type DocumentQueryParams = { documentId: string };
 
 export type DocumentDetail = {
   id: number;
@@ -12,7 +10,5 @@ export type DocumentDetail = {
 
 export type DocumentResponse = {
   success: boolean;
-  data: {
-    details: DocumentDetail[];
-  };
+  data: { details: DocumentDetail[] };
 };

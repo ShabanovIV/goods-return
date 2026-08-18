@@ -1,0 +1,97 @@
+.reviewCard {
+  padding: 1.125rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 0.25rem 1rem rgba(33, 33, 33, 0.04);
+}
+
+.reviewCardHeading {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 0.25rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-accent-strong);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}
+
+.reviewItems {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0.625rem;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  strong,
+  span {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  strong {
+    color: var(--color-text-strong);
+  }
+
+  span {
+    color: var(--color-muted);
+    text-align: right;
+  }
+}
+
+.reviewDetails {
+  display: grid;
+  margin: 0;
+  gap: 0.875rem;
+
+  div {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  dt {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+}
+
+.reviewEmpty,
+.consentNote {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.consentNote {
+  padding-inline: 0.5rem;
+  text-align: center;
+}

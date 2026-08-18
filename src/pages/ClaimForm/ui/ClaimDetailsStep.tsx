@@ -1,7 +1,7 @@
-/* eslint-disable max-lines */
 import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
-import { Button } from 'src/shared/ui/buttons/Button/Button';
 import s from './ClaimFormPage.module.scss';
+import { DictionaryError } from './DictionaryError';
+import { FlawSelector } from './FlawSelector';
 
 type DictionaryState<T> = {
   items: T[];
@@ -23,20 +23,6 @@ type ClaimDetailsStepProps = {
   onDemandChange: (demandId: string) => void;
   onFlawToggle: (flawId: string) => void;
 };
-
-type DictionaryErrorProps = {
-  message: string;
-  onRetry: () => void;
-};
-
-const DictionaryError = ({ message, onRetry }: DictionaryErrorProps) => (
-  <div className={s.dictionaryError} role="alert">
-    <span>{message}</span>
-    <Button type="button" variant="secondary" onClick={onRetry}>
-      Повторить
-    </Button>
-  </div>
-);
 
 export const ClaimDetailsStep = ({
   reasonId,
@@ -113,35 +99,16 @@ export const ClaimDetailsStep = ({
         )}
       </div>
 
-      <fieldset className={s.flawFieldset} disabled={!flawsEnabled || flaws.isLoading}>
-        <legend>Недостатки товара</legend>
-        {!flawsEnabled && <p>Сначала выберите причину обращения.</p>}
-        {flawsEnabled && flaws.isLoading && <p>Обновляем список недостатков…</p>}
-        {flaws.errorMessage && (
-          <DictionaryError message={flaws.errorMessage} onRetry={flaws.retry} />
-        )}
-        {!flaws.isLoading && !flaws.errorMessage && flawsEnabled && flaws.items.length === 0 && (
-          <p>Для выбранных товаров недостатки не найдены.</p>
-        )}
-        <div className={s.optionGrid}>
-          {flaws.items.map((flaw) => (
-            <label className={s.checkOption} key={flaw.id}>
-              <input
-                type="checkbox"
-                checked={flawIds.includes(flaw.id)}
-                onChange={() => onFlawToggle(flaw.id)}
-              />
-              <span className={s.customCheckbox} aria-hidden="true">
-                {flawIds.includes(flaw.id) ? '✓' : ''}
-              </span>
-              <span>{flaw.name}</span>
-            </label>
-          ))}
-        </div>
-        {showErrors && flaws.items.length > 0 && flawIds.length === 0 && (
-          <span className={s.inputError}>Выберите хотя бы один недостаток.</span>
-        )}
-      </fieldset>
+      <FlawSelector
+        enabled={flawsEnabled}
+        errorMessage={flaws.errorMessage}
+        flawIds={flawIds}
+        flaws={flaws.items}
+        isLoading={flaws.isLoading}
+        onRetry={flaws.retry}
+        onToggle={onFlawToggle}
+        showErrors={showErrors}
+      />
     </div>
   </section>
 );
