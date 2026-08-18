@@ -3,7 +3,7 @@ import { getAttachmentFingerprint, getFileFingerprint } from './attachmentFinger
 
 type AddSelectedFilesArguments = {
   attachments: ClaimAttachment[];
-  files: FileList;
+  files: readonly File[];
   attachmentType?: AttachmentType;
 };
 
@@ -23,7 +23,7 @@ export const addSelectedFiles = ({
   const nextAttachments = [...attachments];
   const duplicateNames: string[] = [];
 
-  Array.from(files).forEach((file) => {
+  files.forEach((file) => {
     const fingerprint = getFileFingerprint(file);
     const existingIndex = nextAttachments.findIndex(
       (attachment) => getAttachmentFingerprint(attachment) === fingerprint,

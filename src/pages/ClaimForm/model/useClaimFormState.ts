@@ -17,7 +17,7 @@ export const useClaimFormState = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const addFiles = (files: FileList, attachmentType?: AttachmentType) => {
+  const addFiles = (files: readonly File[], attachmentType?: AttachmentType) => {
     setFormState((current) => {
       const result = addSelectedFiles({ attachments: current.attachments, files, attachmentType });
       if (result.error) setPageError(result.error);

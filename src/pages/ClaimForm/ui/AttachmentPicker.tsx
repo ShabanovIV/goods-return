@@ -4,11 +4,10 @@ import { Button } from 'src/shared/ui/Button';
 import { FormField } from 'src/shared/ui/FormField';
 import { Select } from 'src/shared/ui/Select';
 import s from './ClaimFormPage.module.scss';
-
 type AttachmentPickerProps = {
   attachmentTypes: AttachmentType[];
   isTypesLoading: boolean;
-  onFilesSelected: (files: FileList) => void;
+  onFilesSelected: (files: readonly File[]) => void;
   onRetryTypes: () => void;
   onTypeChange: (type: string) => void;
   selectedType: string;
@@ -21,7 +20,7 @@ type FileActionProps = {
   disabled: boolean;
   label: string;
   multiple?: boolean;
-  onFilesSelected: (files: FileList) => void;
+  onFilesSelected: (files: readonly File[]) => void;
   secondary?: boolean;
   symbol: string;
 };
@@ -48,8 +47,9 @@ const FileAction = ({
       disabled={disabled}
       multiple={multiple}
       onChange={(event) => {
-        if (event.target.files?.length) onFilesSelected(event.target.files);
-        event.target.value = '';
+        const files = Array.from(event.currentTarget.files ?? []);
+        event.currentTarget.value = '';
+        if (files.length) onFilesSelected(files);
       }}
     />
   </label>

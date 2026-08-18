@@ -1,8 +1,6 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
 import { addSelectedFiles, removeAttachment } from './updateAttachments';
 
-const asFileList = (files: File[]) => files as unknown as FileList;
-
 test('adds selected files with attachment type metadata', () => {
   const file = new File(['photo'], 'damage.jpg', {
     type: 'image/jpeg',
@@ -10,7 +8,7 @@ test('adds selected files with attachment type metadata', () => {
   });
   const result = addSelectedFiles({
     attachments: [],
-    files: asFileList([file]),
+    files: [file],
     attachmentType: { order: 20, type: 1, name: 'Фото товара', minAmount: 1 },
   });
 
@@ -39,7 +37,7 @@ test('replaces restored metadata and removes the selected attachment locally', (
   });
   const result = addSelectedFiles({
     attachments: [restored],
-    files: asFileList([file]),
+    files: [file],
   });
 
   expect(result.attachments).toHaveLength(1);

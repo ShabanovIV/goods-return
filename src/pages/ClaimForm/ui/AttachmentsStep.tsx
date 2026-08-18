@@ -12,7 +12,7 @@ type AttachmentsStepProps = {
   typesError?: string;
   showErrors: boolean;
   onTypeChange: (type: string) => void;
-  onFilesSelected: (files: FileList) => void;
+  onFilesSelected: (files: readonly File[]) => void;
   onRetryTypes: () => void;
   onRemoveAttachment: (localId: string) => void;
 };
