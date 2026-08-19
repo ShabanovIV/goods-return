@@ -1,7 +1,10 @@
 import type { ClaimFormState, PersistedClaimDraft } from '../types/claimForm';
 
+const CLAIM_DRAFT_PREFIX = 'goods-return:claim-draft:';
+const CLAIM_DRAFT_VERSION = 2;
+
 export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraft => ({
-  version: 2,
+  version: CLAIM_DRAFT_VERSION,
   savedAt: new Date().toISOString(),
   step: state.step,
   selectedLines: state.selectedLines,
@@ -45,4 +48,17 @@ export const fromPersistedClaimDraft = (draft: PersistedClaimDraft): ClaimFormSt
   attachments: [],
 });
 
-export const getDraftKey = (documentId: string) => `goods-return:claim-draft:v2:${documentId}`;
+export const getDraftKey = (documentId: string) =>
+  `${CLAIM_DRAFT_PREFIX}v${CLAIM_DRAFT_VERSION}:${documentId}`;
+
+export const getOutdatedDraftKeys = (keys: string[], documentId: string) => {
+  return keys.filter((key) => {
+    if (!key.startsWith(CLAIM_DRAFT_PREFIX)) return false;
+    const keyTail = key.slice(CLAIM_DRAFT_PREFIX.length);
+    const separatorIndex = keyTail.indexOf(':');
+    if (separatorIndex < 0 || keyTail.slice(separatorIndex + 1) !== documentId) return false;
+    const versionPart = keyTail.slice(0, separatorIndex);
+    const version = versionPart.startsWith('v') ? Number(versionPart.slice(1)) : Number.NaN;
+    return Number.isInteger(version) && version < CLAIM_DRAFT_VERSION;
+  });
+};

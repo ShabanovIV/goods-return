@@ -4,6 +4,9 @@ export const localStorageConfigHelper: ConfigHelper = {
   async get(key: string): Promise<string | null> {
     return localStorage.getItem(key);
   },
+  async getKeys(): Promise<string[]> {
+    return Object.keys(localStorage);
+  },
   async set(key: string, value: string): Promise<void> {
     localStorage.setItem(key, value);
   },

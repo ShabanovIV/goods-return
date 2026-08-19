@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { configHelperFactory } from 'src/shared/lib/configurations';
 import {
   fromPersistedClaimDraft,
@@ -6,6 +6,7 @@ import {
   isPersistedClaimDraft,
   toPersistedClaimDraft,
 } from './claimDraft';
+import { removeOutdatedClaimDrafts } from './claimDraftCleanup';
 import { createEmptyClaimForm } from './claimFormState';
 import type { ClaimFormState } from '../types/claimForm';
 
@@ -14,6 +15,7 @@ const configuration = configHelperFactory();
 type UseClaimDraftArguments = {
   claimNumber: string;
   documentId: string;
+  isDocumentLoaded: boolean;
   formState: ClaimFormState;
   setFormState: Dispatch<SetStateAction<ClaimFormState>>;
 };
@@ -21,11 +23,21 @@ type UseClaimDraftArguments = {
 export const useClaimDraft = ({
   claimNumber,
   documentId,
+  isDocumentLoaded,
   formState,
   setFormState,
 }: UseClaimDraftArguments) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const [draftMessage, setDraftMessage] = useState('Восстанавливаем черновик…');
+  const cleanedDocumentIdRef = useRef('');
+
+  useEffect(() => {
+    if (!documentId || !isDocumentLoaded || cleanedDocumentIdRef.current === documentId) return;
+    cleanedDocumentIdRef.current = documentId;
+    removeOutdatedClaimDrafts(documentId).catch(() =>
+      setDraftMessage('Не удалось удалить устаревшие черновики'),
+    );
+  }, [documentId, isDocumentLoaded]);
 
   useEffect(() => {
     const controller = new AbortController();

@@ -22,6 +22,7 @@ const ClaimFormPage = () => {
     claimNumber: state.claimNumber,
     documentId,
     formState: state.formState,
+    isDocumentLoaded: data.documentQuery.data?.success === true,
     setFormState: state.setFormState,
   });
   const navigation = useClaimFormNavigation({

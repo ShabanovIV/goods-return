@@ -1,7 +1,9 @@
 import {
   createEmptyClaimForm,
   fromPersistedClaimDraft,
+  getOutdatedDraftKeys,
   isPersistedClaimDraft,
+  removeOutdatedClaimDrafts,
   toPersistedClaimDraft,
 } from './claimForm';
 
@@ -52,4 +54,30 @@ test('rejects drafts with the old multiple flaw selection', () => {
   };
 
   expect(isPersistedClaimDraft(legacyDraft)).toBe(false);
+});
+
+test('finds only outdated drafts for the current document', () => {
+  const keys = [
+    'goods-return:claim-draft:v1:document-1',
+    'goods-return:claim-draft:v2:document-1',
+    'goods-return:claim-draft:v3:document-1',
+    'goods-return:claim-draft:v1:document-2',
+    'another-setting',
+  ];
+
+  expect(getOutdatedDraftKeys(keys, 'document-1')).toEqual([
+    'goods-return:claim-draft:v1:document-1',
+  ]);
+});
+
+test('removes outdated drafts without touching current or other document drafts', async () => {
+  localStorage.setItem('goods-return:claim-draft:v1:document-1', '{}');
+  localStorage.setItem('goods-return:claim-draft:v2:document-1', '{}');
+  localStorage.setItem('goods-return:claim-draft:v1:document-2', '{}');
+
+  await removeOutdatedClaimDrafts('document-1');
+
+  expect(localStorage.getItem('goods-return:claim-draft:v1:document-1')).toBeNull();
+  expect(localStorage.getItem('goods-return:claim-draft:v2:document-1')).toBe('{}');
+  expect(localStorage.getItem('goods-return:claim-draft:v1:document-2')).toBe('{}');
 });

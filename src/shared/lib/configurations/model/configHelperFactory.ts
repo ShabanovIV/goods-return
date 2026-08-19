@@ -11,6 +11,7 @@ type ConfigHelperFactory = {
     defaultValue: T,
     validate: (value: unknown) => value is T,
   ): Promise<T>;
+  getConfigurationKeys(): Promise<string[]>;
   setConfiguration<T>(key: string, value: T): Promise<void>;
   removeConfiguration(key: string): Promise<void>;
 };
@@ -42,12 +43,15 @@ export const configHelperFactory = (): ConfigHelperFactory => {
     await writeConfiguration(key, serializedValue, configHelper);
   };
 
+  const getConfigurationKeys = async (): Promise<string[]> => configHelper.getKeys();
+
   const removeConfiguration = async (key: string): Promise<void> => {
     await deleteConfiguration(key, configHelper);
   };
 
   return {
     getConfiguration,
+    getConfigurationKeys,
     removeConfiguration,
     setConfiguration,
   };
