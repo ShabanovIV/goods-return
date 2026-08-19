@@ -17,12 +17,10 @@ export const useClaimFormConsistency = ({
 }: UseClaimFormConsistencyArguments) => {
   useEffect(() => {
     if (!flawsLoaded) return;
-    const availableIds = new Set(flaws.map((flaw) => flaw.id));
     setFormState((current) => {
-      const availableSelection = current.flawIds.filter((id) => availableIds.has(id));
-      if (availableSelection.length === current.flawIds.length) return current;
-      setPageError('Список недостатков изменился. Проверьте выбранные значения.');
-      return { ...current, flawIds: availableSelection };
+      if (!current.flawId || flaws.some((flaw) => flaw.id === current.flawId)) return current;
+      setPageError('Список недостатков изменился. Выберите недостаток заново.');
+      return { ...current, flawId: '' };
     });
   }, [flaws, flawsLoaded, setFormState, setPageError]);
 };

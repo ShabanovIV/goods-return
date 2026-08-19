@@ -7,6 +7,6 @@ export const createEmptyClaimForm = (): ClaimFormState => ({
   selectedLines: {},
   reasonId: '',
   clientDemandId: '',
-  flawIds: [],
+  flawId: '',
   attachments: [],
 });

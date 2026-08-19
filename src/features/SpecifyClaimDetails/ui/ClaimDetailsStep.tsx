@@ -16,7 +16,7 @@ type DictionaryState<T> = {
 type ClaimDetailsStepProps = {
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
   reasons: DictionaryState<ClaimDictionaryItem>;
   demands: DictionaryState<ClaimDictionaryItem>;
   flaws: DictionaryState<ClaimFlaw>;
@@ -24,13 +24,13 @@ type ClaimDetailsStepProps = {
   showErrors: boolean;
   onReasonChange: (reasonId: string) => void;
   onDemandChange: (demandId: string) => void;
-  onFlawToggle: (flawId: string) => void;
+  onFlawChange: (flawId: string) => void;
 };
 
 export const ClaimDetailsStep = ({
   reasonId,
   clientDemandId,
-  flawIds,
+  flawId,
   reasons,
   demands,
   flaws,
@@ -38,7 +38,7 @@ export const ClaimDetailsStep = ({
   showErrors,
   onReasonChange,
   onDemandChange,
-  onFlawToggle,
+  onFlawChange,
 }: ClaimDetailsStepProps) => (
   <FormStep
     description="Ответы помогут быстрее передать обращение нужному специалисту."
@@ -76,6 +76,16 @@ export const ClaimDetailsStep = ({
           </Select>
         )}
       </FormField>
+      <FlawSelector
+        enabled={flawsEnabled}
+        errorMessage={flaws.errorMessage}
+        flawId={flawId}
+        flaws={flaws.items}
+        isLoading={flaws.isLoading}
+        onChange={onFlawChange}
+        onRetry={flaws.retry}
+        showErrors={showErrors}
+      />
       <FormField
         error={
           showErrors && !clientDemandId && !demands.errorMessage
@@ -107,16 +117,6 @@ export const ClaimDetailsStep = ({
           </Select>
         )}
       </FormField>
-      <FlawSelector
-        enabled={flawsEnabled}
-        errorMessage={flaws.errorMessage}
-        flawIds={flawIds}
-        flaws={flaws.items}
-        isLoading={flaws.isLoading}
-        onRetry={flaws.retry}
-        onToggle={onFlawToggle}
-        showErrors={showErrors}
-      />
     </div>
   </FormStep>
 );

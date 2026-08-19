@@ -23,7 +23,7 @@ export type CreateClaimQueryParams = {
   lines: { lineId: string; amount: number }[];
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
   attachments: ClaimAttachmentMetadata[];
 };
 

@@ -9,7 +9,7 @@ type SubmitClaimArguments = {
   selectedLines: Record<string, number>;
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
   attachments: ClaimAttachment[];
   onAttachmentsUploaded: () => void;
 };
@@ -23,7 +23,7 @@ export const useSubmitClaim = () => {
     selectedLines,
     reasonId,
     clientDemandId,
-    flawIds,
+    flawId,
     attachments,
     onAttachmentsUploaded,
   }: SubmitClaimArguments) => {
@@ -42,7 +42,7 @@ export const useSubmitClaim = () => {
       lines: Object.entries(selectedLines).map(([lineId, amount]) => ({ lineId, amount })),
       reasonId,
       clientDemandId,
-      flawIds,
+      flawId,
       attachments: attachments.map(
         ({ lastModified: _lastModified, status: _status, file: _file, ...item }) => item,
       ),

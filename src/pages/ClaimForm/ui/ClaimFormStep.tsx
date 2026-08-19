@@ -31,7 +31,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
             const selectedLines = { ...current.selectedLines };
             if (selectedLines[product.lineId] !== undefined) delete selectedLines[product.lineId];
             else selectedLines[product.lineId] = 1;
-            return { ...current, selectedLines, flawIds: [] };
+            return { ...current, selectedLines, flawId: '' };
           })
         }
         onAmountChange={(product, amount) =>
@@ -67,7 +67,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
 
   const selectedReason = data.reasons.find((reason) => reason.id === formState.reasonId);
   const selectedDemand = data.demands.find((demand) => demand.id === formState.clientDemandId);
-  const selectedFlaws = data.flaws.filter((flaw) => formState.flawIds.includes(flaw.id));
+  const selectedFlaw = data.flaws.find((flaw) => flaw.id === formState.flawId);
 
   return (
     <ReviewStep
@@ -75,7 +75,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
       selectedLines={formState.selectedLines}
       reason={selectedReason}
       demand={selectedDemand}
-      flaws={selectedFlaws}
+      flaw={selectedFlaw}
       attachments={formState.attachments}
       onEdit={(section) => state.setStep(reviewStep[section])}
     />

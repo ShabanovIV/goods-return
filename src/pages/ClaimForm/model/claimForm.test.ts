@@ -11,6 +11,7 @@ test('does not persist selected attachment files or metadata', () => {
     ...createEmptyClaimForm(),
     step: 2,
     reasonId: 'reason-1',
+    flawId: 'flaw-1',
     attachments: [
       {
         localId: 'attachment-1',
@@ -26,7 +27,11 @@ test('does not persist selected attachment files or metadata', () => {
 
   expect(draft).not.toHaveProperty('attachments');
   expect(isPersistedClaimDraft(draft)).toBe(true);
-  expect(fromPersistedClaimDraft(draft)).toMatchObject({ reasonId: 'reason-1', attachments: [] });
+  expect(fromPersistedClaimDraft(draft)).toMatchObject({
+    reasonId: 'reason-1',
+    flawId: 'flaw-1',
+    attachments: [],
+  });
 });
 
 test('ignores attachment metadata from an older saved draft', () => {
@@ -37,4 +42,14 @@ test('ignores attachment metadata from an older saved draft', () => {
 
   expect(isPersistedClaimDraft(legacyDraft)).toBe(true);
   expect(fromPersistedClaimDraft(legacyDraft).attachments).toEqual([]);
+});
+
+test('rejects drafts with the old multiple flaw selection', () => {
+  const legacyDraft = {
+    ...toPersistedClaimDraft(createEmptyClaimForm()),
+    version: 1,
+    flawIds: ['flaw-1'],
+  };
+
+  expect(isPersistedClaimDraft(legacyDraft)).toBe(false);
 });

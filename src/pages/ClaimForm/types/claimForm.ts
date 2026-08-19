@@ -7,16 +7,16 @@ export type ClaimFormState = {
   selectedLines: Record<string, number>;
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
   attachments: ClaimAttachment[];
 };
 
 export type PersistedClaimDraft = {
-  version: 1;
+  version: 2;
   savedAt: string;
   step: ClaimStep;
   selectedLines: Record<string, number>;
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
 };

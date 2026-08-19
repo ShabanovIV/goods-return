@@ -52,7 +52,7 @@ export const useClaimFormNavigation = ({
         selectedLines: state.formState.selectedLines,
         reasonId: state.formState.reasonId,
         clientDemandId: state.formState.clientDemandId,
-        flawIds: state.formState.flawIds,
+        flawId: state.formState.flawId,
         attachments: state.formState.attachments,
         onAttachmentsUploaded: state.markAttachmentsUploaded,
       });
