@@ -43,7 +43,7 @@ export const ClaimDetailsStep = ({
   <FormStep
     description="Ответы помогут быстрее передать обращение нужному специалисту."
     step={2}
-    title="Расскажите, что произошло"
+    title="Обращение"
     titleId="claim-title"
   >
     <div className={styles.formFields}>
