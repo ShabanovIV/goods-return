@@ -24,6 +24,36 @@ test('connects a form field label, select and error', () => {
   expect(screen.getByText('Выберите значение')).toHaveAttribute('id', 'reason-error');
 });
 
+test('opens a select menu upward when the fixed footer limits space below', () => {
+  const footer = document.createElement('footer');
+  footer.dataset.overlayBoundary = 'bottom';
+  document.body.append(footer);
+  jest.spyOn(footer, 'getBoundingClientRect').mockReturnValue({ top: 700 } as DOMRect);
+  const scrollHeight = jest
+    .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
+    .mockReturnValue(300);
+
+  render(
+    <Select
+      id="demand"
+      value="replacement"
+      options={[{ label: 'Замена', value: 'replacement' }]}
+      placeholder="Выберите требование"
+      onChange={jest.fn()}
+    />,
+  );
+
+  const trigger = screen.getByRole('combobox');
+  jest
+    .spyOn(trigger, 'getBoundingClientRect')
+    .mockReturnValue({ top: 600, bottom: 660 } as DOMRect);
+  fireEvent.click(trigger);
+
+  expect(screen.getByRole('listbox')).toHaveClass('menuTop');
+  scrollHeight.mockRestore();
+  footer.remove();
+});
+
 test('forwards checkbox state and change handler', () => {
   const onChange = jest.fn();
   render(

@@ -59,6 +59,11 @@
   overscroll-behavior: contain;
 }
 
+.menuTop {
+  top: auto;
+  bottom: calc(100% + 0.375rem);
+}
+
 .option {
   width: 100%;
   min-height: 2.75rem;

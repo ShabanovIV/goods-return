@@ -1,19 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import styles from './Select.module.scss';
-
-export type SelectOption = { label: string; value: string };
-
-export type SelectProps = {
-  'aria-describedby'?: string;
-  'aria-invalid'?: boolean;
-  className?: string;
-  disabled?: boolean;
-  id: string;
-  onChange: (value: string) => void;
-  options: readonly SelectOption[];
-  placeholder: string;
-  value: string;
-};
+import type { SelectProps } from './types/select';
+import { useSelectMenuPlacement } from './useSelectMenuPlacement';
 
 export const Select = ({
   'aria-describedby': ariaDescribedBy,
@@ -29,6 +17,7 @@ export const Select = ({
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const menuOptions = [{ label: placeholder, value: '' }, ...options];
   const selectedIndex = Math.max(
@@ -36,6 +25,12 @@ export const Select = ({
     menuOptions.findIndex((option) => option.value === value),
   );
   const selectedOption = menuOptions[selectedIndex];
+  const menuPlacement = useSelectMenuPlacement({
+    isOpen,
+    menuRef,
+    optionCount: menuOptions.length,
+    triggerRef,
+  });
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -48,7 +43,7 @@ export const Select = ({
 
   useEffect(() => {
     if (!isOpen) return;
-    optionRefs.current[selectedIndex]?.focus();
+    optionRefs.current[selectedIndex]?.focus({ preventScroll: true });
   }, [isOpen, selectedIndex]);
 
   const closeAndFocus = () => {
@@ -96,7 +91,12 @@ export const Select = ({
         <span className={styles.chevron} aria-hidden="true" />
       </button>
       {isOpen && (
-        <div id={`${id}-listbox`} className={styles.menu} role="listbox">
+        <div
+          ref={menuRef}
+          id={`${id}-listbox`}
+          className={`${styles.menu} ${menuPlacement === 'top' ? styles.menuTop : ''}`}
+          role="listbox"
+        >
           {menuOptions.map((option, index) => (
             <button
               key={option.value}
