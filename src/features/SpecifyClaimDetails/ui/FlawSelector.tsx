@@ -46,17 +46,12 @@ export const FlawSelector = ({
           id="claim-flaw"
           value={flawId}
           disabled={!enabled || isLoading || flaws.length === 0}
+          options={flaws.map((flaw) => ({ label: flaw.name, value: flaw.id }))}
+          placeholder={placeholder}
           aria-invalid={hasError}
           aria-describedby={hasError ? 'claim-flaw-error' : undefined}
-          onChange={(event) => onChange(event.target.value)}
-        >
-          <option value="">{placeholder}</option>
-          {flaws.map((flaw) => (
-            <option key={flaw.id} value={flaw.id}>
-              {flaw.name}
-            </option>
-          ))}
-        </Select>
+          onChange={onChange}
+        />
       )}
     </FormField>
   );

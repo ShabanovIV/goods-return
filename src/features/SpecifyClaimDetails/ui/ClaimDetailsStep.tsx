@@ -61,19 +61,12 @@ export const ClaimDetailsStep = ({
             id="claim-reason"
             value={reasonId}
             disabled={reasons.isLoading}
+            options={reasons.items.map((reason) => ({ label: reason.name, value: reason.id }))}
+            placeholder={reasons.isLoading ? 'Загружаем причины…' : 'Выберите причину'}
             aria-invalid={showErrors && !reasonId}
             aria-describedby={showErrors && !reasonId ? 'claim-reason-error' : undefined}
-            onChange={(event) => onReasonChange(event.target.value)}
-          >
-            <option value="">
-              {reasons.isLoading ? 'Загружаем причины…' : 'Выберите причину'}
-            </option>
-            {reasons.items.map((reason) => (
-              <option key={reason.id} value={reason.id}>
-                {reason.name}
-              </option>
-            ))}
-          </Select>
+            onChange={onReasonChange}
+          />
         )}
       </FormField>
       <FlawSelector
@@ -102,19 +95,12 @@ export const ClaimDetailsStep = ({
             id="client-demand"
             value={clientDemandId}
             disabled={demands.isLoading}
+            options={demands.items.map((demand) => ({ label: demand.name, value: demand.id }))}
+            placeholder={demands.isLoading ? 'Загружаем варианты…' : 'Выберите вариант'}
             aria-invalid={showErrors && !clientDemandId}
             aria-describedby={showErrors && !clientDemandId ? 'client-demand-error' : undefined}
-            onChange={(event) => onDemandChange(event.target.value)}
-          >
-            <option value="">
-              {demands.isLoading ? 'Загружаем варианты…' : 'Выберите вариант'}
-            </option>
-            {demands.items.map((demand) => (
-              <option key={demand.id} value={demand.id}>
-                {demand.name}
-              </option>
-            ))}
-          </Select>
+            onChange={onDemandChange}
+          />
         )}
       </FormField>
     </div>

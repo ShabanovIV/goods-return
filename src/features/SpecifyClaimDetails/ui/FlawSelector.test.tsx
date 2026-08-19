@@ -22,9 +22,8 @@ test('allows selecting only one flaw', () => {
     />,
   );
 
-  const select = screen.getByLabelText('Недостаток');
-  expect(select).toHaveRole('combobox');
-  fireEvent.change(select, { target: { value: 'flaw-2' } });
+  fireEvent.click(screen.getByRole('combobox', { name: 'Недостаток' }));
+  fireEvent.click(screen.getByRole('option', { name: 'Некомплект' }));
   expect(onChange).toHaveBeenCalledWith('flaw-2');
 });
 
@@ -42,7 +41,7 @@ test('disables flaw selection until a reason is selected', () => {
   );
 
   expect(screen.getByLabelText('Недостаток')).toBeDisabled();
-  expect(screen.getByRole('option', { name: 'Сначала выберите причину' })).toBeInTheDocument();
+  expect(screen.getByLabelText('Недостаток')).toHaveTextContent('Сначала выберите причину');
 });
 
 test('renders reason, flaw and demand in the required order', () => {
@@ -66,6 +65,6 @@ test('renders reason, flaw and demand in the required order', () => {
 
   const labels = screen
     .getAllByRole('combobox')
-    .map((select) => (select as HTMLSelectElement).labels?.item(0)?.textContent);
+    .map((select) => (select as HTMLButtonElement).labels?.item(0)?.textContent);
   expect(labels).toEqual(['Причина', 'Недостаток', 'Требование клиента']);
 });

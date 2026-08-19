@@ -9,9 +9,14 @@ import { Select } from './Select';
 test('connects a form field label, select and error', () => {
   render(
     <FormField error="Выберите значение" htmlFor="reason" label="Причина">
-      <Select id="reason" aria-describedby="reason-error">
-        <option value="">Не выбрано</option>
-      </Select>
+      <Select
+        id="reason"
+        value=""
+        options={[]}
+        placeholder="Не выбрано"
+        aria-describedby="reason-error"
+        onChange={jest.fn()}
+      />
     </FormField>,
   );
 
