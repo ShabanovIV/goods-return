@@ -27,7 +27,7 @@ export const FlawSelector = ({
   showErrors,
 }: FlawSelectorProps) => (
   <fieldset className={styles.flawFieldset} disabled={!enabled || isLoading}>
-    <legend>Недостатки товара</legend>
+    <legend>Недостаток</legend>
     {!enabled && <p>Сначала выберите причину обращения.</p>}
     {enabled && isLoading && <p>Обновляем список недостатков…</p>}
     {errorMessage && <DictionaryError message={errorMessage} onRetry={onRetry} />}

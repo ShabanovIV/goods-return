@@ -52,7 +52,7 @@ export const ClaimDetailsStep = ({
           showErrors && !reasonId && !reasons.errorMessage ? 'Выберите причину обращения.' : ''
         }
         htmlFor="claim-reason"
-        label="Причина обращения"
+        label="Причина"
       >
         {reasons.errorMessage ? (
           <DictionaryError message={reasons.errorMessage} onRetry={reasons.retry} />
@@ -83,7 +83,7 @@ export const ClaimDetailsStep = ({
             : ''
         }
         htmlFor="client-demand"
-        label="Какого решения вы ожидаете?"
+        label="Требование клиента"
       >
         {demands.errorMessage ? (
           <DictionaryError message={demands.errorMessage} onRetry={demands.retry} />
