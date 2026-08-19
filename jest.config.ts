@@ -18,8 +18,6 @@ const config: Config = {
 
   // alias src/*
   moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/src/$1',
-
     // CSS/SCSS modules + global scss
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
 
@@ -31,6 +29,8 @@ const config: Config = {
 
     // images
     '\\.(png|jpe?g|gif|webp|avif|ico)$': '<rootDir>/src/__mocks__/fileMock.js',
+
+    '^src/(.*)$': '<rootDir>/src/$1',
   },
 
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],

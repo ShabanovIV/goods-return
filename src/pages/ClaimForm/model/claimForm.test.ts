@@ -1,3 +1,4 @@
+import { configHelperFactory } from 'src/shared/lib/configurations';
 import {
   createEmptyClaimForm,
   fromPersistedClaimDraft,
@@ -7,7 +8,14 @@ import {
   toPersistedClaimDraft,
 } from './claimForm';
 
-test('does not persist selected attachment files or metadata', () => {
+const configuration = configHelperFactory();
+
+afterEach(async () => {
+  const keys = await configuration.getConfigurationKeys();
+  await Promise.all(keys.map((key) => configuration.removeConfiguration(key)));
+});
+
+test('persists selected attachment files and metadata', () => {
   const file = new File(['photo'], 'damage.jpg', { type: 'image/jpeg', lastModified: 123 });
   const draft = toPersistedClaimDraft({
     ...createEmptyClaimForm(),
@@ -27,23 +35,23 @@ test('does not persist selected attachment files or metadata', () => {
     ],
   });
 
-  expect(draft).not.toHaveProperty('attachments');
+  expect(draft.attachments[0]).toMatchObject({ fileName: 'damage.jpg', file });
   expect(isPersistedClaimDraft(draft)).toBe(true);
   expect(fromPersistedClaimDraft(draft)).toMatchObject({
     reasonId: 'reason-1',
     flawId: 'flaw-1',
-    attachments: [],
+    attachments: [{ fileName: 'damage.jpg', file }],
   });
 });
 
-test('ignores attachment metadata from an older saved draft', () => {
+test('rejects an older draft without restorable attachment files', () => {
   const legacyDraft = {
     ...toPersistedClaimDraft(createEmptyClaimForm()),
+    version: 2,
     attachments: [{ fileName: 'old-photo.jpg', status: 'needs-file' }],
   };
 
-  expect(isPersistedClaimDraft(legacyDraft)).toBe(true);
-  expect(fromPersistedClaimDraft(legacyDraft).attachments).toEqual([]);
+  expect(isPersistedClaimDraft(legacyDraft)).toBe(false);
 });
 
 test('rejects drafts with the old multiple flaw selection', () => {
@@ -61,23 +69,31 @@ test('finds only outdated drafts for the current document', () => {
     'goods-return:claim-draft:v1:document-1',
     'goods-return:claim-draft:v2:document-1',
     'goods-return:claim-draft:v3:document-1',
+    'goods-return:claim-draft:v4:document-1',
     'goods-return:claim-draft:v1:document-2',
     'another-setting',
   ];
 
   expect(getOutdatedDraftKeys(keys, 'document-1')).toEqual([
     'goods-return:claim-draft:v1:document-1',
+    'goods-return:claim-draft:v2:document-1',
   ]);
 });
 
 test('removes outdated drafts without touching current or other document drafts', async () => {
-  localStorage.setItem('goods-return:claim-draft:v1:document-1', '{}');
-  localStorage.setItem('goods-return:claim-draft:v2:document-1', '{}');
-  localStorage.setItem('goods-return:claim-draft:v1:document-2', '{}');
+  await configuration.setConfiguration('goods-return:claim-draft:v1:document-1', {});
+  await configuration.setConfiguration('goods-return:claim-draft:v3:document-1', {});
+  await configuration.setConfiguration('goods-return:claim-draft:v1:document-2', {});
 
   await removeOutdatedClaimDrafts('document-1');
 
-  expect(localStorage.getItem('goods-return:claim-draft:v1:document-1')).toBeNull();
-  expect(localStorage.getItem('goods-return:claim-draft:v2:document-1')).toBe('{}');
-  expect(localStorage.getItem('goods-return:claim-draft:v1:document-2')).toBe('{}');
+  expect(await configuration.getConfigurationKeys()).toEqual(
+    expect.arrayContaining([
+      'goods-return:claim-draft:v3:document-1',
+      'goods-return:claim-draft:v1:document-2',
+    ]),
+  );
+  expect(await configuration.getConfigurationKeys()).not.toContain(
+    'goods-return:claim-draft:v1:document-1',
+  );
 });

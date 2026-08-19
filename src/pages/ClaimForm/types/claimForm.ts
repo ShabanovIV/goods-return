@@ -12,11 +12,12 @@ export type ClaimFormState = {
 };
 
 export type PersistedClaimDraft = {
-  version: 2;
+  version: 3;
   savedAt: string;
   step: ClaimStep;
   selectedLines: Record<string, number>;
   reasonId: string;
   clientDemandId: string;
   flawId: string;
+  attachments: ClaimAttachment[];
 };

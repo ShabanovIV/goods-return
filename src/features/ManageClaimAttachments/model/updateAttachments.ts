@@ -1,5 +1,6 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
 import { getAttachmentFingerprint, getFileFingerprint } from './attachmentFingerprint';
+import { getAttachmentMediaType, isFileAllowed } from '../lib/attachmentMedia';
 
 type AddSelectedFilesArguments = {
   attachments: ClaimAttachment[];
@@ -22,8 +23,15 @@ export const addSelectedFiles = ({
   const processedFingerprints = new Set<string>();
   const nextAttachments = [...attachments];
   const duplicateNames: string[] = [];
+  const invalidNames: string[] = [];
+  const mediaType = attachmentType ? getAttachmentMediaType(attachmentType) : 'file';
 
   files.forEach((file) => {
+    if (!isFileAllowed(file, mediaType)) {
+      invalidNames.push(file.name);
+      return;
+    }
+
     const fingerprint = getFileFingerprint(file);
     const existing = nextAttachments.some(
       (attachment) => getAttachmentFingerprint(attachment) === fingerprint,
@@ -53,9 +61,13 @@ export const addSelectedFiles = ({
 
   return {
     attachments: nextAttachments,
-    error: duplicateNames.length
-      ? `Файл «${duplicateNames[duplicateNames.length - 1]}» уже добавлен.`
-      : undefined,
+    error: invalidNames.length
+      ? `Файл «${invalidNames[invalidNames.length - 1]}» не соответствует типу «${
+          attachmentType?.name ?? 'Файл'
+        }».`
+      : duplicateNames.length
+        ? `Файл «${duplicateNames[duplicateNames.length - 1]}» уже добавлен.`
+        : undefined,
   };
 };
 

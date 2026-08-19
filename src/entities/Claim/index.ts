@@ -13,6 +13,7 @@ export { useAddAttachmentsMutation, useCreateClaimMutation } from './api/submitC
 export type {
   AddAttachmentsQueryParams,
   AddAttachmentsResponse,
+  AttachmentMediaType,
   AttachmentStatus,
   AttachmentType,
   ClaimAttachment,

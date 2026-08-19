@@ -67,13 +67,11 @@ export const useClaimDraft = ({
 
   useEffect(() => {
     if (!isHydrated || !documentId || claimNumber) return undefined;
-    const timeoutId = window.setTimeout(() => {
-      configuration
-        .setConfiguration(getDraftKey(documentId), toPersistedClaimDraft(formState))
-        .then(() => setDraftMessage('Черновик сохранён'))
-        .catch(() => setDraftMessage('Не удалось сохранить черновик'));
-    }, 350);
-    return () => window.clearTimeout(timeoutId);
+    configuration
+      .setConfiguration(getDraftKey(documentId), toPersistedClaimDraft(formState))
+      .then(() => setDraftMessage('Черновик сохранён'))
+      .catch(() => setDraftMessage('Не удалось сохранить черновик'));
+    return undefined;
   }, [claimNumber, documentId, formState, isHydrated]);
 
   useEffect(() => {

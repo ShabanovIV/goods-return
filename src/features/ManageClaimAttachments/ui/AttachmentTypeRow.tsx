@@ -1,8 +1,11 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
+import CameraIcon from 'src/shared/assets/icons/camera.svg';
 import { FieldError } from 'src/shared/ui/FieldError';
 import { List } from 'src/shared/ui/List';
 import { AttachmentFileItem } from './AttachmentFileItem';
+import { AttachmentInput } from './AttachmentInput';
 import styles from './AttachmentsStep.module.scss';
+import { getAttachmentMediaType, getMediaAccept } from '../lib/attachmentMedia';
 
 type AttachmentTypeRowProps = {
   attachmentType: AttachmentType;
@@ -21,6 +24,13 @@ export const AttachmentTypeRow = ({
 }: AttachmentTypeRowProps) => {
   const missingCount = Math.max(0, attachmentType.minAmount - attachments.length);
   const hasError = showErrors && missingCount > 0;
+  const mediaType = getAttachmentMediaType(attachmentType);
+  const accept = getMediaAccept(mediaType);
+  const addFiles = (files: readonly File[]) => onFilesSelected(attachmentType, files);
+  const captureLabel =
+    mediaType === 'video'
+      ? `Записать видео: ${attachmentType.name}`
+      : `Сфотографировать: ${attachmentType.name}`;
 
   return (
     <section className={`${styles.typeRow} ${hasError ? styles.typeRowError : ''}`}>
@@ -33,19 +43,28 @@ export const AttachmentTypeRow = ({
               : 'Необязательно'}
           </span>
         </div>
-        <label className={styles.addButton}>
-          <span aria-hidden="true">+</span>
-          <input
-            aria-label={`Добавить файлы: ${attachmentType.name}`}
-            type="file"
+        <div className={styles.attachmentActions}>
+          <AttachmentInput
+            accept={accept}
+            ariaLabel={`Добавить файлы: ${attachmentType.name}`}
+            className={styles.addButton}
             multiple
-            onChange={(event) => {
-              const files = Array.from(event.currentTarget.files ?? []);
-              event.currentTarget.value = '';
-              if (files.length) onFilesSelected(attachmentType, files);
-            }}
-          />
-        </label>
+            onFilesSelected={addFiles}
+          >
+            <span aria-hidden="true">+</span>
+          </AttachmentInput>
+          {mediaType !== 'file' && (
+            <AttachmentInput
+              accept={accept}
+              ariaLabel={captureLabel}
+              capture="environment"
+              className={styles.cameraButton}
+              onFilesSelected={addFiles}
+            >
+              <CameraIcon aria-hidden="true" />
+            </AttachmentInput>
+          )}
+        </div>
       </div>
       {attachments.length ? (
         <ul className={styles.fileList}>

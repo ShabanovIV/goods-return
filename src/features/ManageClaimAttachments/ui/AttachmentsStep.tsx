@@ -67,9 +67,5 @@ export const AttachmentsStep = ({
         />
       </div>
     )}
-    <p className={styles.uploadHint}>
-      Выбранные файлы не сохраняются после перезагрузки страницы и отправятся одной группой после
-      подтверждения претензии.
-    </p>
   </FormStep>
 );
