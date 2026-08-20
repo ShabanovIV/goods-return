@@ -16,7 +16,7 @@ type DictionaryState<T> = {
 type ClaimDetailsStepProps = {
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
   reasons: DictionaryState<ClaimDictionaryItem>;
   demands: DictionaryState<ClaimDictionaryItem>;
   flaws: DictionaryState<ClaimFlaw>;
@@ -24,13 +24,13 @@ type ClaimDetailsStepProps = {
   showErrors: boolean;
   onReasonChange: (reasonId: string) => void;
   onDemandChange: (demandId: string) => void;
-  onFlawToggle: (flawId: string) => void;
+  onFlawChange: (flawId: string) => void;
 };
 
 export const ClaimDetailsStep = ({
   reasonId,
   clientDemandId,
-  flawIds,
+  flawId,
   reasons,
   demands,
   flaws,
@@ -38,12 +38,12 @@ export const ClaimDetailsStep = ({
   showErrors,
   onReasonChange,
   onDemandChange,
-  onFlawToggle,
+  onFlawChange,
 }: ClaimDetailsStepProps) => (
   <FormStep
     description="Ответы помогут быстрее передать обращение нужному специалисту."
     step={2}
-    title="Расскажите, что произошло"
+    title="Обращение"
     titleId="claim-title"
   >
     <div className={styles.formFields}>
@@ -52,7 +52,7 @@ export const ClaimDetailsStep = ({
           showErrors && !reasonId && !reasons.errorMessage ? 'Выберите причину обращения.' : ''
         }
         htmlFor="claim-reason"
-        label="Причина обращения"
+        label="Причина"
       >
         {reasons.errorMessage ? (
           <DictionaryError message={reasons.errorMessage} onRetry={reasons.retry} />
@@ -61,21 +61,24 @@ export const ClaimDetailsStep = ({
             id="claim-reason"
             value={reasonId}
             disabled={reasons.isLoading}
+            options={reasons.items.map((reason) => ({ label: reason.name, value: reason.id }))}
+            placeholder={reasons.isLoading ? 'Загружаем причины…' : 'Выберите причину'}
             aria-invalid={showErrors && !reasonId}
             aria-describedby={showErrors && !reasonId ? 'claim-reason-error' : undefined}
-            onChange={(event) => onReasonChange(event.target.value)}
-          >
-            <option value="">
-              {reasons.isLoading ? 'Загружаем причины…' : 'Выберите причину'}
-            </option>
-            {reasons.items.map((reason) => (
-              <option key={reason.id} value={reason.id}>
-                {reason.name}
-              </option>
-            ))}
-          </Select>
+            onChange={onReasonChange}
+          />
         )}
       </FormField>
+      <FlawSelector
+        enabled={flawsEnabled}
+        errorMessage={flaws.errorMessage}
+        flawId={flawId}
+        flaws={flaws.items}
+        isLoading={flaws.isLoading}
+        onChange={onFlawChange}
+        onRetry={flaws.retry}
+        showErrors={showErrors}
+      />
       <FormField
         error={
           showErrors && !clientDemandId && !demands.errorMessage
@@ -83,7 +86,7 @@ export const ClaimDetailsStep = ({
             : ''
         }
         htmlFor="client-demand"
-        label="Какого решения вы ожидаете?"
+        label="Требование клиента"
       >
         {demands.errorMessage ? (
           <DictionaryError message={demands.errorMessage} onRetry={demands.retry} />
@@ -92,31 +95,14 @@ export const ClaimDetailsStep = ({
             id="client-demand"
             value={clientDemandId}
             disabled={demands.isLoading}
+            options={demands.items.map((demand) => ({ label: demand.name, value: demand.id }))}
+            placeholder={demands.isLoading ? 'Загружаем варианты…' : 'Выберите вариант'}
             aria-invalid={showErrors && !clientDemandId}
             aria-describedby={showErrors && !clientDemandId ? 'client-demand-error' : undefined}
-            onChange={(event) => onDemandChange(event.target.value)}
-          >
-            <option value="">
-              {demands.isLoading ? 'Загружаем варианты…' : 'Выберите вариант'}
-            </option>
-            {demands.items.map((demand) => (
-              <option key={demand.id} value={demand.id}>
-                {demand.name}
-              </option>
-            ))}
-          </Select>
+            onChange={onDemandChange}
+          />
         )}
       </FormField>
-      <FlawSelector
-        enabled={flawsEnabled}
-        errorMessage={flaws.errorMessage}
-        flawIds={flawIds}
-        flaws={flaws.items}
-        isLoading={flaws.isLoading}
-        onRetry={flaws.retry}
-        onToggle={onFlawToggle}
-        showErrors={showErrors}
-      />
     </div>
   </FormStep>
 );

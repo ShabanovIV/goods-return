@@ -1,6 +1,6 @@
 import type { AttachmentType, ClaimFlaw } from 'src/entities/Claim';
 import type { DocumentDetail } from 'src/entities/Document';
-import type { ClaimFormState, ClaimStep } from './claimFormTypes';
+import type { ClaimFormState, ClaimStep } from '../types/claimForm';
 
 type ClaimValidationContext = {
   areAttachmentTypesReady: boolean;
@@ -44,7 +44,7 @@ export const isClaimStepValid = (step: ClaimStep, context: ClaimValidationContex
       formState.reasonId &&
       formState.clientDemandId &&
       areDetailsReady &&
-      (flaws.length === 0 || formState.flawIds.length > 0),
+      (flaws.length === 0 || Boolean(formState.flawId)),
     );
   }
 

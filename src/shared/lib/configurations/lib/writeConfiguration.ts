@@ -1,9 +1,9 @@
 import { ConfigurationWriteError } from '../errors/ConfigurationWriteError';
 import { ConfigHelper } from '../types/config';
 
-export const writeConfiguration = async (
+export const writeConfiguration = async <T>(
   key: string,
-  value: string,
+  value: T,
   configHelper: ConfigHelper,
 ): Promise<void> => {
   try {

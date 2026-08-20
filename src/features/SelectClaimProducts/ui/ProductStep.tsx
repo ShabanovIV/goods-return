@@ -27,7 +27,7 @@ export const ProductStep = ({
     <FormStep
       description="Выберите одну или несколько позиций и укажите количество."
       step={1}
-      title="Какие товары вас беспокоят?"
+      title="Товары"
       titleId="products-title"
     >
       {showErrors && selectedCount === 0 && <Alert>Выберите хотя бы один товар.</Alert>}

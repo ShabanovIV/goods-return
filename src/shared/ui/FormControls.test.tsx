@@ -9,14 +9,49 @@ import { Select } from './Select';
 test('connects a form field label, select and error', () => {
   render(
     <FormField error="Выберите значение" htmlFor="reason" label="Причина">
-      <Select id="reason" aria-describedby="reason-error">
-        <option value="">Не выбрано</option>
-      </Select>
+      <Select
+        id="reason"
+        value=""
+        options={[]}
+        placeholder="Не выбрано"
+        aria-describedby="reason-error"
+        onChange={jest.fn()}
+      />
     </FormField>,
   );
 
   expect(screen.getByLabelText('Причина')).toHaveAttribute('aria-describedby', 'reason-error');
   expect(screen.getByText('Выберите значение')).toHaveAttribute('id', 'reason-error');
+});
+
+test('opens a select menu upward when the fixed footer limits space below', () => {
+  const footer = document.createElement('footer');
+  footer.dataset.overlayBoundary = 'bottom';
+  document.body.append(footer);
+  jest.spyOn(footer, 'getBoundingClientRect').mockReturnValue({ top: 700 } as DOMRect);
+  const scrollHeight = jest
+    .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
+    .mockReturnValue(300);
+
+  render(
+    <Select
+      id="demand"
+      value="replacement"
+      options={[{ label: 'Замена', value: 'replacement' }]}
+      placeholder="Выберите требование"
+      onChange={jest.fn()}
+    />,
+  );
+
+  const trigger = screen.getByRole('combobox');
+  jest
+    .spyOn(trigger, 'getBoundingClientRect')
+    .mockReturnValue({ top: 600, bottom: 660 } as DOMRect);
+  fireEvent.click(trigger);
+
+  expect(screen.getByRole('listbox')).toHaveClass('menuTop');
+  scrollHeight.mockRestore();
+  footer.remove();
 });
 
 test('forwards checkbox state and change handler', () => {

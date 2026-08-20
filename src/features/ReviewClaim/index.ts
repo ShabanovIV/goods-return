@@ -1,1 +1,2 @@
-export { ReviewStep, type ReviewSection } from './ui/ReviewStep';
+export type { ReviewSection } from './types/reviewClaim';
+export { ReviewStep } from './ui/ReviewStep';

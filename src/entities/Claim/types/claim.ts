@@ -23,7 +23,7 @@ export type CreateClaimQueryParams = {
   lines: { lineId: string; amount: number }[];
   reasonId: string;
   clientDemandId: string;
-  flawIds: string[];
+  flawId: string;
   attachments: ClaimAttachmentMetadata[];
 };
 
@@ -32,12 +32,14 @@ export type ClaimDataResponse<TData> = { success: true; data: TData } | ClaimErr
 export type ClaimActionResponse = { success: true } | ClaimErrorResponse;
 export type ClaimDictionaryItem = { id: string; name: string };
 export type ClaimFlaw = { id: string; name: string };
+export type AttachmentMediaType = 'file' | 'image' | 'video';
 
 export type AttachmentType = {
   order: number;
   type: number;
   name: string;
   minAmount: number;
+  mediaType?: AttachmentMediaType;
   description?: string;
 };
 

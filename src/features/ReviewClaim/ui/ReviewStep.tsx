@@ -5,15 +5,14 @@ import { Button } from 'src/shared/ui/Button';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { List } from 'src/shared/ui/List';
 import styles from './ReviewStep.module.scss';
-
-export type ReviewSection = 'attachments' | 'details' | 'products';
+import type { ReviewSection } from '../types/reviewClaim';
 
 type ReviewStepProps = {
   products: DocumentDetail[];
   selectedLines: Record<string, number>;
   reason?: ClaimDictionaryItem;
   demand?: ClaimDictionaryItem;
-  flaws: ClaimFlaw[];
+  flaw?: ClaimFlaw;
   attachments: ClaimAttachment[];
   onEdit: (section: ReviewSection) => void;
 };
@@ -41,7 +40,7 @@ export const ReviewStep = ({
   selectedLines,
   reason,
   demand,
-  flaws,
+  flaw,
   attachments,
   onEdit,
 }: ReviewStepProps) => {
@@ -75,12 +74,12 @@ export const ReviewStep = ({
               <dd>{reason?.name ?? 'Не выбрана'}</dd>
             </div>
             <div>
-              <dt>Ожидаемое решение</dt>
-              <dd>{demand?.name ?? 'Не выбрано'}</dd>
+              <dt>Недостаток</dt>
+              <dd>{flaw?.name ?? 'Не выбран'}</dd>
             </div>
             <div>
-              <dt>Недостатки</dt>
-              <dd>{flaws.map((flaw) => flaw.name).join(', ') || 'Не выбраны'}</dd>
+              <dt>Требование клиента</dt>
+              <dd>{demand?.name ?? 'Не выбрано'}</dd>
             </div>
           </dl>
         </ReviewCard>

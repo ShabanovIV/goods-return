@@ -12,7 +12,7 @@ export const ClaimDetailsContainer = ({ data, state }: ClaimDetailsContainerProp
   <ClaimDetailsStep
     reasonId={state.formState.reasonId}
     clientDemandId={state.formState.clientDemandId}
-    flawIds={state.formState.flawIds}
+    flawId={state.formState.flawId}
     reasons={{
       items: data.reasons,
       isLoading: data.reasonsQuery.isLoading,
@@ -40,18 +40,11 @@ export const ClaimDetailsContainer = ({ data, state }: ClaimDetailsContainerProp
     flawsEnabled={data.selectedLineIds.length > 0 && Boolean(state.formState.reasonId)}
     showErrors={state.showErrors}
     onReasonChange={(reasonId) =>
-      state.setFormState((current) => ({ ...current, reasonId, flawIds: [] }))
+      state.setFormState((current) => ({ ...current, reasonId, flawId: '' }))
     }
     onDemandChange={(clientDemandId) =>
       state.setFormState((current) => ({ ...current, clientDemandId }))
     }
-    onFlawToggle={(flawId) =>
-      state.setFormState((current) => ({
-        ...current,
-        flawIds: current.flawIds.includes(flawId)
-          ? current.flawIds.filter((id) => id !== flawId)
-          : [...current.flawIds, flawId],
-      }))
-    }
+    onFlawChange={(flawId) => state.setFormState((current) => ({ ...current, flawId }))}
   />
 );

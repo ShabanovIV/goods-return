@@ -6,7 +6,7 @@ import type {
   AddAttachmentsResponse,
   CreateClaimQueryParams,
   CreateClaimResponse,
-} from '../model/claimTypes';
+} from '../types/claim';
 
 const wait = (milliseconds: number) =>
   new Promise<void>((resolve) => {

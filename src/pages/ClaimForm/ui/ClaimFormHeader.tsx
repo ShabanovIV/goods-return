@@ -14,7 +14,7 @@ export const ClaimFormHeader = ({ draftMessage, step }: ClaimFormHeaderProps) =>
           a
         </span>
         <span>
-          <strong>Возврат товаров</strong>
+          <strong>Претензия</strong>
           <small>{draftMessage}</small>
         </span>
       </div>

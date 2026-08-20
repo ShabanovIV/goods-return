@@ -27,7 +27,7 @@ export const ClaimFormFooter = ({
         : 'Продолжить';
 
   return (
-    <footer className={s.actionBar}>
+    <footer className={s.actionBar} data-overlay-boundary="bottom">
       <div className={s.actionBarInner}>
         {step > 0 && (
           <Button type="button" variant="secondary" disabled={isLoading} onClick={onBack}>

@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery, toUrlSearchParams } from 'src/shared/api';
-import type { DocumentQueryParams, DocumentResponse } from '../model/documentTypes';
+import type { DocumentQueryParams, DocumentResponse } from '../types/document';
 
 const BASE_URL = 'document';
 

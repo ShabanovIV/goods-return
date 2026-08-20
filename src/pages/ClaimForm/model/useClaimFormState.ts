@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { AttachmentType } from 'src/entities/Claim';
 import { addSelectedFiles, removeAttachment } from 'src/features/ManageClaimAttachments';
-import { createEmptyClaimForm, type ClaimStep } from './claimFormTypes';
+import { createEmptyClaimForm } from './claimFormState';
+import type { ClaimStep } from '../types/claimForm';
 
 export const useClaimFormState = () => {
   const [formState, setFormState] = useState(createEmptyClaimForm);

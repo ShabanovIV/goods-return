@@ -4,7 +4,7 @@ import { ConfigHelper } from '../types/config';
 export const readConfiguration = async (
   key: string,
   configHelper: ConfigHelper,
-): Promise<string | null> => {
+): Promise<unknown | null> => {
   try {
     return await configHelper.get(key);
   } catch (error: unknown) {

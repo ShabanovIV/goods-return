@@ -6,7 +6,7 @@ import {
   useGetReasonsQuery,
 } from 'src/entities/Claim';
 import { useGetDocumentQuery } from 'src/entities/Document';
-import type { ClaimFormState } from './claimFormTypes';
+import type { ClaimFormState } from '../types/claimForm';
 
 export const useClaimData = (documentId: string, formState: ClaimFormState) => {
   const documentQuery = useGetDocumentQuery({ documentId }, { skip: !documentId });

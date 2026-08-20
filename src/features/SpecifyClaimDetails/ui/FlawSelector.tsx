@@ -1,53 +1,58 @@
 import type { ClaimFlaw } from 'src/entities/Claim';
-import { Checkbox } from 'src/shared/ui/Checkbox';
-import { FieldError } from 'src/shared/ui/FieldError';
-import { List } from 'src/shared/ui/List';
-import styles from './ClaimDetailsStep.module.scss';
+import { FormField } from 'src/shared/ui/FormField';
+import { Select } from 'src/shared/ui/Select';
 import { DictionaryError } from './DictionaryError';
 
 type FlawSelectorProps = {
   enabled: boolean;
   errorMessage?: string;
-  flawIds: string[];
+  flawId: string;
   flaws: ClaimFlaw[];
   isLoading: boolean;
+  onChange: (flawId: string) => void;
   onRetry: () => void;
-  onToggle: (flawId: string) => void;
   showErrors: boolean;
 };
 
 export const FlawSelector = ({
   enabled,
   errorMessage,
-  flawIds,
+  flawId,
   flaws,
   isLoading,
+  onChange,
   onRetry,
-  onToggle,
   showErrors,
-}: FlawSelectorProps) => (
-  <fieldset className={styles.flawFieldset} disabled={!enabled || isLoading}>
-    <legend>Недостатки товара</legend>
-    {!enabled && <p>Сначала выберите причину обращения.</p>}
-    {enabled && isLoading && <p>Обновляем список недостатков…</p>}
-    {errorMessage && <DictionaryError message={errorMessage} onRetry={onRetry} />}
-    {!isLoading && !errorMessage && enabled && flaws.length === 0 && (
-      <p>Для выбранных товаров недостатки не найдены.</p>
-    )}
-    <div className={styles.optionGrid}>
-      <List
-        items={flaws}
-        getKey={(flaw) => flaw.id}
-        renderItem={(flaw) => (
-          <label className={styles.checkOption}>
-            <Checkbox checked={flawIds.includes(flaw.id)} onChange={() => onToggle(flaw.id)} />
-            <span>{flaw.name}</span>
-          </label>
-        )}
-      />
-    </div>
-    {showErrors && flaws.length > 0 && flawIds.length === 0 && (
-      <FieldError>Выберите хотя бы один недостаток.</FieldError>
-    )}
-  </fieldset>
-);
+}: FlawSelectorProps) => {
+  const hasError = showErrors && enabled && flaws.length > 0 && !flawId && !errorMessage;
+  const placeholder = !enabled
+    ? 'Сначала выберите причину'
+    : isLoading
+      ? 'Загружаем недостатки…'
+      : flaws.length
+        ? 'Выберите недостаток'
+        : 'Недостатки не найдены';
+
+  return (
+    <FormField
+      error={hasError ? 'Выберите недостаток.' : ''}
+      htmlFor="claim-flaw"
+      label="Недостаток"
+    >
+      {errorMessage ? (
+        <DictionaryError message={errorMessage} onRetry={onRetry} />
+      ) : (
+        <Select
+          id="claim-flaw"
+          value={flawId}
+          disabled={!enabled || isLoading || flaws.length === 0}
+          options={flaws.map((flaw) => ({ label: flaw.name, value: flaw.id }))}
+          placeholder={placeholder}
+          aria-invalid={hasError}
+          aria-describedby={hasError ? 'claim-flaw-error' : undefined}
+          onChange={onChange}
+        />
+      )}
+    </FormField>
+  );
+};
