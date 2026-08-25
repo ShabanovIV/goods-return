@@ -46,7 +46,7 @@ export const ClaimDetailsStep = ({
   onDescriptionChange,
 }: ClaimDetailsStepProps) => (
   <FormStep
-    description="Ответы помогут быстрее передать обращение нужному специалисту."
+    description="Заполните все поля обращения."
     step={2}
     title="Обращение"
     titleId="claim-title"

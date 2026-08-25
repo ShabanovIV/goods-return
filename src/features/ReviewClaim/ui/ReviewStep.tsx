@@ -108,9 +108,6 @@ export const ReviewStep = ({
           )}
         </ReviewCard>
       </div>
-      <p className={styles.consentNote}>
-        Нажимая «Отправить претензию», вы подтверждаете правильность указанных данных.
-      </p>
     </FormStep>
   );
 };
