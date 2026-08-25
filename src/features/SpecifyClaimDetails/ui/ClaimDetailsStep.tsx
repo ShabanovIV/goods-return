@@ -2,6 +2,7 @@ import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
 import { FormField } from 'src/shared/ui/FormField';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { Select } from 'src/shared/ui/Select';
+import { ClaimDescriptionField } from './ClaimDescriptionField';
 import styles from './ClaimDetailsStep.module.scss';
 import { DictionaryError } from './DictionaryError';
 import { FlawSelector } from './FlawSelector';
@@ -17,6 +18,7 @@ type ClaimDetailsStepProps = {
   reasonId: string;
   clientDemandId: string;
   flawId: string;
+  description: string;
   reasons: DictionaryState<ClaimDictionaryItem>;
   demands: DictionaryState<ClaimDictionaryItem>;
   flaws: DictionaryState<ClaimFlaw>;
@@ -25,12 +27,14 @@ type ClaimDetailsStepProps = {
   onReasonChange: (reasonId: string) => void;
   onDemandChange: (demandId: string) => void;
   onFlawChange: (flawId: string) => void;
+  onDescriptionChange: (description: string) => void;
 };
 
 export const ClaimDetailsStep = ({
   reasonId,
   clientDemandId,
   flawId,
+  description,
   reasons,
   demands,
   flaws,
@@ -39,9 +43,10 @@ export const ClaimDetailsStep = ({
   onReasonChange,
   onDemandChange,
   onFlawChange,
+  onDescriptionChange,
 }: ClaimDetailsStepProps) => (
   <FormStep
-    description="Ответы помогут быстрее передать обращение нужному специалисту."
+    description="Заполните все поля обращения."
     step={2}
     title="Обращение"
     titleId="claim-title"
@@ -103,6 +108,11 @@ export const ClaimDetailsStep = ({
           />
         )}
       </FormField>
+      <ClaimDescriptionField
+        description={description}
+        onChange={onDescriptionChange}
+        showErrors={showErrors}
+      />
     </div>
   </FormStep>
 );

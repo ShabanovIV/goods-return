@@ -1,8 +1,4 @@
-import {
-  type ClaimAttachment,
-  useAddAttachmentsMutation,
-  useCreateClaimMutation,
-} from 'src/entities/Claim';
+import { type ClaimAttachment, useCreateClaimMutation } from 'src/entities/Claim';
 
 type SubmitClaimArguments = {
   documentId: string;
@@ -10,12 +6,11 @@ type SubmitClaimArguments = {
   reasonId: string;
   clientDemandId: string;
   flawId: string;
+  description: string;
   attachments: ClaimAttachment[];
-  onAttachmentsUploaded: () => void;
 };
 
 export const useSubmitClaim = () => {
-  const [addAttachments, addAttachmentsState] = useAddAttachmentsMutation();
   const [createClaim, createClaimState] = useCreateClaimMutation();
 
   const submitClaim = async ({
@@ -24,37 +19,28 @@ export const useSubmitClaim = () => {
     reasonId,
     clientDemandId,
     flawId,
+    description,
     attachments,
-    onAttachmentsUploaded,
   }: SubmitClaimArguments) => {
-    const files = attachments.flatMap((attachment) =>
-      attachment.status === 'selected' && attachment.file ? [attachment.file] : [],
-    );
-
-    if (files.length) {
-      const attachmentResponse = await addAttachments({ documentId, files }).unwrap();
-      if (!attachmentResponse.success) throw new Error(attachmentResponse.error);
-      onAttachmentsUploaded();
-    }
+    const files = attachments.flatMap((attachment) => (attachment.file ? [attachment.file] : []));
 
     const response = await createClaim({
       documentId,
-      lines: Object.entries(selectedLines).map(([lineId, amount]) => ({ lineId, amount })),
-      reasonId,
-      clientDemandId,
-      flawId,
-      attachments: attachments.map(
-        ({ lastModified: _lastModified, status: _status, file: _file, ...item }) => item,
-      ),
+      products: Object.entries(selectedLines).map(([id, quantity]) => ({ id, quantity })),
+      reason: reasonId,
+      flaw: flawId,
+      requirement: clientDemandId,
+      description,
+      files,
     }).unwrap();
-    if (!response.success) throw new Error(response.error);
 
-    return response.data.claimNumber;
+    if (!response.number) throw new Error('Сервер не вернул номер созданной претензии.');
+
+    return response.number;
   };
 
   return {
     isCreatingClaim: createClaimState.isLoading,
-    isUploadingAttachments: addAttachmentsState.isLoading,
     submitClaim,
   };
 };

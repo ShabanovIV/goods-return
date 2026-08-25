@@ -52,6 +52,7 @@ test('renders reason, flaw and demand in the required order', () => {
       reasonId=""
       clientDemandId=""
       flawId=""
+      description=""
       reasons={{ ...dictionaryState, items: [{ id: 'reason-1', name: 'Причина' }] }}
       flaws={{ ...dictionaryState, items: flaws }}
       demands={{ ...dictionaryState, items: [{ id: 'demand-1', name: 'Замена' }] }}
@@ -60,6 +61,7 @@ test('renders reason, flaw and demand in the required order', () => {
       onReasonChange={jest.fn()}
       onFlawChange={jest.fn()}
       onDemandChange={jest.fn()}
+      onDescriptionChange={jest.fn()}
     />,
   );
 
@@ -67,4 +69,5 @@ test('renders reason, flaw and demand in the required order', () => {
     .getAllByRole('combobox')
     .map((select) => (select as HTMLButtonElement).labels?.item(0)?.textContent);
   expect(labels).toEqual(['Причина', 'Недостаток', 'Требование клиента']);
+  expect(screen.getByLabelText('Суть претензии')).toHaveAttribute('maxlength', '1000');
 });

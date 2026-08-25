@@ -8,16 +8,22 @@ export type ClaimFormState = {
   reasonId: string;
   clientDemandId: string;
   flawId: string;
+  description: string;
   attachments: ClaimAttachment[];
 };
 
 export type PersistedClaimDraft = {
-  version: 3;
+  version: 4;
   savedAt: string;
   step: ClaimStep;
   selectedLines: Record<string, number>;
   reasonId: string;
   clientDemandId: string;
   flawId: string;
+  description: string;
   attachments: ClaimAttachment[];
+};
+
+export type PreviousPersistedClaimDraft = Omit<PersistedClaimDraft, 'description' | 'version'> & {
+  version: 3;
 };

@@ -1,5 +1,4 @@
 export type GetFlawsQueryParams = { lineIds: string | string[]; reason: string };
-export type AddAttachmentsQueryParams = { documentId: string; files: File[] };
 
 export type ClaimAttachmentMetadata = {
   localId: string;
@@ -20,16 +19,16 @@ export type ClaimAttachment = ClaimAttachmentMetadata & {
 
 export type CreateClaimQueryParams = {
   documentId: string;
-  lines: { lineId: string; amount: number }[];
-  reasonId: string;
-  clientDemandId: string;
-  flawId: string;
-  attachments: ClaimAttachmentMetadata[];
+  products: { id: string; quantity: number }[];
+  reason: string;
+  flaw: string;
+  requirement: string;
+  description: string;
+  files: File[];
 };
 
 export type ClaimErrorResponse = { success: false; error: string };
 export type ClaimDataResponse<TData> = { success: true; data: TData } | ClaimErrorResponse;
-export type ClaimActionResponse = { success: true } | ClaimErrorResponse;
 export type ClaimDictionaryItem = { id: string; name: string };
 export type ClaimFlaw = { id: string; name: string };
 export type AttachmentMediaType = 'file' | 'image' | 'video';
@@ -46,6 +45,5 @@ export type AttachmentType = {
 export type GetReasonsResponse = ClaimDataResponse<ClaimDictionaryItem[]>;
 export type GetClientDemandsResponse = ClaimDataResponse<ClaimDictionaryItem[]>;
 export type GetFlawsResponse = ClaimDataResponse<{ flaws: ClaimFlaw[] }>;
-export type AddAttachmentsResponse = ClaimActionResponse;
 export type GetAttachmentTypesResponse = ClaimDataResponse<AttachmentType[]>;
-export type CreateClaimResponse = ClaimDataResponse<{ claimId: string; claimNumber: string }>;
+export type CreateClaimResponse = { id: string; number: string; status: string };

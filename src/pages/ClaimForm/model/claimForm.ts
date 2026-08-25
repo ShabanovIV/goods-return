@@ -1,8 +1,10 @@
 export {
   fromPersistedClaimDraft,
   getDraftKey,
+  getPreviousDraftKey,
   getOutdatedDraftKeys,
   isPersistedClaimDraft,
+  isPreviousPersistedClaimDraft,
   toPersistedClaimDraft,
 } from './claimDraft';
 export type { ClaimFormState, ClaimStep, PersistedClaimDraft } from '../types/claimForm';

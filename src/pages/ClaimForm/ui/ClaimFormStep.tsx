@@ -76,6 +76,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
       reason={selectedReason}
       demand={selectedDemand}
       flaw={selectedFlaw}
+      description={formState.description}
       attachments={formState.attachments}
       onEdit={(section) => state.setStep(reviewStep[section])}
     />

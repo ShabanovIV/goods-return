@@ -17,16 +17,15 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
-type BusinessError = {
-  success: false;
-  error: string;
-};
-
-const isBusinessError = (value: unknown): value is BusinessError => {
-  if (typeof value !== 'object' || value === null) return false;
+export const getBusinessErrorMessage = (value: unknown) => {
+  if (typeof value !== 'object' || value === null) return undefined;
 
   const response = value as Record<string, unknown>;
-  return response.success === false && typeof response.error === 'string';
+  const success = response.success ?? response.Success;
+  if (success !== false) return undefined;
+
+  const error = response.error ?? response.Error;
+  return typeof error === 'string' && error ? error : 'Операция не выполнена.';
 };
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
@@ -36,11 +35,12 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
 ) => {
   const result = await rawBaseQuery(args, api, extraOptions);
 
-  if ('data' in result && isBusinessError(result.data)) {
+  const businessError = 'data' in result ? getBusinessErrorMessage(result.data) : undefined;
+  if (businessError) {
     return {
       error: {
         status: 'CUSTOM_ERROR',
-        error: result.data.error || 'Операция не выполнена.',
+        error: businessError,
         data: result.data,
       },
     };

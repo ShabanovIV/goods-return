@@ -22,6 +22,7 @@ test('persists selected attachment files and metadata', () => {
     step: 2,
     reasonId: 'reason-1',
     flawId: 'flaw-1',
+    description: 'Суть претензии',
     attachments: [
       {
         localId: 'attachment-1',
@@ -40,6 +41,7 @@ test('persists selected attachment files and metadata', () => {
   expect(fromPersistedClaimDraft(draft)).toMatchObject({
     reasonId: 'reason-1',
     flawId: 'flaw-1',
+    description: 'Суть претензии',
     attachments: [{ fileName: 'damage.jpg', file }],
   });
 });
@@ -70,6 +72,7 @@ test('finds only outdated drafts for the current document', () => {
     'goods-return:claim-draft:v2:document-1',
     'goods-return:claim-draft:v3:document-1',
     'goods-return:claim-draft:v4:document-1',
+    'goods-return:claim-draft:v5:document-1',
     'goods-return:claim-draft:v1:document-2',
     'another-setting',
   ];
@@ -77,19 +80,20 @@ test('finds only outdated drafts for the current document', () => {
   expect(getOutdatedDraftKeys(keys, 'document-1')).toEqual([
     'goods-return:claim-draft:v1:document-1',
     'goods-return:claim-draft:v2:document-1',
+    'goods-return:claim-draft:v3:document-1',
   ]);
 });
 
 test('removes outdated drafts without touching current or other document drafts', async () => {
   await configuration.setConfiguration('goods-return:claim-draft:v1:document-1', {});
-  await configuration.setConfiguration('goods-return:claim-draft:v3:document-1', {});
+  await configuration.setConfiguration('goods-return:claim-draft:v4:document-1', {});
   await configuration.setConfiguration('goods-return:claim-draft:v1:document-2', {});
 
   await removeOutdatedClaimDrafts('document-1');
 
   expect(await configuration.getConfigurationKeys()).toEqual(
     expect.arrayContaining([
-      'goods-return:claim-draft:v3:document-1',
+      'goods-return:claim-draft:v4:document-1',
       'goods-return:claim-draft:v1:document-2',
     ]),
   );

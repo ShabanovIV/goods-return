@@ -32,17 +32,6 @@ export const useClaimFormState = () => {
     }));
   };
 
-  const markAttachmentsUploaded = () => {
-    setFormState((current) => ({
-      ...current,
-      attachments: current.attachments.map((attachment) =>
-        attachment.status === 'selected'
-          ? { ...attachment, status: 'uploaded', file: undefined }
-          : attachment,
-      ),
-    }));
-  };
-
   const resetForm = () => {
     setFormState(createEmptyClaimForm());
     setClaimNumber('');
@@ -52,7 +41,6 @@ export const useClaimFormState = () => {
     addFiles,
     claimNumber,
     formState,
-    markAttachmentsUploaded,
     pageError,
     removeFile,
     resetForm,

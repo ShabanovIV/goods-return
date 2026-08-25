@@ -53,8 +53,8 @@ export const useClaimFormNavigation = ({
         reasonId: state.formState.reasonId,
         clientDemandId: state.formState.clientDemandId,
         flawId: state.formState.flawId,
+        description: state.formState.description,
         attachments: state.formState.attachments,
-        onAttachmentsUploaded: state.markAttachmentsUploaded,
       });
       state.setClaimNumber(claimNumber);
       void removeClaimDraft(documentId).catch(() =>
@@ -62,6 +62,7 @@ export const useClaimFormNavigation = ({
       );
     } catch (error: unknown) {
       state.setPageError(getRequestErrorMessage(error));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -81,6 +82,5 @@ export const useClaimFormNavigation = ({
     goBack: () => state.setStep((state.formState.step - 1) as ClaimStep),
     goNext,
     isCreatingClaim: submission.isCreatingClaim,
-    isUploadingAttachments: submission.isUploadingAttachments,
   };
 };
