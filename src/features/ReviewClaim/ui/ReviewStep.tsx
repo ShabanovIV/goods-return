@@ -13,6 +13,7 @@ type ReviewStepProps = {
   reason?: ClaimDictionaryItem;
   demand?: ClaimDictionaryItem;
   flaw?: ClaimFlaw;
+  description: string;
   attachments: ClaimAttachment[];
   onEdit: (section: ReviewSection) => void;
 };
@@ -41,6 +42,7 @@ export const ReviewStep = ({
   reason,
   demand,
   flaw,
+  description,
   attachments,
   onEdit,
 }: ReviewStepProps) => {
@@ -80,6 +82,10 @@ export const ReviewStep = ({
             <div>
               <dt>Требование клиента</dt>
               <dd>{demand?.name ?? 'Не выбрано'}</dd>
+            </div>
+            <div>
+              <dt>Суть претензии</dt>
+              <dd>{description}</dd>
             </div>
           </dl>
         </ReviewCard>

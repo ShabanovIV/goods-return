@@ -1,13 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { configHelperFactory } from 'src/shared/lib/configurations';
-import {
-  fromPersistedClaimDraft,
-  getDraftKey,
-  isPersistedClaimDraft,
-  toPersistedClaimDraft,
-} from './claimDraft';
-import { removeOutdatedClaimDrafts } from './claimDraftCleanup';
+import { getDraftKey, toPersistedClaimDraft } from './claimDraft';
 import { createEmptyClaimForm } from './claimFormState';
+import { restoreClaimDraft } from './restoreClaimDraft';
 import type { ClaimFormState } from '../types/claimForm';
 
 const configuration = configHelperFactory();
@@ -29,29 +24,18 @@ export const useClaimDraft = ({
 }: UseClaimDraftArguments) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const [draftMessage, setDraftMessage] = useState('Восстанавливаем черновик…');
-  const cleanedDocumentIdRef = useRef('');
-
-  useEffect(() => {
-    if (!documentId || !isDocumentLoaded || cleanedDocumentIdRef.current === documentId) return;
-    cleanedDocumentIdRef.current = documentId;
-    removeOutdatedClaimDrafts(documentId).catch(() =>
-      setDraftMessage('Не удалось удалить устаревшие черновики'),
-    );
-  }, [documentId, isDocumentLoaded]);
-
   useEffect(() => {
     const controller = new AbortController();
     setIsHydrated(false);
     setFormState(createEmptyClaimForm());
     setDraftMessage('Восстанавливаем черновик…');
-    if (!documentId) return () => undefined;
+    if (!documentId || !isDocumentLoaded) return () => undefined;
 
-    configuration
-      .getConfiguration(getDraftKey(documentId), null, isPersistedClaimDraft)
+    restoreClaimDraft(documentId)
       .then((draft) => {
         if (controller.signal.aborted) return;
         if (draft) {
-          setFormState(fromPersistedClaimDraft(draft));
+          setFormState(draft);
           setDraftMessage('Черновик восстановлен');
         } else setDraftMessage('Черновик сохраняется автоматически');
       })
@@ -63,7 +47,7 @@ export const useClaimDraft = ({
       });
 
     return () => controller.abort();
-  }, [documentId, setFormState]);
+  }, [documentId, isDocumentLoaded, setFormState]);
 
   useEffect(() => {
     if (!isHydrated || !documentId || claimNumber) return undefined;
@@ -78,7 +62,7 @@ export const useClaimDraft = ({
     if (!isHydrated || claimNumber) return undefined;
     const hasDraft =
       Object.keys(formState.selectedLines).length > 0 ||
-      Boolean(formState.reasonId || formState.clientDemandId);
+      Boolean(formState.reasonId || formState.clientDemandId || formState.description);
     if (!hasDraft) return undefined;
     const preventAccidentalClose = (event: BeforeUnloadEvent) => event.preventDefault();
     window.addEventListener('beforeunload', preventAccidentalClose);

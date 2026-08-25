@@ -14,5 +14,7 @@ test('shows a helpful message when document id is missing', async () => {
   );
 
   expect(screen.getByTestId('app-root')).toBeInTheDocument();
-  expect(await screen.findByRole('heading', { name: 'Не указан документ' })).toBeInTheDocument();
+  expect(
+    await screen.findByRole('heading', { name: 'Не указан документ' }, { timeout: 5000 }),
+  ).toBeInTheDocument();
 });

@@ -84,7 +84,6 @@ const ClaimFormPage = () => {
       </main>
       <ClaimFormFooter
         isCreatingClaim={navigation.isCreatingClaim}
-        isUploadingAttachments={navigation.isUploadingAttachments}
         onBack={navigation.goBack}
         onNext={navigation.goNext}
         step={state.formState.step}

@@ -1,8 +1,13 @@
-import type { ClaimAttachment } from 'src/entities/Claim';
-import type { ClaimFormState, PersistedClaimDraft } from '../types/claimForm';
+import { isDraftData } from './claimDraftValidation';
+import type {
+  ClaimFormState,
+  PersistedClaimDraft,
+  PreviousPersistedClaimDraft,
+} from '../types/claimForm';
 
 const CLAIM_DRAFT_PREFIX = 'goods-return:claim-draft:';
-const CLAIM_DRAFT_VERSION = 3;
+const CLAIM_DRAFT_VERSION = 4;
+const PREVIOUS_DRAFT_VERSION = 3;
 
 export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraft => ({
   version: CLAIM_DRAFT_VERSION,
@@ -12,68 +17,39 @@ export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraf
   reasonId: state.reasonId,
   clientDemandId: state.clientDemandId,
   flawId: state.flawId,
+  description: state.description,
   attachments: state.attachments.filter(
     (attachment) => attachment.status === 'selected' && attachment.file instanceof File,
   ),
 });
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
+export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDraft =>
+  isDraftData(value, CLAIM_DRAFT_VERSION) && typeof value.description === 'string';
 
-const isSelectedLines = (value: unknown): value is Record<string, number> =>
-  isRecord(value) &&
-  Object.values(value).every(
-    (amount) => typeof amount === 'number' && Number.isInteger(amount) && amount > 0,
-  );
+export const isPreviousPersistedClaimDraft = (
+  value: unknown,
+): value is PreviousPersistedClaimDraft => isDraftData(value, PREVIOUS_DRAFT_VERSION);
 
-const isOptionalNumber = (value: unknown) => value === undefined || typeof value === 'number';
-const isOptionalString = (value: unknown) => value === undefined || typeof value === 'string';
-
-const isClaimAttachment = (value: unknown): value is ClaimAttachment =>
-  isRecord(value) &&
-  typeof value.localId === 'string' &&
-  typeof value.fileName === 'string' &&
-  typeof value.size === 'number' &&
-  typeof value.mimeType === 'string' &&
-  typeof value.lastModified === 'number' &&
-  value.status === 'selected' &&
-  value.file instanceof File &&
-  isOptionalNumber(value.attachmentType) &&
-  isOptionalNumber(value.attachmentTypeOrder) &&
-  isOptionalString(value.attachmentTypeName);
-
-const isClaimAttachments = (value: unknown): value is ClaimAttachment[] =>
-  Array.isArray(value) && value.every(isClaimAttachment);
-
-export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDraft => {
-  if (!isRecord(value)) return false;
-
-  return (
-    value.version === CLAIM_DRAFT_VERSION &&
-    typeof value.savedAt === 'string' &&
-    Number.isInteger(value.step) &&
-    typeof value.step === 'number' &&
-    value.step >= 0 &&
-    value.step <= 3 &&
-    isSelectedLines(value.selectedLines) &&
-    typeof value.reasonId === 'string' &&
-    typeof value.clientDemandId === 'string' &&
-    typeof value.flawId === 'string' &&
-    isClaimAttachments(value.attachments)
-  );
-};
-
-export const fromPersistedClaimDraft = (draft: PersistedClaimDraft): ClaimFormState => ({
+export const fromPersistedClaimDraft = (
+  draft: PersistedClaimDraft | PreviousPersistedClaimDraft,
+): ClaimFormState => ({
   step: draft.step,
   selectedLines: draft.selectedLines,
   reasonId: draft.reasonId,
   clientDemandId: draft.clientDemandId,
   flawId: draft.flawId,
+  description: 'description' in draft ? draft.description : '',
   attachments: draft.attachments,
 });
 
+const getVersionedDraftKey = (documentId: string, version: number) =>
+  `${CLAIM_DRAFT_PREFIX}v${version}:${documentId}`;
+
 export const getDraftKey = (documentId: string) =>
-  `${CLAIM_DRAFT_PREFIX}v${CLAIM_DRAFT_VERSION}:${documentId}`;
+  getVersionedDraftKey(documentId, CLAIM_DRAFT_VERSION);
+
+export const getPreviousDraftKey = (documentId: string) =>
+  getVersionedDraftKey(documentId, PREVIOUS_DRAFT_VERSION);
 
 export const getOutdatedDraftKeys = (keys: string[], documentId: string) => {
   return keys.filter((key) => {

@@ -13,6 +13,7 @@ export const ClaimDetailsContainer = ({ data, state }: ClaimDetailsContainerProp
     reasonId={state.formState.reasonId}
     clientDemandId={state.formState.clientDemandId}
     flawId={state.formState.flawId}
+    description={state.formState.description}
     reasons={{
       items: data.reasons,
       isLoading: data.reasonsQuery.isLoading,
@@ -46,5 +47,8 @@ export const ClaimDetailsContainer = ({ data, state }: ClaimDetailsContainerProp
       state.setFormState((current) => ({ ...current, clientDemandId }))
     }
     onFlawChange={(flawId) => state.setFormState((current) => ({ ...current, flawId }))}
+    onDescriptionChange={(description) =>
+      state.setFormState((current) => ({ ...current, description }))
+    }
   />
 );

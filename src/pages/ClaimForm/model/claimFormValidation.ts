@@ -43,6 +43,8 @@ export const isClaimStepValid = (step: ClaimStep, context: ClaimValidationContex
     return Boolean(
       formState.reasonId &&
       formState.clientDemandId &&
+      formState.description.trim() &&
+      formState.description.length <= 1000 &&
       areDetailsReady &&
       (flaws.length === 0 || Boolean(formState.flawId)),
     );
