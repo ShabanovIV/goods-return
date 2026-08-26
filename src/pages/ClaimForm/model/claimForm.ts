@@ -1,9 +1,11 @@
 export {
   fromPersistedClaimDraft,
   getDraftKey,
+  getLegacyDraftKey,
   getPreviousDraftKey,
   getOutdatedDraftKeys,
   isPersistedClaimDraft,
+  isLegacyPersistedClaimDraft,
   isPreviousPersistedClaimDraft,
   toPersistedClaimDraft,
 } from './claimDraft';

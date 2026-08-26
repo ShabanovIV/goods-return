@@ -2,7 +2,9 @@ import { configHelperFactory } from 'src/shared/lib/configurations';
 import {
   fromPersistedClaimDraft,
   getDraftKey,
+  getLegacyDraftKey,
   getPreviousDraftKey,
+  isLegacyPersistedClaimDraft,
   isPersistedClaimDraft,
   isPreviousPersistedClaimDraft,
   toPersistedClaimDraft,
@@ -27,12 +29,19 @@ export const restoreClaimDraft = async (documentId: string) => {
     null,
     isPreviousPersistedClaimDraft,
   );
-  if (!previousDraft) {
+  const restorableDraft =
+    previousDraft ??
+    (await configuration.getConfiguration(
+      getLegacyDraftKey(documentId),
+      null,
+      isLegacyPersistedClaimDraft,
+    ));
+  if (!restorableDraft) {
     await removeOutdatedClaimDrafts(documentId);
     return null;
   }
 
-  const migratedDraft = fromPersistedClaimDraft(previousDraft);
+  const migratedDraft = fromPersistedClaimDraft(restorableDraft);
   await configuration.setConfiguration(
     getDraftKey(documentId),
     toPersistedClaimDraft(migratedDraft),

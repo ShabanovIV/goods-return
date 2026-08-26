@@ -24,6 +24,8 @@ export type CreateClaimQueryParams = {
   flaw: string;
   requirement: string;
   description: string;
+  isLeftAddress: boolean;
+  isOpenClient: boolean;
   files: File[];
 };
 

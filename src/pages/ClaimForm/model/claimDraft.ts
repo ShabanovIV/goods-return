@@ -1,13 +1,15 @@
 import { isDraftData } from './claimDraftValidation';
 import type {
   ClaimFormState,
+  LegacyPersistedClaimDraft,
   PersistedClaimDraft,
   PreviousPersistedClaimDraft,
 } from '../types/claimForm';
 
 const CLAIM_DRAFT_PREFIX = 'goods-return:claim-draft:';
-const CLAIM_DRAFT_VERSION = 4;
-const PREVIOUS_DRAFT_VERSION = 3;
+const CLAIM_DRAFT_VERSION = 5;
+const PREVIOUS_DRAFT_VERSION = 4;
+const LEGACY_DRAFT_VERSION = 3;
 
 export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraft => ({
   version: CLAIM_DRAFT_VERSION,
@@ -18,20 +20,29 @@ export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraf
   clientDemandId: state.clientDemandId,
   flawId: state.flawId,
   description: state.description,
+  isLeftAddress: state.isLeftAddress,
+  isOpenClient: state.isOpenClient,
   attachments: state.attachments.filter(
     (attachment) => attachment.status === 'selected' && attachment.file instanceof File,
   ),
 });
 
 export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDraft =>
-  isDraftData(value, CLAIM_DRAFT_VERSION) && typeof value.description === 'string';
+  isDraftData(value, CLAIM_DRAFT_VERSION) &&
+  typeof value.description === 'string' &&
+  typeof value.isLeftAddress === 'boolean' &&
+  typeof value.isOpenClient === 'boolean';
 
 export const isPreviousPersistedClaimDraft = (
   value: unknown,
-): value is PreviousPersistedClaimDraft => isDraftData(value, PREVIOUS_DRAFT_VERSION);
+): value is PreviousPersistedClaimDraft =>
+  isDraftData(value, PREVIOUS_DRAFT_VERSION) && typeof value.description === 'string';
+
+export const isLegacyPersistedClaimDraft = (value: unknown): value is LegacyPersistedClaimDraft =>
+  isDraftData(value, LEGACY_DRAFT_VERSION);
 
 export const fromPersistedClaimDraft = (
-  draft: PersistedClaimDraft | PreviousPersistedClaimDraft,
+  draft: PersistedClaimDraft | PreviousPersistedClaimDraft | LegacyPersistedClaimDraft,
 ): ClaimFormState => ({
   step: draft.step,
   selectedLines: draft.selectedLines,
@@ -39,6 +50,8 @@ export const fromPersistedClaimDraft = (
   clientDemandId: draft.clientDemandId,
   flawId: draft.flawId,
   description: 'description' in draft ? draft.description : '',
+  isLeftAddress: 'isLeftAddress' in draft ? draft.isLeftAddress : true,
+  isOpenClient: 'isOpenClient' in draft ? draft.isOpenClient : false,
   attachments: draft.attachments,
 });
 
@@ -50,6 +63,9 @@ export const getDraftKey = (documentId: string) =>
 
 export const getPreviousDraftKey = (documentId: string) =>
   getVersionedDraftKey(documentId, PREVIOUS_DRAFT_VERSION);
+
+export const getLegacyDraftKey = (documentId: string) =>
+  getVersionedDraftKey(documentId, LEGACY_DRAFT_VERSION);
 
 export const getOutdatedDraftKeys = (keys: string[], documentId: string) => {
   return keys.filter((key) => {

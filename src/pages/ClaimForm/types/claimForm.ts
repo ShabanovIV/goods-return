@@ -9,11 +9,13 @@ export type ClaimFormState = {
   clientDemandId: string;
   flawId: string;
   description: string;
+  isLeftAddress: boolean;
+  isOpenClient: boolean;
   attachments: ClaimAttachment[];
 };
 
 export type PersistedClaimDraft = {
-  version: 4;
+  version: 5;
   savedAt: string;
   step: ClaimStep;
   selectedLines: Record<string, number>;
@@ -21,9 +23,21 @@ export type PersistedClaimDraft = {
   clientDemandId: string;
   flawId: string;
   description: string;
+  isLeftAddress: boolean;
+  isOpenClient: boolean;
   attachments: ClaimAttachment[];
 };
 
-export type PreviousPersistedClaimDraft = Omit<PersistedClaimDraft, 'description' | 'version'> & {
+export type PreviousPersistedClaimDraft = Omit<
+  PersistedClaimDraft,
+  'isLeftAddress' | 'isOpenClient' | 'version'
+> & {
+  version: 4;
+};
+
+export type LegacyPersistedClaimDraft = Omit<
+  PreviousPersistedClaimDraft,
+  'description' | 'version'
+> & {
   version: 3;
 };

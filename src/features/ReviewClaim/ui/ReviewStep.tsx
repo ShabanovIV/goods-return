@@ -4,6 +4,8 @@ import type { DocumentDetail } from 'src/entities/Document';
 import { Button } from 'src/shared/ui/Button';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { List } from 'src/shared/ui/List';
+import { ClaimDetailsReview } from './ClaimDetailsReview';
+import { ClaimOptionsReview } from './ClaimOptionsReview';
 import styles from './ReviewStep.module.scss';
 import type { ReviewSection } from '../types/reviewClaim';
 
@@ -14,6 +16,8 @@ type ReviewStepProps = {
   demand?: ClaimDictionaryItem;
   flaw?: ClaimFlaw;
   description: string;
+  isLeftAddress: boolean;
+  isOpenClient: boolean;
   attachments: ClaimAttachment[];
   onEdit: (section: ReviewSection) => void;
 };
@@ -43,6 +47,8 @@ export const ReviewStep = ({
   demand,
   flaw,
   description,
+  isLeftAddress,
+  isOpenClient,
   attachments,
   onEdit,
 }: ReviewStepProps) => {
@@ -68,26 +74,15 @@ export const ReviewStep = ({
               )}
             />
           </ul>
+          <ClaimOptionsReview isLeftAddress={isLeftAddress} isOpenClient={isOpenClient} />
         </ReviewCard>
         <ReviewCard title="Обращение" onEdit={() => onEdit('details')}>
-          <dl className={styles.reviewDetails}>
-            <div>
-              <dt>Причина</dt>
-              <dd>{reason?.name ?? 'Не выбрана'}</dd>
-            </div>
-            <div>
-              <dt>Недостаток</dt>
-              <dd>{flaw?.name ?? 'Не выбран'}</dd>
-            </div>
-            <div>
-              <dt>Требование клиента</dt>
-              <dd>{demand?.name ?? 'Не выбрано'}</dd>
-            </div>
-            <div>
-              <dt>Суть претензии</dt>
-              <dd>{description}</dd>
-            </div>
-          </dl>
+          <ClaimDetailsReview
+            reason={reason}
+            demand={demand}
+            flaw={flaw}
+            description={description}
+          />
         </ReviewCard>
         <ReviewCard title="Вложения" onEdit={() => onEdit('attachments')}>
           {attachments.length ? (

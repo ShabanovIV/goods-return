@@ -54,6 +54,8 @@ export const useClaimFormNavigation = ({
         clientDemandId: state.formState.clientDemandId,
         flawId: state.formState.flawId,
         description: state.formState.description,
+        isLeftAddress: state.formState.isLeftAddress,
+        isOpenClient: state.formState.isOpenClient,
         attachments: state.formState.attachments,
       });
       state.setClaimNumber(claimNumber);

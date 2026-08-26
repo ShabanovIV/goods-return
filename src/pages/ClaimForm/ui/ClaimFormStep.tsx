@@ -26,6 +26,8 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
         products={data.products}
         selectedLines={formState.selectedLines}
         showErrors={state.showErrors}
+        isLeftAddress={formState.isLeftAddress}
+        isOpenClient={formState.isOpenClient}
         onToggle={(product) =>
           state.setFormState((current) => {
             const selectedLines = { ...current.selectedLines };
@@ -39,6 +41,12 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
             ...current,
             selectedLines: { ...current.selectedLines, [product.lineId]: amount },
           }))
+        }
+        onLeftAddressChange={(isLeftAddress) =>
+          state.setFormState((current) => ({ ...current, isLeftAddress }))
+        }
+        onOpenClientChange={(isOpenClient) =>
+          state.setFormState((current) => ({ ...current, isOpenClient }))
         }
       />
     );
@@ -77,6 +85,8 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
       demand={selectedDemand}
       flaw={selectedFlaw}
       description={formState.description}
+      isLeftAddress={formState.isLeftAddress}
+      isOpenClient={formState.isOpenClient}
       attachments={formState.attachments}
       onEdit={(section) => state.setStep(reviewStep[section])}
     />

@@ -7,6 +7,8 @@ type SubmitClaimArguments = {
   clientDemandId: string;
   flawId: string;
   description: string;
+  isLeftAddress: boolean;
+  isOpenClient: boolean;
   attachments: ClaimAttachment[];
 };
 
@@ -20,6 +22,8 @@ export const useSubmitClaim = () => {
     clientDemandId,
     flawId,
     description,
+    isLeftAddress,
+    isOpenClient,
     attachments,
   }: SubmitClaimArguments) => {
     const files = attachments.flatMap((attachment) => (attachment.file ? [attachment.file] : []));
@@ -31,6 +35,8 @@ export const useSubmitClaim = () => {
       flaw: flawId,
       requirement: clientDemandId,
       description,
+      isLeftAddress,
+      isOpenClient,
       files,
     }).unwrap();
 

@@ -12,6 +12,8 @@ test('creates the Claim/Create multipart form with all files', () => {
     flaw: 'flaw-1',
     requirement: 'requirement-1',
     description: '  Суть претензии  ',
+    isLeftAddress: false,
+    isOpenClient: true,
     files,
   });
 
@@ -22,7 +24,7 @@ test('creates the Claim/Create multipart form with all files', () => {
   expect(formData.get('Flaw')).toBe('flaw-1');
   expect(formData.get('Requirement')).toBe('requirement-1');
   expect(formData.get('Description')).toBe('Суть претензии');
-  expect(formData.get('IsLeftAddress')).toBe('true');
-  expect(formData.get('IsOpenClient')).toBe('false');
+  expect(formData.get('IsLeftAddress')).toBe('false');
+  expect(formData.get('IsOpenClient')).toBe('true');
   expect(formData.getAll('')).toEqual(files);
 });

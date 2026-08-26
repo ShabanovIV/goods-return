@@ -5,6 +5,8 @@ export const createClaimFormData = ({
   documentId,
   files,
   flaw,
+  isLeftAddress,
+  isOpenClient,
   products,
   reason,
   requirement,
@@ -20,8 +22,8 @@ export const createClaimFormData = ({
   formData.append('Flaw', flaw);
   formData.append('Requirement', requirement);
   formData.append('Description', description.trim());
-  formData.append('IsLeftAddress', 'true');
-  formData.append('IsOpenClient', 'false');
+  formData.append('IsLeftAddress', isLeftAddress.toString());
+  formData.append('IsOpenClient', isOpenClient.toString());
   files.forEach((file) => formData.append('', file, file.name));
 
   return formData;
