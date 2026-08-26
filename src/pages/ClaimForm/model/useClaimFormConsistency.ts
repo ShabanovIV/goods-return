@@ -6,7 +6,7 @@ type UseClaimFormConsistencyArguments = {
   flaws: ClaimFlaw[];
   flawsLoaded: boolean;
   setFormState: Dispatch<SetStateAction<ClaimFormState>>;
-  setPageError: Dispatch<SetStateAction<string>>;
+  setPageError: (message: string) => void;
 };
 
 export const useClaimFormConsistency = ({

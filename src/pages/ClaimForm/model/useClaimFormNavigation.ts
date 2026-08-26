@@ -33,7 +33,6 @@ export const useClaimFormNavigation = ({
     state.setFormState((current) => ({ ...current, step }));
     state.setShowErrors(true);
     state.setPageError(message);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const submit = async () => {
@@ -64,7 +63,6 @@ export const useClaimFormNavigation = ({
       );
     } catch (error: unknown) {
       state.setPageError(getRequestErrorMessage(error));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
