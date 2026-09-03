@@ -11,7 +11,7 @@ interface ProvidersProps {
 const Providers = ({ children }: ProvidersProps) => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={__APP_BASE_PATH__}>
         <ErrorBoundary
           retryKeys={[location.pathname]}
           onError={(error) => {

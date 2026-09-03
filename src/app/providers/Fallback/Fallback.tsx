@@ -37,7 +37,7 @@ const Fallback: React.FC<FallbackProps> = ({ error, onRetry, onGoHome }) => {
       return;
     }
 
-    window.location.assign('/');
+    window.location.assign(__APP_BASE_PATH__);
   };
 
   return (

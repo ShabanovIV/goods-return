@@ -27,6 +27,7 @@ Object.assign(globalThis, { TextDecoder, TextEncoder });
 Object.assign(globalThis, { structuredClone: cloneForIndexedDb });
 Object.assign(globalThis, {
   __API_URL__: '/',
+  __APP_BASE_PATH__: '/',
   __DEVELOPMENT_TOKEN__: undefined,
 });
 Object.assign(globalThis, {

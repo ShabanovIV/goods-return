@@ -1,4 +1,5 @@
 declare const __API_URL__: string;
+declare const __APP_BASE_PATH__: string;
 declare const __DEVELOPMENT_TOKEN__: string | undefined;
 
 // CSS Modules
