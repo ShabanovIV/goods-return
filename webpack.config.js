@@ -22,6 +22,8 @@ export default (_, argv) => {
   const apiUrlEnvName = isProd ? 'PRODUCTION_API_URL' : 'DEVELOPMENT_API_URL';
   const apiUrl = process.env[apiUrlEnvName];
   const developmentToken = isProd ? undefined : process.env.DEVELOPMENT_TOKEN || undefined;
+  const basePathValue = (process.env.APP_BASE_PATH ?? '').trim().replace(/^\/+|\/+$/g, '');
+  const appBasePath = basePathValue ? `/${basePathValue}/` : '/';
 
   if (!apiUrl) {
     throw new Error(
@@ -38,7 +40,7 @@ export default (_, argv) => {
       path: path.resolve(__dirname, 'dist'),
       filename: isProd ? '[name].[contenthash].js' : '[name].js',
       clean: true,
-      publicPath: '/',
+      publicPath: appBasePath,
     },
 
     devtool: isProd ? 'source-map' : 'eval-cheap-module-source-map',
@@ -50,7 +52,11 @@ export default (_, argv) => {
       },
     },
 
-    cache: { type: 'filesystem' },
+    cache: {
+      type: 'filesystem',
+      version: appBasePath,
+      buildDependencies: { config: [__filename] },
+    },
 
     module: {
       rules: [
@@ -183,6 +189,7 @@ export default (_, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         __API_URL__: JSON.stringify(apiUrl),
+        __APP_BASE_PATH__: JSON.stringify(appBasePath),
         __DEVELOPMENT_TOKEN__: JSON.stringify(developmentToken),
       }),
       new HtmlWebpackPlugin({
@@ -194,10 +201,11 @@ export default (_, argv) => {
     devServer: {
       port: 3000,
       hot: true,
-      open: true,
-      historyApiFallback: true,
+      open: [appBasePath],
+      historyApiFallback: { index: `${appBasePath}index.html` },
       static: {
         directory: path.resolve(__dirname, 'public'),
+        publicPath: appBasePath,
       },
     },
 
