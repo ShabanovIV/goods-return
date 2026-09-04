@@ -6,7 +6,7 @@ test('renders defaults and changes both claim options', () => {
   const onOpenClientChange = jest.fn();
   render(
     <ClaimOptions
-      isLeftAddress
+      isLeftAddress={false}
       isOpenClient={false}
       onLeftAddressChange={onLeftAddressChange}
       onOpenClientChange={onOpenClientChange}
@@ -17,11 +17,11 @@ test('renders defaults and changes both claim options', () => {
   const openClient = screen.getByRole('switch', {
     name: /Упаковка вскрыта в присутствии клиента/,
   });
-  expect(leftAddress).toBeChecked();
+  expect(leftAddress).not.toBeChecked();
   expect(openClient).not.toBeChecked();
 
   fireEvent.click(leftAddress);
   fireEvent.click(openClient);
-  expect(onLeftAddressChange).toHaveBeenCalledWith(false);
+  expect(onLeftAddressChange).toHaveBeenCalledWith(true);
   expect(onOpenClientChange).toHaveBeenCalledWith(true);
 });

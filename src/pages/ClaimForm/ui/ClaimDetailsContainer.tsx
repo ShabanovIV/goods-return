@@ -14,6 +14,14 @@ export const ClaimDetailsContainer = ({ data, state }: ClaimDetailsContainerProp
     clientDemandId={state.formState.clientDemandId}
     flawId={state.formState.flawId}
     description={state.formState.description}
+    isLeftAddress={state.formState.isLeftAddress}
+    isOpenClient={state.formState.isOpenClient}
+    onLeftAddressChange={(isLeftAddress) =>
+      state.setFormState((current) => ({ ...current, isLeftAddress }))
+    }
+    onOpenClientChange={(isOpenClient) =>
+      state.setFormState((current) => ({ ...current, isOpenClient }))
+    }
     reasons={{
       items: data.reasons,
       isLoading: data.reasonsQuery.isLoading,

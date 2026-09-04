@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { isLoginRedirecting } from 'src/shared/lib/auth';
 import { configHelperFactory } from 'src/shared/lib/configurations';
 import { getDraftKey, toPersistedClaimDraft } from './claimDraft';
 import { createEmptyClaimForm } from './claimFormState';
@@ -64,7 +65,9 @@ export const useClaimDraft = ({
       Object.keys(formState.selectedLines).length > 0 ||
       Boolean(formState.reasonId || formState.clientDemandId || formState.description);
     if (!hasDraft) return undefined;
-    const preventAccidentalClose = (event: BeforeUnloadEvent) => event.preventDefault();
+    const preventAccidentalClose = (event: BeforeUnloadEvent) => {
+      if (!isLoginRedirecting()) event.preventDefault();
+    };
     window.addEventListener('beforeunload', preventAccidentalClose);
     return () => window.removeEventListener('beforeunload', preventAccidentalClose);
   }, [claimNumber, formState, isHydrated]);
