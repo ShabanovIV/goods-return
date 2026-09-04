@@ -1,40 +1,22 @@
-import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
 import { FormField } from 'src/shared/ui/FormField';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { Select } from 'src/shared/ui/Select';
 import { ClaimDescriptionField } from './ClaimDescriptionField';
 import styles from './ClaimDetailsStep.module.scss';
+import { ClaimOptions } from './ClaimOptions';
 import { DictionaryError } from './DictionaryError';
 import { FlawSelector } from './FlawSelector';
-
-type DictionaryState<T> = {
-  items: T[];
-  isLoading: boolean;
-  errorMessage?: string;
-  retry: () => void;
-};
-
-type ClaimDetailsStepProps = {
-  reasonId: string;
-  clientDemandId: string;
-  flawId: string;
-  description: string;
-  reasons: DictionaryState<ClaimDictionaryItem>;
-  demands: DictionaryState<ClaimDictionaryItem>;
-  flaws: DictionaryState<ClaimFlaw>;
-  flawsEnabled: boolean;
-  showErrors: boolean;
-  onReasonChange: (reasonId: string) => void;
-  onDemandChange: (demandId: string) => void;
-  onFlawChange: (flawId: string) => void;
-  onDescriptionChange: (description: string) => void;
-};
+import type { ClaimDetailsStepProps } from '../types/claimDetails';
 
 export const ClaimDetailsStep = ({
   reasonId,
   clientDemandId,
   flawId,
   description,
+  isLeftAddress,
+  isOpenClient,
+  onLeftAddressChange,
+  onOpenClientChange,
   reasons,
   demands,
   flaws,
@@ -108,6 +90,12 @@ export const ClaimDetailsStep = ({
           />
         )}
       </FormField>
+      <ClaimOptions
+        isLeftAddress={isLeftAddress}
+        isOpenClient={isOpenClient}
+        onLeftAddressChange={onLeftAddressChange}
+        onOpenClientChange={onOpenClientChange}
+      />
       <ClaimDescriptionField
         description={description}
         onChange={onDescriptionChange}

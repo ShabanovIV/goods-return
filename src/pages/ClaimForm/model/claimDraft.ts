@@ -50,7 +50,7 @@ export const fromPersistedClaimDraft = (
   clientDemandId: draft.clientDemandId,
   flawId: draft.flawId,
   description: 'description' in draft ? draft.description : '',
-  isLeftAddress: 'isLeftAddress' in draft ? draft.isLeftAddress : true,
+  isLeftAddress: 'isLeftAddress' in draft ? draft.isLeftAddress : false,
   isOpenClient: 'isOpenClient' in draft ? draft.isOpenClient : false,
   attachments: draft.attachments,
 });
