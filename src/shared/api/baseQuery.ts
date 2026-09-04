@@ -4,6 +4,7 @@ import {
   FetchBaseQueryError,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query';
+import { redirectToLogin } from 'src/shared/lib/auth';
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: __API_URL__,
@@ -34,6 +35,11 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
   extraOptions,
 ) => {
   const result = await rawBaseQuery(args, api, extraOptions);
+
+  if (result.error?.status === 401 || result.meta?.response?.status === 401) {
+    redirectToLogin();
+    return result;
+  }
 
   const businessError = 'data' in result ? getBusinessErrorMessage(result.data) : undefined;
   if (businessError) {
