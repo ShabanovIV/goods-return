@@ -74,7 +74,6 @@ export const ReviewStep = ({
               )}
             />
           </ul>
-          <ClaimOptionsReview isLeftAddress={isLeftAddress} isOpenClient={isOpenClient} />
         </ReviewCard>
         <ReviewCard title="Обращение" onEdit={() => onEdit('details')}>
           <ClaimDetailsReview
@@ -83,6 +82,7 @@ export const ReviewStep = ({
             flaw={flaw}
             description={description}
           />
+          <ClaimOptionsReview isLeftAddress={isLeftAddress} isOpenClient={isOpenClient} />
         </ReviewCard>
         <ReviewCard title="Вложения" onEdit={() => onEdit('attachments')}>
           {attachments.length ? (

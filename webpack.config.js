@@ -21,9 +21,27 @@ export default (_, argv) => {
   const isProd = argv.mode === 'production';
   const apiUrlEnvName = isProd ? 'PRODUCTION_API_URL' : 'DEVELOPMENT_API_URL';
   const apiUrl = process.env[apiUrlEnvName];
+  const authLoginUrl = process.env.AUTH_LOGIN_URL?.trim() || undefined;
+  const absoluteReturnUrlValue = process.env.AUTH_RETURN_URL_ABSOLUTE?.trim().toLowerCase();
+  if (absoluteReturnUrlValue && !['true', 'false'].includes(absoluteReturnUrlValue)) {
+    throw new Error('AUTH_RETURN_URL_ABSOLUTE должен быть true или false.');
+  }
+  const absoluteReturnUrl = absoluteReturnUrlValue !== 'false';
   const developmentToken = isProd ? undefined : process.env.DEVELOPMENT_TOKEN || undefined;
   const basePathValue = (process.env.APP_BASE_PATH ?? '').trim().replace(/^\/+|\/+$/g, '');
   const appBasePath = basePathValue ? `/${basePathValue}/` : '/';
+
+  if (authLoginUrl) {
+    const parsedLoginUrl = URL.parse(authLoginUrl);
+    if (
+      !parsedLoginUrl ||
+      !['http:', 'https:'].includes(parsedLoginUrl.protocol) ||
+      parsedLoginUrl.username ||
+      parsedLoginUrl.password
+    ) {
+      throw new Error('AUTH_LOGIN_URL должен быть полным HTTP(S) URL без логина и пароля.');
+    }
+  }
 
   if (!apiUrl) {
     throw new Error(
@@ -189,6 +207,8 @@ export default (_, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         __API_URL__: JSON.stringify(apiUrl),
+        __AUTH_LOGIN_URL__: JSON.stringify(authLoginUrl),
+        __AUTH_RETURN_URL_ABSOLUTE__: JSON.stringify(absoluteReturnUrl),
         __APP_BASE_PATH__: JSON.stringify(appBasePath),
         __DEVELOPMENT_TOKEN__: JSON.stringify(developmentToken),
       }),

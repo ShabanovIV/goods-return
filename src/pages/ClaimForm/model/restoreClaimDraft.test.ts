@@ -41,7 +41,7 @@ test('still migrates a version 3 draft with attachment files', async () => {
 
   expect(restored).toMatchObject({
     description: '',
-    isLeftAddress: true,
+    isLeftAddress: false,
     isOpenClient: false,
     attachments: [{ file }],
   });
@@ -76,7 +76,7 @@ test('migrates a version 4 draft with default options without losing files', asy
 
   expect(restored).toMatchObject({
     description: 'Описание',
-    isLeftAddress: true,
+    isLeftAddress: false,
     isOpenClient: false,
     attachments: [{ file }],
   });

@@ -1,12 +1,6 @@
 import { Switch } from 'src/shared/ui/Switch';
-import styles from './ProductStep.module.scss';
-
-type ClaimOptionsProps = {
-  isLeftAddress: boolean;
-  isOpenClient: boolean;
-  onLeftAddressChange: (checked: boolean) => void;
-  onOpenClientChange: (checked: boolean) => void;
-};
+import styles from './ClaimOptions.module.scss';
+import type { ClaimOptionsProps } from '../types/claimDetails';
 
 export const ClaimOptions = ({
   isLeftAddress,
