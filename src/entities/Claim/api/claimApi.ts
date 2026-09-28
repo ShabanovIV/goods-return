@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery, toUrlSearchParams } from 'src/shared/api';
+import { baseQuery } from 'src/shared/api';
 import type {
   GetAttachmentTypesResponse,
   GetClientDemandsResponse,
@@ -21,10 +21,10 @@ export const claimApi = createApi({
       query: () => ({ url: `${BASE_URL}/getClientDemands`, method: 'POST' }),
     }),
     getFlaws: builder.query<GetFlawsResponse, GetFlawsQueryParams>({
-      query: (params) => ({
+      query: (body) => ({
         url: `${BASE_URL}/getFlaws`,
         method: 'POST',
-        params: toUrlSearchParams(params),
+        body,
       }),
     }),
     getAttachmentTypes: builder.query<GetAttachmentTypesResponse, void>({
