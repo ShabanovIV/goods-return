@@ -40,10 +40,7 @@ const ClaimFormPage = () => {
   });
 
   if (!documentId) return <MissingDocument />;
-  if (data.documentQuery.isLoading || !draft.isHydrated) {
-    return <LoadingDocument />;
-  }
-  if (data.documentQuery.isError || !data.documentQuery.data?.success) {
+  if (data.documentQuery.isError) {
     return (
       <DocumentError
         message={getRequestErrorMessage(data.documentQuery.error)}
@@ -51,6 +48,16 @@ const ClaimFormPage = () => {
       />
     );
   }
+  if (data.documentQuery.isLoading) return <LoadingDocument />;
+  if (!data.documentQuery.data?.success) {
+    return (
+      <DocumentError
+        message={getRequestErrorMessage(data.documentQuery.error)}
+        onRetry={data.documentQuery.refetch}
+      />
+    );
+  }
+  if (!draft.isHydrated) return <LoadingDocument />;
   if (state.claimNumber) {
     return (
       <ClaimResult
