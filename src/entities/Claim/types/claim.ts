@@ -48,4 +48,10 @@ export type GetReasonsResponse = ClaimDataResponse<ClaimDictionaryItem[]>;
 export type GetClientDemandsResponse = ClaimDataResponse<ClaimDictionaryItem[]>;
 export type GetFlawsResponse = ClaimDataResponse<{ flaws: ClaimFlaw[] }>;
 export type GetAttachmentTypesResponse = ClaimDataResponse<AttachmentType[]>;
-export type CreateClaimResponse = { id: string; number: string; status: string };
+export type CreateClaimResponse = {
+  Data: string | null;
+  ErrorCode: string | null;
+  Error: string | null;
+  Success: boolean;
+  TraceId: string | null;
+};

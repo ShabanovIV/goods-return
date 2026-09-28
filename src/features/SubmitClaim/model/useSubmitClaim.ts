@@ -40,9 +40,10 @@ export const useSubmitClaim = () => {
       files,
     }).unwrap();
 
-    if (!response.number) throw new Error('Сервер не вернул номер созданной претензии.');
+    if (!response.Success) throw new Error(response.Error || 'Не удалось создать претензию.');
+    if (!response.Data) throw new Error('Сервер не вернул номер созданной претензии.');
 
-    return response.number;
+    return response.Data;
   };
 
   return {
