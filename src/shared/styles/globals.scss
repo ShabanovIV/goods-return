@@ -1,28 +1,28 @@
 :root {
-  --color-accent: #00b9bf;
-  --color-accent-hover: #00a6ac;
-  --color-accent-strong: #009ca2;
-  --color-accent-border: rgba(0, 185, 191, 0.48);
-  --color-accent-soft: #e9fafa;
-  --color-accent-glow: rgba(0, 185, 191, 0.16);
-  --color-focus-ring: rgba(0, 185, 191, 0.2);
+  --color-accent: #03a9f4;
+  --color-accent-hover: #0398db;
+  --color-accent-strong: #3f51b5;
+  --color-accent-border: rgba(63, 81, 181, 0.45);
+  --color-accent-soft: #e8f5fd;
+  --color-accent-glow: rgba(3, 169, 244, 0.14);
+  --color-focus-ring: rgba(63, 81, 181, 0.2);
 
-  --color-bg: #f5f5f5;
+  --color-bg: #f1f4f5;
   --color-card: #ffffff;
-  --color-surface-muted: #f6f6f6;
+  --color-surface-muted: #fafafa;
 
-  --color-text: #333333;
-  --color-text-strong: #212121;
-  --color-muted: #666666;
-  --color-placeholder: #999999;
-  --color-border: #e2e2e2;
+  --color-text: #797979;
+  --color-text-strong: #2a3542;
+  --color-muted: #797979;
+  --color-placeholder: #a7a7a7;
+  --color-border: #e5e5e5;
   --color-error: #d03b35;
 
-  --font-family: Gilroy, 'Avenir Next', 'Segoe UI', Arial, sans-serif;
+  --font-family: Roboto, Arial, sans-serif;
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 
-  --border-radius: 1.5rem;
-  --shadow-md: 0 1rem 3rem rgba(33, 33, 33, 0.08);
+  --border-radius: 0.25rem;
+  --shadow-md: 0 0 0.5rem rgba(0, 0, 0, 0.06), 0 0.0625rem 0 rgba(0, 0, 0, 0.02);
 }
 
 *,
@@ -47,6 +47,8 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-family);
+  font-size: 0.875rem;
+  line-height: 1.4286;
   -webkit-font-smoothing: antialiased;
 }
 

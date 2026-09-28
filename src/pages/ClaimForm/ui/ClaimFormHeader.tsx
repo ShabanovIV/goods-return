@@ -11,11 +11,13 @@ export const ClaimFormHeader = ({ draftMessage, step }: ClaimFormHeaderProps) =>
     <div className={s.headerInner}>
       <div className={s.brand} aria-label="Askona — возврат товаров">
         <span className={s.logoMark} aria-hidden="true">
-          a
+          <svg viewBox="0 0 24 24">
+            <path d="m12 2 9 4.5-9 4.5-9-4.5L12 2Zm-7.5 8L12 13.75 19.5 10 21 11.5 12 16l-9-4.5L4.5 10Zm0 5L12 18.75 19.5 15l1.5 1.5L12 21l-9-4.5L4.5 15Z" />
+          </svg>
         </span>
         <span>
-          <strong>Претензия</strong>
-          <small>{draftMessage}</small>
+          <strong>ASKONA</strong>
+          <small>Претензия · {draftMessage}</small>
         </span>
       </div>
     </div>

@@ -1,7 +1,7 @@
 .page {
   min-height: 100dvh;
   padding-bottom: 6.5rem;
-  background: #f5f6f6;
+  background: var(--color-bg);
 }
 
 .header {
@@ -9,9 +9,8 @@
   z-index: 20;
   top: 0;
   border-bottom: 0.0625rem solid var(--color-border);
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 0.25rem 1.5rem rgba(33, 33, 33, 0.04);
-  backdrop-filter: blur(1rem);
+  background: var(--color-card);
+  box-shadow: var(--shadow-md);
 }
 
 .headerInner,
@@ -43,7 +42,9 @@
   }
 
   strong {
-    font-size: 0.9375rem;
+    color: var(--color-text-strong);
+    font-size: 1.125rem;
+    letter-spacing: 0.05em;
   }
 
   small {
@@ -57,13 +58,15 @@
 
 .logoMark {
   display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
   flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--color-accent);
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 800;
+  color: var(--color-text-strong);
   place-items: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: currentcolor;
+  }
 }

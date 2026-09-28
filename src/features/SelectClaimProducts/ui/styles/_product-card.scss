@@ -6,9 +6,9 @@
 .productCard {
   overflow: hidden;
   border: 0.125rem solid transparent;
-  border-radius: 1.25rem;
+  border-radius: 0.25rem;
   background: var(--color-card);
-  box-shadow: 0 0.25rem 1.25rem rgba(33, 33, 33, 0.06);
+  box-shadow: var(--shadow-md);
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease;
@@ -16,7 +16,7 @@
 
 .productCardSelected {
   border-color: var(--color-accent);
-  box-shadow: 0 0.75rem 2rem rgba(0, 185, 191, 0.12);
+  box-shadow: 0 0.25rem 0.75rem var(--color-accent-glow);
 }
 
 .productChoice {

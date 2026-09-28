@@ -7,8 +7,7 @@
   padding: 0.75rem max(1rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom))
     max(1rem, env(safe-area-inset-left));
   border-top: 0.0625rem solid var(--color-border);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(1rem);
+  background: var(--color-card);
 }
 
 .actionBarInner {
@@ -17,7 +16,7 @@
   gap: 0.75rem;
 
   button {
-    min-height: 3.25rem;
+    min-height: 2.75rem;
   }
 }
 
@@ -36,7 +35,7 @@
   min-height: 100dvh;
   padding: 1rem;
   background:
-    radial-gradient(circle at 50% 10%, rgba(0, 185, 191, 0.12), transparent 25rem), #f5f6f6;
+    radial-gradient(circle at 50% 10%, rgba(3, 169, 244, 0.1), transparent 25rem), var(--color-bg);
   place-items: center;
 }
 
@@ -47,7 +46,7 @@
   width: min(100%, 30rem);
   padding: clamp(1.5rem, 7vw, 3rem);
   border: 0.0625rem solid var(--color-border);
-  border-radius: 1.5rem;
+  border-radius: 0.25rem;
   background: #fff;
   box-shadow: var(--shadow-md);
   justify-items: center;
