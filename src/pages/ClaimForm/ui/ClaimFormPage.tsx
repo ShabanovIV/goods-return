@@ -16,6 +16,9 @@ import { useClaimFormState } from '../model/useClaimFormState';
 
 const ClaimFormPage = () => {
   const { documentId = '' } = useParams<{ documentId: string }>();
+  const returnToDocument = () => {
+    window.location.assign(`${__API_URL__}?documentId=${encodeURIComponent(documentId)}`);
+  };
   const state = useClaimFormState();
   const data = useClaimData(documentId, state.formState);
   const draft = useClaimDraft({
@@ -59,15 +62,7 @@ const ClaimFormPage = () => {
   }
   if (!draft.isHydrated) return <LoadingDocument />;
   if (state.claimNumber) {
-    return (
-      <ClaimResult
-        claimNumber={state.claimNumber}
-        onStartAgain={() => {
-          state.resetForm();
-          draft.setDraftMessage('Черновик сохраняется автоматически');
-        }}
-      />
-    );
+    return <ClaimResult claimNumber={state.claimNumber} onReturnToDocument={returnToDocument} />;
   }
 
   return (
@@ -91,7 +86,7 @@ const ClaimFormPage = () => {
       </main>
       <ClaimFormFooter
         isCreatingClaim={navigation.isCreatingClaim}
-        onBack={navigation.goBack}
+        onBack={state.formState.step === 0 ? returnToDocument : navigation.goBack}
         onNext={navigation.goNext}
         step={state.formState.step}
       />

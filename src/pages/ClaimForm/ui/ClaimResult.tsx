@@ -3,10 +3,10 @@ import s from './ClaimFormPage.module.scss';
 
 type ClaimResultProps = {
   claimNumber: string;
-  onStartAgain: () => void;
+  onReturnToDocument: () => void;
 };
 
-export const ClaimResult = ({ claimNumber, onStartAgain }: ClaimResultProps) => (
+export const ClaimResult = ({ claimNumber, onReturnToDocument }: ClaimResultProps) => (
   <main className={s.resultPage}>
     <section className={s.resultCard}>
       <div className={s.successIcon} aria-hidden="true">
@@ -19,7 +19,7 @@ export const ClaimResult = ({ claimNumber, onStartAgain }: ClaimResultProps) => 
         <span>Номер претензии</span>
         <strong>{claimNumber}</strong>
       </div>
-      <Button type="button" variant="secondary" onClick={onStartAgain}>
+      <Button type="button" variant="secondary" onClick={onReturnToDocument}>
         Вернуться к документу
       </Button>
     </section>
