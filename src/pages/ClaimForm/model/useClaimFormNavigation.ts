@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSubmitClaim } from 'src/features/SubmitClaim';
 import { isClaimStepValid } from './claimFormValidation';
 import { useClaimData } from './useClaimData';
@@ -9,17 +10,27 @@ import type { ClaimStep } from '../types/claimForm';
 type UseClaimFormNavigationArguments = {
   data: ReturnType<typeof useClaimData>;
   documentId: string;
-  setDraftMessage: (message: string) => void;
   state: ReturnType<typeof useClaimFormState>;
 };
 
 export const useClaimFormNavigation = ({
   data,
   documentId,
-  setDraftMessage,
   state,
 }: UseClaimFormNavigationArguments) => {
   const submission = useSubmitClaim();
+  const [draftCleanupStatus, setDraftCleanupStatus] = useState<'pending' | 'success' | 'error'>(
+    'pending',
+  );
+  const deleteDraft = async () => {
+    setDraftCleanupStatus('pending');
+    try {
+      await removeClaimDraft(documentId);
+      setDraftCleanupStatus('success');
+    } catch {
+      setDraftCleanupStatus('error');
+    }
+  };
   const validationContext = {
     areAttachmentTypesReady: data.areAttachmentTypesReady,
     areDetailsReady: data.areDetailsReady,
@@ -58,9 +69,7 @@ export const useClaimFormNavigation = ({
         attachments: state.formState.attachments,
       });
       state.setClaimNumber(claimNumber);
-      void removeClaimDraft(documentId).catch(() =>
-        setDraftMessage('Претензия отправлена, но черновик удалить не удалось'),
-      );
+      await deleteDraft();
     } catch (error: unknown) {
       state.setPageError(getRequestErrorMessage(error));
     }
@@ -79,6 +88,10 @@ export const useClaimFormNavigation = ({
   };
 
   return {
+    draftCleanupStatus,
+    retryDraftCleanup: () => {
+      if (state.claimNumber && draftCleanupStatus === 'error') void deleteDraft();
+    },
     goBack: () => state.setStep((state.formState.step - 1) as ClaimStep),
     goNext,
     isCreatingClaim: submission.isCreatingClaim,

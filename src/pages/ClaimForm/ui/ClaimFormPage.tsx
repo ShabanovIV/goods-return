@@ -31,7 +31,6 @@ const ClaimFormPage = () => {
   const navigation = useClaimFormNavigation({
     data,
     documentId,
-    setDraftMessage: draft.setDraftMessage,
     state,
   });
 
@@ -62,7 +61,14 @@ const ClaimFormPage = () => {
   }
   if (!draft.isHydrated) return <LoadingDocument />;
   if (state.claimNumber) {
-    return <ClaimResult claimNumber={state.claimNumber} onReturnToDocument={returnToDocument} />;
+    return (
+      <ClaimResult
+        claimNumber={state.claimNumber}
+        draftCleanupStatus={navigation.draftCleanupStatus}
+        onRetryDraftCleanup={navigation.retryDraftCleanup}
+        onReturnToDocument={returnToDocument}
+      />
+    );
   }
 
   return (
