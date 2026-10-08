@@ -24,8 +24,7 @@ export const useClaimData = (documentId: string, formState: ClaimFormState) => {
 
   const products = useMemo(() => {
     if (!documentQuery.data?.success) return [];
-    const productLines = documentQuery.data.data.details.filter((detail) => detail.isProduct);
-    return productLines.length ? productLines : documentQuery.data.data.details;
+    return documentQuery.data.data.details;
   }, [documentQuery.data]);
   const reasons = reasonsQuery.data?.success ? reasonsQuery.data.data : [];
   const demands = demandsQuery.data?.success ? demandsQuery.data.data : [];
