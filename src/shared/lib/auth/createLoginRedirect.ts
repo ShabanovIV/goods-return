@@ -16,8 +16,12 @@ export const createLoginRedirect = ({
   const redirectToLogin = () => {
     if (!loginUrl || state.redirecting) return;
 
-    const url = new URL(loginUrl);
     const originalUrl = new URL(returnUrl);
+    const isRootRelativeUrl =
+      loginUrl.startsWith('/') && !loginUrl.startsWith('//') && !loginUrl.includes('\\');
+    if (loginUrl.startsWith('/') && !isRootRelativeUrl) return;
+
+    const url = isRootRelativeUrl ? new URL(loginUrl, originalUrl.origin) : new URL(loginUrl);
     if (url.origin === originalUrl.origin && url.pathname === originalUrl.pathname) {
       return;
     }

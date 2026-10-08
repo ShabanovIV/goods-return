@@ -32,14 +32,23 @@ export default (_, argv) => {
   const appBasePath = basePathValue ? `/${basePathValue}/` : '/';
 
   if (authLoginUrl) {
-    const parsedLoginUrl = URL.parse(authLoginUrl);
-    if (
-      !parsedLoginUrl ||
-      !['http:', 'https:'].includes(parsedLoginUrl.protocol) ||
-      parsedLoginUrl.username ||
-      parsedLoginUrl.password
-    ) {
-      throw new Error('AUTH_LOGIN_URL должен быть полным HTTP(S) URL без логина и пароля.');
+    const isRootRelativeUrl =
+      authLoginUrl.startsWith('/') &&
+      !authLoginUrl.startsWith('//') &&
+      !authLoginUrl.includes('\\');
+
+    if (!isRootRelativeUrl) {
+      const parsedLoginUrl = URL.parse(authLoginUrl);
+      if (
+        !parsedLoginUrl ||
+        !['http:', 'https:'].includes(parsedLoginUrl.protocol) ||
+        parsedLoginUrl.username ||
+        parsedLoginUrl.password
+      ) {
+        throw new Error(
+          'AUTH_LOGIN_URL должен быть полным HTTP(S) URL или путём от корня сайта, без логина и пароля.',
+        );
+      }
     }
   }
 

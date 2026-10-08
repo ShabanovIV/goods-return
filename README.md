@@ -62,6 +62,9 @@ AUTH_LOGIN_URL=https://api.example.com/Account/Login
 AUTH_RETURN_URL_ABSOLUTE=true
 ```
 
+`AUTH_LOGIN_URL` также может быть путём от корня текущего домена, например
+`/Account/Login`. Значения вида `//other.example/Account/Login` не поддерживаются.
+
 Настройка доступна в коде как `__AUTH_LOGIN_URL__`. Если она не задана, значение —
 `undefined`. После изменения нужен перезапуск `npm start` или `npm run build`.
 Если адрес задан, любой HTTP 401 от API вызывает переход на страницу входа.

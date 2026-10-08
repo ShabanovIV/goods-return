@@ -16,6 +16,30 @@ test('navigates synchronously and preserves the full entry URL and login paramet
   expect(target.searchParams.get('returnUrl')).toBe(returnUrl);
 });
 
+test('resolves a root-relative login URL on the current origin', () => {
+  const navigate = jest.fn();
+  createLoginRedirect({ loginUrl: '/Account/Login', returnUrl, navigate }).redirectToLogin();
+
+  const target = new URL(navigate.mock.calls[0][0] as string);
+  expect(target.origin).toBe('http://localhost:3000');
+  expect(target.pathname).toBe('/Account/Login');
+  expect(target.searchParams.get('returnUrl')).toBe(returnUrl);
+});
+
+test('does not redirect to a protocol-relative external login URL', () => {
+  const navigate = jest.fn();
+  const redirect = createLoginRedirect({
+    loginUrl: '//other.example/Account/Login',
+    returnUrl,
+    navigate,
+  });
+
+  redirect.redirectToLogin();
+
+  expect(navigate).not.toHaveBeenCalled();
+  expect(redirect.isLoginRedirecting()).toBe(false);
+});
+
 test('redirects only once for repeated calls', () => {
   const navigate = jest.fn();
   const redirect = createLoginRedirect({ loginUrl, returnUrl, navigate });
