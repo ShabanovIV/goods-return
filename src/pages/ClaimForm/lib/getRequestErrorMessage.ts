@@ -5,7 +5,16 @@ export const getRequestErrorMessage = (error: unknown) => {
     return 'Не удалось выполнить запрос. Проверьте соединение и попробуйте ещё раз.';
   }
 
-  const requestError = error as { data?: unknown; error?: unknown; status?: unknown };
+  const requestError = error as {
+    data?: unknown;
+    error?: unknown;
+    originalStatus?: unknown;
+    status?: unknown;
+  };
+
+  if (requestError.status === 401 || requestError.originalStatus === 401) {
+    return 'Не удалось выполнить запрос. Проверьте авторизацию и попробуйте ещё раз.';
+  }
 
   if (typeof requestError.data === 'object' && requestError.data !== null) {
     const data = requestError.data as Record<string, unknown>;

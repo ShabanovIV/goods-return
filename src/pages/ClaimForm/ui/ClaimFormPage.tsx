@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { isLoginRedirecting } from 'src/shared/lib/auth';
 import { Alert } from 'src/shared/ui/Alert';
 import { IconButton } from 'src/shared/ui/IconButton';
 import { DocumentError, LoadingDocument, MissingDocument } from './ClaimDocumentState';
@@ -42,6 +43,7 @@ const ClaimFormPage = () => {
   });
 
   if (!documentId) return <MissingDocument />;
+  if (isLoginRedirecting()) return <LoadingDocument />;
   if (data.documentQuery.isError) {
     return (
       <DocumentError
