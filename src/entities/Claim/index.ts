@@ -23,6 +23,7 @@ export type {
   CreateClaimQueryParams,
   CreateClaimResponse,
   GetAttachmentTypesResponse,
+  GetAttachmentTypesQueryParams,
   GetClientDemandsResponse,
   GetFlawsQueryParams,
   GetFlawsResponse,

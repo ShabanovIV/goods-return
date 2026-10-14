@@ -12,7 +12,6 @@ export const useClaimData = (documentId: string, formState: ClaimFormState) => {
   const documentQuery = useGetDocumentQuery({ documentId }, { skip: !documentId });
   const reasonsQuery = useGetReasonsQuery(undefined, { skip: !documentId });
   const demandsQuery = useGetClientDemandsQuery(undefined, { skip: !documentId });
-  const attachmentTypesQuery = useGetAttachmentTypesQuery(undefined, { skip: !documentId });
   const selectedLineIds = useMemo(
     () => Object.keys(formState.selectedLines),
     [formState.selectedLines],
@@ -26,6 +25,22 @@ export const useClaimData = (documentId: string, formState: ClaimFormState) => {
     if (!documentQuery.data?.success) return [];
     return documentQuery.data.data.details;
   }, [documentQuery.data]);
+  const productIds = [
+    ...new Set(
+      selectedLineIds
+        .map((lineId) => products.find((product) => product.lineId === lineId)?.productId)
+        .filter((id): id is string => Boolean(id)),
+    ),
+  ].sort();
+  const hasSelectedProducts =
+    selectedLineIds.length > 0 &&
+    selectedLineIds.every((lineId) =>
+      products.some((product) => product.lineId === lineId && product.productId),
+    );
+  const attachmentTypesQuery = useGetAttachmentTypesQuery(
+    { productIds },
+    { skip: !documentId || !hasSelectedProducts },
+  );
   const reasons = reasonsQuery.data?.success ? reasonsQuery.data.data : [];
   const demands = demandsQuery.data?.success ? demandsQuery.data.data : [];
   const flaws = useMemo(
@@ -34,10 +49,10 @@ export const useClaimData = (documentId: string, formState: ClaimFormState) => {
   );
   const attachmentTypes = useMemo(
     () =>
-      attachmentTypesQuery.data?.success
-        ? [...attachmentTypesQuery.data.data].sort((left, right) => left.order - right.order)
+      attachmentTypesQuery.currentData?.success
+        ? [...attachmentTypesQuery.currentData.data].sort((left, right) => left.order - right.order)
         : [],
-    [attachmentTypesQuery.data],
+    [attachmentTypesQuery.currentData],
   );
 
   const areDetailsReady = !(
@@ -48,7 +63,12 @@ export const useClaimData = (documentId: string, formState: ClaimFormState) => {
     demandsQuery.error ||
     flawsQuery.error
   );
-  const areAttachmentTypesReady = !(attachmentTypesQuery.error || attachmentTypesQuery.isFetching);
+  const areAttachmentTypesReady = Boolean(
+    hasSelectedProducts &&
+    attachmentTypesQuery.currentData?.success &&
+    !attachmentTypesQuery.error &&
+    !attachmentTypesQuery.isFetching,
+  );
 
   return {
     areAttachmentTypesReady,

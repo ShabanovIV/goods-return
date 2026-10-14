@@ -46,9 +46,9 @@ export const AttachmentsStep = ({
     )}
     {isTypesLoading && <p className={styles.stepMessage}>Загружаем типы вложений…</p>}
     {!isTypesLoading && !typesError && attachmentTypes.length === 0 && (
-      <p className={styles.stepMessage}>Типы вложений не найдены.</p>
+      <p className={styles.stepMessage}>Для выбранных позиций прикреплять файлы не требуется.</p>
     )}
-    {!typesError && attachmentTypes.length > 0 && (
+    {!isTypesLoading && !typesError && attachmentTypes.length > 0 && (
       <div className={styles.typeRows}>
         <List
           items={attachmentTypes}

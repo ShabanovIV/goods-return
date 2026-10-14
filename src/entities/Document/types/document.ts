@@ -6,6 +6,7 @@ export type DocumentDetail = {
   amount: number;
   isProduct: boolean;
   lineId: string;
+  productId: string;
 };
 
 export type DocumentResponse = {

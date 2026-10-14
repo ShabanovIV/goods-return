@@ -36,6 +36,8 @@ const ClaimFormPage = () => {
   });
 
   useClaimFormConsistency({
+    attachmentTypes: data.attachmentTypes,
+    attachmentTypesLoaded: draft.isHydrated && data.areAttachmentTypesReady,
     flaws: data.flaws,
     flawsLoaded: data.flawsQuery.isSuccess,
     setFormState: state.setFormState,

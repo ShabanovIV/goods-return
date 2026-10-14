@@ -51,11 +51,13 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
       <AttachmentsStep
         attachments={formState.attachments}
         attachmentTypes={data.attachmentTypes}
-        isTypesLoading={data.attachmentTypesQuery.isLoading}
+        isTypesLoading={data.attachmentTypesQuery.isFetching}
         typesError={
           data.attachmentTypesQuery.error
             ? getRequestErrorMessage(data.attachmentTypesQuery.error)
-            : undefined
+            : data.attachmentTypesQuery.currentData?.success === false
+              ? data.attachmentTypesQuery.currentData.error
+              : undefined
         }
         showErrors={state.showErrors}
         onFilesSelected={(attachmentType, files) => state.addFiles(files, attachmentType)}

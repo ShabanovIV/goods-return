@@ -1,4 +1,5 @@
 export type GetFlawsQueryParams = { lineIds: string[]; reason: string };
+export type GetAttachmentTypesQueryParams = { productIds: string[] };
 
 export type ClaimAttachmentMetadata = {
   localId: string;
