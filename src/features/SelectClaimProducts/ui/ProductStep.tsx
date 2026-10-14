@@ -26,10 +26,10 @@ export const ProductStep = ({
     <FormStep
       description="Выберите одну или несколько позиций и укажите количество."
       step={1}
-      title="Товары"
+      title="Товары/услуги"
       titleId="products-title"
     >
-      {showErrors && selectedCount === 0 && <Alert>Выберите хотя бы один товар.</Alert>}
+      {showErrors && selectedCount === 0 && <Alert>Выберите хотя бы один товар или услугу.</Alert>}
       <div className={styles.productList}>
         {products.length === 0 && (
           <div className={styles.emptyProducts}>
