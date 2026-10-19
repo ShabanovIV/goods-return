@@ -9,7 +9,7 @@ export const createEmptyClaimForm = (): ClaimFormState => ({
   clientDemandId: '',
   flawId: '',
   description: '',
-  isLeftAddress: false,
-  isOpenClient: false,
+  isLeftAddress: null,
+  isOpenClient: null,
   attachments: [],
 });

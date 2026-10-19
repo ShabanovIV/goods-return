@@ -25,7 +25,10 @@ const TestForm = () => {
   const navigation = useClaimFormNavigation({
     data,
     documentId: 'document-1',
-    state: { ...state, formState: { ...state.formState, step: 3 } },
+    state: {
+      ...state,
+      formState: { ...state.formState, step: 3, isLeftAddress: false, isOpenClient: true },
+    },
   });
   return state.claimNumber ? (
     <ClaimResult

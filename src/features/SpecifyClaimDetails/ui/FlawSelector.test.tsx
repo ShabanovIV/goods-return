@@ -72,6 +72,12 @@ test('renders reason, flaw and demand in the required order', () => {
   const labels = screen
     .getAllByRole('combobox')
     .map((select) => (select as HTMLButtonElement).labels?.item(0)?.textContent);
-  expect(labels).toEqual(['Причина', 'Недостаток', 'Требование клиента']);
+  expect(labels).toEqual([
+    'Причина',
+    'Недостаток',
+    'Требование клиента',
+    'Товар оставлен на адресе',
+    'Упаковка вскрыта в присутствии клиента',
+  ]);
   expect(screen.getByLabelText('Суть претензии')).toHaveAttribute('maxlength', '1000');
 });

@@ -7,7 +7,7 @@ import type {
 } from '../types/claimForm';
 
 const CLAIM_DRAFT_PREFIX = 'goods-return:claim-draft:';
-const CLAIM_DRAFT_VERSION = 5;
+const CLAIM_DRAFT_VERSION = 6;
 const PREVIOUS_DRAFT_VERSION = 4;
 const LEGACY_DRAFT_VERSION = 3;
 
@@ -30,13 +30,17 @@ export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraf
 export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDraft =>
   isDraftData(value, CLAIM_DRAFT_VERSION) &&
   typeof value.description === 'string' &&
-  typeof value.isLeftAddress === 'boolean' &&
-  typeof value.isOpenClient === 'boolean';
+  (value.isLeftAddress === null || typeof value.isLeftAddress === 'boolean') &&
+  (value.isOpenClient === null || typeof value.isOpenClient === 'boolean');
 
 export const isPreviousPersistedClaimDraft = (
   value: unknown,
 ): value is PreviousPersistedClaimDraft =>
-  isDraftData(value, PREVIOUS_DRAFT_VERSION) && typeof value.description === 'string';
+  (isDraftData(value, PREVIOUS_DRAFT_VERSION) ||
+    (isDraftData(value, 5) &&
+      typeof value.isLeftAddress === 'boolean' &&
+      typeof value.isOpenClient === 'boolean')) &&
+  typeof value.description === 'string';
 
 export const isLegacyPersistedClaimDraft = (value: unknown): value is LegacyPersistedClaimDraft =>
   isDraftData(value, LEGACY_DRAFT_VERSION);
@@ -50,8 +54,8 @@ export const fromPersistedClaimDraft = (
   clientDemandId: draft.clientDemandId,
   flawId: draft.flawId,
   description: 'description' in draft ? draft.description : '',
-  isLeftAddress: 'isLeftAddress' in draft ? draft.isLeftAddress : false,
-  isOpenClient: 'isOpenClient' in draft ? draft.isOpenClient : false,
+  isLeftAddress: 'isLeftAddress' in draft ? draft.isLeftAddress : null,
+  isOpenClient: 'isOpenClient' in draft ? draft.isOpenClient : null,
   attachments: draft.attachments,
 });
 
@@ -60,6 +64,8 @@ const getVersionedDraftKey = (documentId: string, version: number) =>
 
 export const getDraftKey = (documentId: string) =>
   getVersionedDraftKey(documentId, CLAIM_DRAFT_VERSION);
+
+export const getSwitchDraftKey = (documentId: string) => getVersionedDraftKey(documentId, 5);
 
 export const getPreviousDraftKey = (documentId: string) =>
   getVersionedDraftKey(documentId, PREVIOUS_DRAFT_VERSION);

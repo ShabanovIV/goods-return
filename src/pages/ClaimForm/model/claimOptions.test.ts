@@ -1,8 +1,8 @@
 import { fromPersistedClaimDraft, toPersistedClaimDraft } from './claimDraft';
 import { createEmptyClaimForm } from './claimFormState';
 
-test('starts with both claim options disabled', () => {
-  expect(createEmptyClaimForm()).toMatchObject({ isLeftAddress: false, isOpenClient: false });
+test('starts with both claim options unanswered', () => {
+  expect(createEmptyClaimForm()).toMatchObject({ isLeftAddress: null, isOpenClient: null });
 });
 
 test('preserves explicitly saved options instead of replacing them with new defaults', () => {

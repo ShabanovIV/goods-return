@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { ClaimDetailsStep } from './ClaimDetailsStep';
 
 test('places the options between the client demand and description', () => {
@@ -31,5 +31,5 @@ test('places the options between the client demand and description', () => {
   expect(
     options.compareDocumentPosition(description) & Node.DOCUMENT_POSITION_FOLLOWING,
   ).toBeTruthy();
-  expect(screen.getAllByRole('switch')).toHaveLength(2);
+  expect(within(options).getAllByRole('combobox')).toHaveLength(2);
 });

@@ -16,8 +16,8 @@ type ReviewStepProps = {
   demand?: ClaimDictionaryItem;
   flaw?: ClaimFlaw;
   description: string;
-  isLeftAddress: boolean;
-  isOpenClient: boolean;
+  isLeftAddress: boolean | null;
+  isOpenClient: boolean | null;
   attachments: ClaimAttachment[];
   onEdit: (section: ReviewSection) => void;
 };

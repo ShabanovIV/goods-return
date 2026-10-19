@@ -41,6 +41,8 @@ export const isClaimStepValid = (step: ClaimStep, context: ClaimValidationContex
 
   if (step === 1) {
     return Boolean(
+      typeof formState.isLeftAddress === 'boolean' &&
+      typeof formState.isOpenClient === 'boolean' &&
       formState.reasonId &&
       formState.clientDemandId &&
       formState.description.trim() &&

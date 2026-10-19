@@ -91,6 +91,7 @@ export const ClaimDetailsStep = ({
         )}
       </FormField>
       <ClaimOptions
+        showErrors={showErrors}
         isLeftAddress={isLeftAddress}
         isOpenClient={isOpenClient}
         onLeftAddressChange={onLeftAddressChange}

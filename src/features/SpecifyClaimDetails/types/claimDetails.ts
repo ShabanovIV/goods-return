@@ -8,10 +8,11 @@ type DictionaryState<T> = {
 };
 
 export type ClaimOptionsProps = {
-  isLeftAddress: boolean;
-  isOpenClient: boolean;
-  onLeftAddressChange: (checked: boolean) => void;
-  onOpenClientChange: (checked: boolean) => void;
+  showErrors: boolean;
+  isLeftAddress: boolean | null;
+  isOpenClient: boolean | null;
+  onLeftAddressChange: (checked: boolean | null) => void;
+  onOpenClientChange: (checked: boolean | null) => void;
 };
 
 export type ClaimDetailsStepProps = ClaimOptionsProps & {

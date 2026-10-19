@@ -55,6 +55,12 @@ export const useClaimFormNavigation = ({
       return;
     }
 
+    const { isLeftAddress, isOpenClient } = state.formState;
+    if (isLeftAddress === null || isOpenClient === null) {
+      showInvalidStep(1, 'Выберите «Да» или «Нет» для параметров претензии.');
+      return;
+    }
+
     try {
       state.setPageError('');
       const claimNumber = await submission.submitClaim({
@@ -64,8 +70,8 @@ export const useClaimFormNavigation = ({
         clientDemandId: state.formState.clientDemandId,
         flawId: state.formState.flawId,
         description: state.formState.description,
-        isLeftAddress: state.formState.isLeftAddress,
-        isOpenClient: state.formState.isOpenClient,
+        isLeftAddress,
+        isOpenClient,
         attachments: state.formState.attachments,
       });
       state.setClaimNumber(claimNumber);

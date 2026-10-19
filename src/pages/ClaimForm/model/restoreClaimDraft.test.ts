@@ -3,8 +3,11 @@ import {
   getDraftKey,
   getLegacyDraftKey,
   getPreviousDraftKey,
+  getSwitchDraftKey,
   isPersistedClaimDraft,
+  toPersistedClaimDraft,
 } from './claimDraft';
+import { createEmptyClaimForm } from './claimFormState';
 import { restoreClaimDraft } from './restoreClaimDraft';
 
 const configuration = configHelperFactory();
@@ -12,6 +15,29 @@ const configuration = configHelperFactory();
 afterEach(async () => {
   const keys = await configuration.getConfigurationKeys();
   await Promise.all(keys.map((key) => configuration.removeConfiguration(key)));
+});
+
+test('preserves version 5 answers, current step and other data', async () => {
+  const draft = {
+    ...toPersistedClaimDraft(createEmptyClaimForm()),
+    version: 5,
+    step: 3,
+    description: 'Saved description',
+    selectedLines: { 'line-1': 2 },
+    isLeftAddress: true,
+    isOpenClient: false,
+  };
+  await configuration.setConfiguration(getSwitchDraftKey('document-1'), draft);
+  const restored = await restoreClaimDraft('document-1');
+  expect(restored).toMatchObject({
+    step: 3,
+    isLeftAddress: true,
+    isOpenClient: false,
+    description: draft.description,
+    selectedLines: draft.selectedLines,
+  });
+  expect(await configuration.getConfigurationKeys()).not.toContain(getSwitchDraftKey('document-1'));
+  expect(await restoreClaimDraft('document-1')).toEqual(restored);
 });
 
 test('still migrates a version 3 draft with attachment files', async () => {
@@ -40,9 +66,10 @@ test('still migrates a version 3 draft with attachment files', async () => {
   const restored = await restoreClaimDraft('document-1');
 
   expect(restored).toMatchObject({
+    step: 2,
     description: '',
-    isLeftAddress: false,
-    isOpenClient: false,
+    isLeftAddress: null,
+    isOpenClient: null,
     attachments: [{ file }],
   });
 });
@@ -75,14 +102,15 @@ test('migrates a version 4 draft with default options without losing files', asy
   const restored = await restoreClaimDraft('document-1');
 
   expect(restored).toMatchObject({
+    step: 2,
     description: 'Описание',
-    isLeftAddress: false,
-    isOpenClient: false,
+    isLeftAddress: null,
+    isOpenClient: null,
     attachments: [{ file }],
   });
   expect(
     await configuration.getConfiguration(getDraftKey('document-1'), null, isPersistedClaimDraft),
-  ).toMatchObject({ version: 5, attachments: [{ file }] });
+  ).toMatchObject({ version: 6, attachments: [{ file }] });
   expect(await configuration.getConfigurationKeys()).not.toContain(
     getPreviousDraftKey('document-1'),
   );
