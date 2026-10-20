@@ -16,9 +16,6 @@ export const MissingDocument = () => (
 export const LoadingDocument = () => (
   <main className={s.statePage} aria-busy="true">
     <section className={s.loadingCard}>
-      <div className={s.logoMark} aria-hidden="true">
-        a
-      </div>
       <div className={s.spinner} />
       <h1>Открываем документ</h1>
       <p>Это займёт несколько секунд.</p>
