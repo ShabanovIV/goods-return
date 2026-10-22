@@ -4,5 +4,7 @@ export const getFileFingerprint = (file: Pick<File, 'lastModified' | 'name' | 's
   `${file.name}:${file.size}:${file.lastModified}`;
 
 export const getAttachmentFingerprint = (
-  attachment: Pick<ClaimAttachment, 'fileName' | 'lastModified' | 'size'>,
-) => `${attachment.fileName}:${attachment.size}:${attachment.lastModified}`;
+  attachment: Pick<ClaimAttachment, 'fileName' | 'lastModified' | 'size' | 'sourceFingerprint'>,
+) =>
+  attachment.sourceFingerprint ??
+  `${attachment.fileName}:${attachment.size}:${attachment.lastModified}`;

@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import type { AttachmentType } from 'src/entities/Claim';
 import { addSelectedFiles, removeAttachment } from 'src/features/ManageClaimAttachments';
 import { createEmptyClaimForm } from './claimFormState';
+import { useAttachmentConversion } from './useAttachmentConversion';
 import type { ClaimStep } from '../types/claimForm';
 
 export const useClaimFormState = () => {
   const [formState, setFormState] = useState(createEmptyClaimForm);
+  useAttachmentConversion(formState, setFormState);
   const [showErrors, setShowErrors] = useState(false);
   const [pageError, setPageErrorValue] = useState('');
   const [pageErrorRevision, setPageErrorRevision] = useState(0);

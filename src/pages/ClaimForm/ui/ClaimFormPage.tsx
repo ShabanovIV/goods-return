@@ -95,6 +95,9 @@ const ClaimFormPage = () => {
         <ClaimFormStep data={data} state={state} />
       </main>
       <ClaimFormFooter
+        attachmentsBlocked={state.formState.attachments.some(
+          (item) => item.status === 'processing' || item.status === 'error',
+        )}
         isCreatingClaim={navigation.isCreatingClaim}
         onBack={state.formState.step === 0 ? returnToDocument : navigation.goBack}
         onNext={navigation.goNext}

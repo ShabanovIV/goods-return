@@ -22,9 +22,11 @@ export const toPersistedClaimDraft = (state: ClaimFormState): PersistedClaimDraf
   description: state.description,
   isLeftAddress: state.isLeftAddress,
   isOpenClient: state.isOpenClient,
-  attachments: state.attachments.filter(
-    (attachment) => attachment.status === 'selected' && attachment.file instanceof File,
-  ),
+  attachments: state.attachments
+    .filter((attachment) => attachment.status !== 'uploaded' && attachment.file instanceof File)
+    .map((attachment) =>
+      attachment.status === 'processing' ? { ...attachment, status: 'error' } : attachment,
+    ),
 });
 
 export const isPersistedClaimDraft = (value: unknown): value is PersistedClaimDraft =>

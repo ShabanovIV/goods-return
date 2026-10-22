@@ -19,11 +19,12 @@ const isClaimAttachment = (value: unknown): value is ClaimAttachment =>
   typeof value.size === 'number' &&
   typeof value.mimeType === 'string' &&
   typeof value.lastModified === 'number' &&
-  value.status === 'selected' &&
+  (value.status === 'selected' || value.status === 'error') &&
   value.file instanceof File &&
   isOptionalNumber(value.attachmentType) &&
   isOptionalNumber(value.attachmentTypeOrder) &&
-  isOptionalString(value.attachmentTypeName);
+  isOptionalString(value.attachmentTypeName) &&
+  isOptionalString(value.sourceFingerprint);
 
 const isClaimAttachments = (value: unknown): value is ClaimAttachment[] =>
   Array.isArray(value) && value.every(isClaimAttachment);

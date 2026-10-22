@@ -11,6 +11,9 @@ const formatFileSize = (size: number) => {
 const statusText: Record<ClaimAttachment['status'], string> = {
   selected: 'Выбран · отправится с претензией',
   uploaded: 'Отправлен',
+  processing: 'Обрабатываем фото…',
+  error:
+    'Не удалось преобразовать фото в JPEG. Удалите файл и добавьте его заново или выберите JPEG. Отправка заблокирована.',
 };
 
 type AttachmentFileItemProps = {
@@ -26,7 +29,12 @@ export const AttachmentFileItem = ({ attachment, onRemove }: AttachmentFileItemP
     <div className={styles.fileInfo}>
       <strong>{attachment.fileName}</strong>
       <span>{formatFileSize(attachment.size)}</span>
-      <span className={styles[`status-${attachment.status}`]}>{statusText[attachment.status]}</span>
+      <span
+        role={attachment.status === 'error' ? 'alert' : 'status'}
+        className={styles[`status-${attachment.status}`]}
+      >
+        {statusText[attachment.status]}
+      </span>
     </div>
     <Button
       aria-label={`Удалить ${attachment.fileName}`}

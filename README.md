@@ -26,6 +26,16 @@ APP_BASE_PATH=/goods-return/
 - JS, CSS и ресурсы сборки загружаются из `/goods-return/`;
 - кнопка «На главную» на экране ошибки возвращает в `/goods-return/`.
 
+## Локальный mock API
+
+В соседней папке `../GoodsReturn.Api.Mock` находится тестовый API на .NET 10.
+Запустите там `dotnet run`, затем в этой папке `npm start` и откройте
+`http://localhost:3000/goods-return/invoices/demo`.
+В `.env` должен быть `DEVELOPMENT_API_URL=http://localhost:5080/`.
+Mock работает без внешнего сервера и авторизации, возвращает тестовые товары и
+справочники, сохраняет заявки и файлы в `../GoodsReturn.Api.Mock/Attachments`.
+Подробности и проверка API описаны в `../GoodsReturn.Api.Mock/README.md`.
+
 ## Публикация в подпапке
 
 1. Задайте `APP_BASE_PATH` и `PRODUCTION_API_URL` в `.env` или окружении сборки.

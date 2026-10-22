@@ -58,7 +58,13 @@ export const isClaimStepValid = (step: ClaimStep, context: ClaimValidationContex
         formState.attachments.filter((item) => item.attachmentTypeOrder === type.order).length >=
         type.minAmount,
     );
-    return Boolean(areAttachmentTypesReady && requirementsMet);
+    return Boolean(
+      areAttachmentTypesReady &&
+      requirementsMet &&
+      formState.attachments.every(
+        (item) => item.status === 'selected' || item.status === 'uploaded',
+      ),
+    );
   }
 
   return true;
