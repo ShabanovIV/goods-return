@@ -1,4 +1,6 @@
 .root {
+  min-width: 0;
+  overflow-wrap: anywhere;
   position: relative;
   width: 100%;
 }
@@ -17,6 +19,10 @@
   color: var(--color-text-strong);
   cursor: pointer;
   text-align: left;
+
+  > span:first-child {
+    min-width: 0;
+  }
 
   &:focus-visible {
     border-color: var(--color-accent);

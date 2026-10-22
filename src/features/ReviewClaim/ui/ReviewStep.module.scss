@@ -1,9 +1,11 @@
 .reviewList {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.875rem;
 }
 
 .reviewCard {
+  min-width: 0;
   padding: 1.125rem;
   border: 0.0625rem solid var(--color-border);
   border-radius: 0.25rem;
@@ -27,13 +29,15 @@
 
 .reviewItems {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   margin: 0;
   padding: 0;
   gap: 0.625rem;
   list-style: none;
 
   li {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
@@ -41,6 +45,7 @@
 
   strong,
   span {
+    min-width: 0;
     font-size: 0.875rem;
     line-height: 1.4;
   }
@@ -52,6 +57,16 @@
   span {
     color: var(--color-muted);
     text-align: right;
+  }
+}
+
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:focus {
+    white-space: normal;
   }
 }
 

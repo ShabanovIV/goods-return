@@ -27,7 +27,9 @@ export const AttachmentFileItem = ({ attachment, onRemove }: AttachmentFileItemP
       {attachment.mimeType.startsWith('image/') ? 'IMG' : 'FILE'}
     </div>
     <div className={styles.fileInfo}>
-      <strong>{attachment.fileName}</strong>
+      <strong title={attachment.fileName} tabIndex={0}>
+        {attachment.fileName}
+      </strong>
       <span>{formatFileSize(attachment.size)}</span>
       <span
         role={attachment.status === 'error' ? 'alert' : 'status'}

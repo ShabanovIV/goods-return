@@ -1,10 +1,14 @@
 .step {
   display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
   gap: 1rem;
 }
 
 .heading {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
 
   h1,

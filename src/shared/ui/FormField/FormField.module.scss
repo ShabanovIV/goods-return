@@ -1,5 +1,8 @@
 .field {
   display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
   gap: 0.5rem;
 
   > label {

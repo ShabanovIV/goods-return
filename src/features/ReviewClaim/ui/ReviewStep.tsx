@@ -92,7 +92,9 @@ export const ReviewStep = ({
                 getKey={(attachment) => attachment.localId}
                 renderItem={(attachment) => (
                   <li>
-                    <strong>{attachment.fileName}</strong>
+                    <strong className={styles.fileName} title={attachment.fileName} tabIndex={0}>
+                      {attachment.fileName}
+                    </strong>
                     <span>{attachment.attachmentTypeName ?? 'Файл'}</span>
                   </li>
                 )}
