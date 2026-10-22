@@ -4,6 +4,7 @@ import type { ClaimStep } from '../model/claimForm';
 
 type ClaimFormFooterProps = {
   isCreatingClaim: boolean;
+  attachmentsBlocked?: boolean;
   onBack: () => void;
   onNext: () => void;
   step: ClaimStep;
@@ -11,6 +12,7 @@ type ClaimFormFooterProps = {
 
 export const ClaimFormFooter = ({
   isCreatingClaim,
+  attachmentsBlocked = false,
   onBack,
   onNext,
   step,
@@ -27,7 +29,12 @@ export const ClaimFormFooter = ({
         <Button type="button" variant="secondary" disabled={isCreatingClaim} onClick={onBack}>
           Назад
         </Button>
-        <Button className={s.nextButton} type="button" disabled={isCreatingClaim} onClick={onNext}>
+        <Button
+          className={s.nextButton}
+          type="button"
+          disabled={isCreatingClaim || (step >= 2 && attachmentsBlocked)}
+          onClick={onNext}
+        >
           {buttonText}
         </Button>
       </div>

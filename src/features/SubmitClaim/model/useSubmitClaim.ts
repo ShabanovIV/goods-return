@@ -26,6 +26,9 @@ export const useSubmitClaim = () => {
     isOpenClient,
     attachments,
   }: SubmitClaimArguments) => {
+    if (attachments.some((item) => item.status === 'processing' || item.status === 'error')) {
+      throw new Error('Дождитесь обработки фото и удалите файлы с ошибками перед отправкой.');
+    }
     const files = attachments.flatMap((attachment) => (attachment.file ? [attachment.file] : []));
 
     const response = await createClaim({

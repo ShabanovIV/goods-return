@@ -11,8 +11,9 @@ export type ClaimAttachmentMetadata = {
   attachmentTypeName?: string;
 };
 
-export type AttachmentStatus = 'selected' | 'uploaded';
+export type AttachmentStatus = 'selected' | 'uploaded' | 'processing' | 'error';
 export type ClaimAttachment = ClaimAttachmentMetadata & {
+  sourceFingerprint?: string;
   lastModified: number;
   status: AttachmentStatus;
   file?: File;

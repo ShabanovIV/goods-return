@@ -1,6 +1,7 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
 import { getAttachmentFingerprint, getFileFingerprint } from './attachmentFingerprint';
 import { getAttachmentMediaType, isFileAllowed } from '../lib/attachmentMedia';
+import { isHeicFile } from '../lib/heic';
 
 type AddSelectedFilesArguments = {
   attachments: ClaimAttachment[];
@@ -51,7 +52,8 @@ export const addSelectedFiles = ({
       attachmentType: attachmentType?.type,
       attachmentTypeOrder: attachmentType?.order,
       attachmentTypeName: attachmentType?.name,
-      status: 'selected',
+      status: isHeicFile(file) ? 'processing' : 'selected',
+      sourceFingerprint: fingerprint,
       file,
     };
 

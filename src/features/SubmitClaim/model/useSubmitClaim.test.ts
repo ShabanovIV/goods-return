@@ -18,6 +18,36 @@ const submitArguments = {
   selectedLines: { product: 1 },
 };
 
+test.each(['processing', 'error'] as const)(
+  'blocks API submission for %s photos',
+  async (status) => {
+    const createClaim = jest.fn();
+    jest
+      .mocked(useCreateClaimMutation)
+      .mockReturnValue([createClaim, { isLoading: false }] as unknown as ReturnType<
+        typeof useCreateClaimMutation
+      >);
+    const { result } = renderHook(useSubmitClaim);
+    await expect(
+      result.current.submitClaim({
+        ...submitArguments,
+        attachments: [
+          {
+            localId: 'photo',
+            fileName: 'photo.heic',
+            size: 4,
+            mimeType: 'image/heic',
+            lastModified: 123,
+            status,
+            file: new File(['heic'], 'photo.heic'),
+          },
+        ],
+      }),
+    ).rejects.toThrow('Дождитесь обработки фото');
+    expect(createClaim).not.toHaveBeenCalled();
+  },
+);
+
 test('returns the claim number from the API Data field', async () => {
   const unwrap = jest.fn().mockResolvedValue({
     Data: '107798-2026-P',
