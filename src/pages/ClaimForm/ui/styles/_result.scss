@@ -1,3 +1,13 @@
+.resultPage {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.resultCard {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
+}
+
 .stateIcon,
 .successIcon {
   display: grid;
@@ -30,6 +40,7 @@
 
 .claimNumber {
   display: grid;
+  min-width: 0;
   width: 100%;
   padding: 1rem;
   border-radius: 0.25rem;
