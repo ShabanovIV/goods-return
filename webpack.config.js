@@ -19,6 +19,16 @@ if (dotenvError && dotenvError.code !== 'ENOENT') {
 
 export default (_, argv) => {
   const isProd = argv.mode === 'production';
+  const heicJpegQualityValue = process.env.HEIC_JPEG_QUALITY?.trim();
+  const heicJpegQuality = Number(heicJpegQualityValue);
+  if (
+    !heicJpegQualityValue ||
+    !Number.isFinite(heicJpegQuality) ||
+    heicJpegQuality < 0 ||
+    heicJpegQuality > 1
+  ) {
+    throw new Error('HEIC_JPEG_QUALITY должен быть числом от 0 до 1 включительно.');
+  }
   const apiUrlEnvName = isProd ? 'PRODUCTION_API_URL' : 'DEVELOPMENT_API_URL';
   const apiUrl = process.env[apiUrlEnvName];
   const authLoginUrl = process.env.AUTH_LOGIN_URL?.trim() || undefined;
@@ -216,6 +226,7 @@ export default (_, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         __API_URL__: JSON.stringify(apiUrl),
+        __HEIC_JPEG_QUALITY__: JSON.stringify(heicJpegQuality),
         __AUTH_LOGIN_URL__: JSON.stringify(authLoginUrl),
         __AUTH_RETURN_URL_ABSOLUTE__: JSON.stringify(absoluteReturnUrl),
         __APP_BASE_PATH__: JSON.stringify(appBasePath),
