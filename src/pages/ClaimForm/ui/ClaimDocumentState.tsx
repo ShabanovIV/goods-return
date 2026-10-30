@@ -1,4 +1,5 @@
 import { Button } from 'src/shared/ui/Button';
+import { ErrorMessage, type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 import s from './ClaimFormPage.module.scss';
 
 export const MissingDocument = () => (
@@ -24,7 +25,7 @@ export const LoadingDocument = () => (
 );
 
 type DocumentErrorProps = {
-  message: string;
+  message: ErrorNotice | string;
   onRetry: () => void;
 };
 
@@ -35,7 +36,7 @@ export const DocumentError = ({ message, onRetry }: DocumentErrorProps) => (
         !
       </span>
       <h1>Не удалось открыть документ</h1>
-      <p>{message}</p>
+      <ErrorMessage notice={message} />
       <Button type="button" onClick={onRetry}>
         Попробовать снова
       </Button>

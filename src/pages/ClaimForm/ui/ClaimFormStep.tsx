@@ -56,7 +56,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
           data.attachmentTypesQuery.error
             ? getRequestErrorMessage(data.attachmentTypesQuery.error)
             : data.attachmentTypesQuery.currentData?.success === false
-              ? data.attachmentTypesQuery.currentData.error
+              ? getRequestErrorMessage({ data: data.attachmentTypesQuery.currentData })
               : undefined
         }
         showErrors={state.showErrors}

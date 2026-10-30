@@ -77,7 +77,11 @@ export const useClaimFormNavigation = ({
       state.setClaimNumber(claimNumber);
       await deleteDraft();
     } catch (error: unknown) {
-      state.setPageError(getRequestErrorMessage(error));
+      state.setPageError(
+        error instanceof Error
+          ? { source: 'form', message: error.message, details: error.stack }
+          : getRequestErrorMessage(error),
+      );
     }
   };
 

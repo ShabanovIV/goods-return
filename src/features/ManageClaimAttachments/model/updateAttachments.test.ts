@@ -23,7 +23,7 @@ test('adds selected files with attachment type metadata', () => {
     fileName: 'damage.jpg',
     attachmentType: 1,
     attachmentTypeOrder: 20,
-    status: 'selected',
+    status: 'processing',
     file,
   });
 });

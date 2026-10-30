@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { AttachmentType } from 'src/entities/Claim';
 import { addSelectedFiles, removeAttachment } from 'src/features/ManageClaimAttachments';
+import { type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 import { createEmptyClaimForm } from './claimFormState';
 import { useAttachmentConversion } from './useAttachmentConversion';
 import type { ClaimStep } from '../types/claimForm';
@@ -9,11 +10,11 @@ export const useClaimFormState = () => {
   const [formState, setFormState] = useState(createEmptyClaimForm);
   useAttachmentConversion(formState, setFormState);
   const [showErrors, setShowErrors] = useState(false);
-  const [pageError, setPageErrorValue] = useState('');
+  const [pageError, setPageErrorValue] = useState<ErrorNotice | string>('');
   const [pageErrorRevision, setPageErrorRevision] = useState(0);
   const [claimNumber, setClaimNumber] = useState('');
 
-  const setPageError = useCallback((message: string) => {
+  const setPageError = useCallback((message: ErrorNotice | string) => {
     setPageErrorValue(message);
     if (message) setPageErrorRevision((current) => current + 1);
   }, []);

@@ -17,6 +17,7 @@ const jpeg = new File(['jpeg data'], 'one.jpg', { type: 'image/jpeg', lastModifi
 
 beforeEach(() => {
   jest.clearAllMocks();
+  jest.mocked(convertHeic).mockReset();
   jest.spyOn(window, 'scrollTo').mockImplementation();
 });
 afterEach(() => jest.restoreAllMocks());
@@ -36,7 +37,7 @@ test('converts sequentially across selections and retains source duplicate detec
   const first = heic('one.HEIC');
   act(() => result.current.addFiles([first]));
   act(() => result.current.addFiles([heic('two.heif')]));
-  expect(convertHeic).toHaveBeenCalledTimes(1);
+  await waitFor(() => expect(convertHeic).toHaveBeenCalledTimes(1));
   await act(async () => deferred.finish!(jpeg));
   await waitFor(() =>
     expect(result.current.formState.attachments.every((a) => a.status === 'selected')).toBe(true),
@@ -80,6 +81,7 @@ test('aborts removed photos and does not reinsert their late results', async () 
   );
   const { result } = renderHook(useClaimFormState);
   act(() => result.current.addFiles([heic('one.heic')]));
+  await waitFor(() => expect(convertHeic).toHaveBeenCalledTimes(1));
   const signal = jest.mocked(convertHeic).mock.calls[0][1];
   expect(toPersistedClaimDraft(result.current.formState).attachments[0].status).toBe('error');
   act(() => result.current.removeFile(result.current.formState.attachments[0].localId));
@@ -88,9 +90,36 @@ test('aborts removed photos and does not reinsert their late results', async () 
   expect(result.current.formState.attachments).toEqual([]);
 });
 
-test('ordinary JPEG files do not load the converter', () => {
+test('ordinary JPEG files are copied without loading the converter', async () => {
   const { result } = renderHook(useClaimFormState);
   act(() => result.current.addFiles([jpeg]));
   expect(convertHeic).not.toHaveBeenCalled();
-  expect(result.current.formState.attachments[0].status).toBe('selected');
+  await waitFor(() => expect(result.current.formState.attachments[0].status).toBe('selected'));
+  expect(result.current.formState.attachments[0].file).not.toBe(jpeg);
+  expect(convertHeic).not.toHaveBeenCalled();
+});
+
+test('marks an unreadable file and continues preparing the next attachment', async () => {
+  jest.spyOn(FileReader.prototype, 'readAsArrayBuffer').mockImplementationOnce(function (
+    this: FileReader,
+  ) {
+    Object.defineProperty(this, 'error', {
+      value: new DOMException('File changed', 'NotReadableError'),
+    });
+    this.dispatchEvent(new ProgressEvent('error'));
+  });
+  const { result } = renderHook(useClaimFormState);
+  act(() => result.current.addFiles([new File(['bad'], 'bad.jpg'), jpeg]));
+  await waitFor(() =>
+    expect(result.current.formState.attachments.map((a) => a.status)).toEqual([
+      'error',
+      'selected',
+    ]),
+  );
+  expect(result.current.formState.attachments[0]).toMatchObject({
+    errorReason: 'read',
+    errorDetails: 'NotReadableError: File changed',
+    file: undefined,
+  });
+  expect(isPersistedClaimDraft(toPersistedClaimDraft(result.current.formState))).toBe(true);
 });

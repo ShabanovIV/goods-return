@@ -1,9 +1,10 @@
 import type { ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
+import { type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 
 type DictionaryState<T> = {
   items: T[];
   isLoading: boolean;
-  errorMessage?: string;
+  errorMessage?: ErrorNotice | string;
   retry: () => void;
 };
 

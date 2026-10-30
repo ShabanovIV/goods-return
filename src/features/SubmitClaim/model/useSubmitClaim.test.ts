@@ -43,7 +43,7 @@ test.each(['processing', 'error'] as const)(
           },
         ],
       }),
-    ).rejects.toThrow('Дождитесь обработки фото');
+    ).rejects.toThrow('Дождитесь подготовки файлов');
     expect(createClaim).not.toHaveBeenCalled();
   },
 );
@@ -83,8 +83,10 @@ test('rejects a successful response without a claim number', async () => {
   const { result } = renderHook(useSubmitClaim);
 
   await act(async () => {
-    await expect(result.current.submitClaim(submitArguments)).rejects.toThrow(
-      'Сервер не вернул номер созданной претензии.',
-    );
+    await expect(result.current.submitClaim(submitArguments)).rejects.toMatchObject({
+      status: 'CUSTOM_ERROR',
+      data: { Success: true },
+      error: expect.stringContaining('Сервер не вернул номер созданной претензии.'),
+    });
   });
 });

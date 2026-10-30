@@ -1,11 +1,12 @@
 import type { ClaimFlaw } from 'src/entities/Claim';
+import { type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 import { FormField } from 'src/shared/ui/FormField';
 import { Select } from 'src/shared/ui/Select';
 import { DictionaryError } from './DictionaryError';
 
 type FlawSelectorProps = {
   enabled: boolean;
-  errorMessage?: string;
+  errorMessage?: ErrorNotice | string;
   flawId: string;
   flaws: ClaimFlaw[];
   isLoading: boolean;

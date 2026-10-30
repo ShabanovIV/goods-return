@@ -19,7 +19,7 @@ export const Alert = ({
     className={[styles.alert, styles[tone], className].filter(Boolean).join(' ')}
     role={role}
   >
-    <span>{children}</span>
+    <div className={styles.content}>{children}</div>
     {action && <div className={styles.action}>{action}</div>}
   </div>
 );

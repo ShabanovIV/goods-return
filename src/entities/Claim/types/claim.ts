@@ -16,6 +16,8 @@ export type ClaimAttachment = ClaimAttachmentMetadata & {
   sourceFingerprint?: string;
   lastModified: number;
   status: AttachmentStatus;
+  errorReason?: 'read' | 'conversion' | 'interrupted';
+  errorDetails?: string;
   file?: File;
 };
 

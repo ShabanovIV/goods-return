@@ -1,0 +1,15 @@
+.message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  summary {
+    margin-top: 0.5rem;
+    cursor: pointer;
+  }
+  pre {
+    max-height: 20rem;
+    overflow: auto;
+    font-size: 0.75rem;
+    white-space: pre-wrap;
+  }
+}

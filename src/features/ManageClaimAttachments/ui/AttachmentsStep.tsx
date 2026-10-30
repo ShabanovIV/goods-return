@@ -1,6 +1,7 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
 import { Alert } from 'src/shared/ui/Alert';
 import { Button } from 'src/shared/ui/Button';
+import { ErrorMessage, type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { List } from 'src/shared/ui/List';
 import styles from './AttachmentsStep.module.scss';
@@ -10,7 +11,7 @@ type AttachmentsStepProps = {
   attachments: ClaimAttachment[];
   attachmentTypes: AttachmentType[];
   isTypesLoading: boolean;
-  typesError?: string;
+  typesError?: ErrorNotice | string;
   showErrors: boolean;
   onFilesSelected: (attachmentType: AttachmentType, files: readonly File[]) => void;
   onRetryTypes: () => void;
@@ -41,7 +42,7 @@ export const AttachmentsStep = ({
           </Button>
         }
       >
-        {typesError}
+        <ErrorMessage notice={typesError} />
       </Alert>
     )}
     {isTypesLoading && <p className={styles.stepMessage}>Загружаем типы вложений…</p>}

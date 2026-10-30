@@ -27,7 +27,7 @@ export const useSubmitClaim = () => {
     attachments,
   }: SubmitClaimArguments) => {
     if (attachments.some((item) => item.status === 'processing' || item.status === 'error')) {
-      throw new Error('Дождитесь обработки фото и удалите файлы с ошибками перед отправкой.');
+      throw new Error('Дождитесь подготовки файлов и удалите файлы с ошибками перед отправкой.');
     }
     const files = attachments.flatMap((attachment) => (attachment.file ? [attachment.file] : []));
 
@@ -43,8 +43,14 @@ export const useSubmitClaim = () => {
       files,
     }).unwrap();
 
-    if (!response.Success) throw new Error(response.Error || 'Не удалось создать претензию.');
-    if (!response.Data) throw new Error('Сервер не вернул номер созданной претензии.');
+    if (!response.Success) throw { status: 'CUSTOM_ERROR', data: response };
+    if (!response.Data)
+      throw {
+        status: 'CUSTOM_ERROR',
+        data: response,
+        error:
+          'Сервер не вернул номер созданной претензии. Проверьте список претензий перед повторной отправкой.',
+      };
 
     return response.Data;
   };

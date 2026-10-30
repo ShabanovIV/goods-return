@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { isLoginRedirecting } from 'src/shared/lib/auth';
 import { Alert } from 'src/shared/ui/Alert';
+import { ErrorMessage } from 'src/shared/ui/ErrorMessage';
 import { IconButton } from 'src/shared/ui/IconButton';
 import { DocumentError, LoadingDocument, MissingDocument } from './ClaimDocumentState';
 import { ClaimFormFooter } from './ClaimFormFooter';
@@ -89,7 +90,7 @@ const ClaimFormPage = () => {
               </IconButton>
             }
           >
-            {state.pageError}
+            <ErrorMessage notice={state.pageError} />
           </Alert>
         )}
         <ClaimFormStep data={data} state={state} />

@@ -20,7 +20,12 @@ const isClaimAttachment = (value: unknown): value is ClaimAttachment =>
   typeof value.mimeType === 'string' &&
   typeof value.lastModified === 'number' &&
   (value.status === 'selected' || value.status === 'error') &&
-  value.file instanceof File &&
+  (value.file instanceof File || (value.status === 'error' && value.file === undefined)) &&
+  (value.errorReason === undefined ||
+    value.errorReason === 'read' ||
+    value.errorReason === 'conversion' ||
+    value.errorReason === 'interrupted') &&
+  isOptionalString(value.errorDetails) &&
   isOptionalNumber(value.attachmentType) &&
   isOptionalNumber(value.attachmentTypeOrder) &&
   isOptionalString(value.attachmentTypeName) &&
