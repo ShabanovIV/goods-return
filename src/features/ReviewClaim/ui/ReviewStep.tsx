@@ -22,19 +22,21 @@ type ReviewStepProps = {
   isOpenClient: boolean | null;
   attachments: ClaimAttachment[];
   onEdit: (section: ReviewSection) => void;
+  isCreatingClaim?: boolean;
 };
 
 type ReviewCardProps = {
   children: ReactNode;
   onEdit: () => void;
   title: string;
+  disabled: boolean;
 };
 
-const ReviewCard = ({ children, onEdit, title }: ReviewCardProps) => (
+const ReviewCard = ({ children, onEdit, title, disabled }: ReviewCardProps) => (
   <section className={styles.reviewCard}>
     <div className={styles.reviewCardHeading}>
       <h2>{title}</h2>
-      <Button size="small" variant="text" onClick={onEdit}>
+      <Button size="small" variant="text" disabled={disabled} onClick={onEdit}>
         Изменить
       </Button>
     </div>
@@ -53,6 +55,7 @@ export const ReviewStep = ({
   isOpenClient,
   attachments,
   onEdit,
+  isCreatingClaim = false,
 }: ReviewStepProps) => {
   const selectedProducts = products.filter((product) => selectedLines[product.lineId]);
   return (
@@ -63,7 +66,7 @@ export const ReviewStep = ({
       titleId="review-title"
     >
       <div className={styles.reviewList}>
-        <ReviewCard title="Товары" onEdit={() => onEdit('products')}>
+        <ReviewCard title="Товары" disabled={isCreatingClaim} onEdit={() => onEdit('products')}>
           <ul className={styles.reviewItems}>
             <List
               items={selectedProducts}
@@ -77,7 +80,7 @@ export const ReviewStep = ({
             />
           </ul>
         </ReviewCard>
-        <ReviewCard title="Обращение" onEdit={() => onEdit('details')}>
+        <ReviewCard title="Обращение" disabled={isCreatingClaim} onEdit={() => onEdit('details')}>
           <ClaimDetailsReview
             reason={reason}
             demand={demand}
@@ -86,7 +89,11 @@ export const ReviewStep = ({
           />
           <ClaimOptionsReview isLeftAddress={isLeftAddress} isOpenClient={isOpenClient} />
         </ReviewCard>
-        <ReviewCard title="Вложения" onEdit={() => onEdit('attachments')}>
+        <ReviewCard
+          title="Вложения"
+          disabled={isCreatingClaim}
+          onEdit={() => onEdit('attachments')}
+        >
           <AttachmentsSize bytes={getAttachmentsSize(attachments)} />
           {attachments.length ? (
             <ul className={styles.reviewItems}>

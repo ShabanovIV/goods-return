@@ -7,6 +7,7 @@ import { useClaimData } from '../model/useClaimData';
 import { useClaimFormState } from '../model/useClaimFormState';
 
 type ClaimFormStepProps = {
+  isCreatingClaim: boolean;
   data: ReturnType<typeof useClaimData>;
   state: ReturnType<typeof useClaimFormState>;
 };
@@ -17,7 +18,7 @@ const reviewStep: Record<ReviewSection, 0 | 1 | 2> = {
   attachments: 2,
 };
 
-export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
+export const ClaimFormStep = ({ data, state, isCreatingClaim }: ClaimFormStepProps) => {
   const { formState } = state;
 
   if (formState.step === 0) {
@@ -73,6 +74,7 @@ export const ClaimFormStep = ({ data, state }: ClaimFormStepProps) => {
 
   return (
     <ReviewStep
+      isCreatingClaim={isCreatingClaim}
       products={data.products}
       selectedLines={formState.selectedLines}
       reason={selectedReason}

@@ -94,7 +94,7 @@ const ClaimFormPage = () => {
             <ErrorMessage notice={state.pageError} />
           </Alert>
         )}
-        <ClaimFormStep data={data} state={state} />
+        <ClaimFormStep data={data} state={state} isCreatingClaim={navigation.isCreatingClaim} />
       </main>
       <ClaimFormFooter
         attachmentsBlocked={
