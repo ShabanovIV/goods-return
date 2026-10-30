@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { AttachmentType } from 'src/entities/Claim';
-import { addSelectedFiles, removeAttachment } from 'src/features/ManageClaimAttachments';
+import { removeAttachment } from 'src/features/ManageClaimAttachments';
 import { type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 import { createEmptyClaimForm } from './claimFormState';
 import { useAttachmentConversion } from './useAttachmentConversion';
+import { useAttachmentSelection } from './useAttachmentSelection';
 import type { ClaimStep } from '../types/claimForm';
 
 export const useClaimFormState = () => {
@@ -31,13 +31,7 @@ export const useClaimFormState = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const addFiles = (files: readonly File[], attachmentType?: AttachmentType) => {
-    setFormState((current) => {
-      const result = addSelectedFiles({ attachments: current.attachments, files, attachmentType });
-      if (result.error) setPageError(result.error);
-      return { ...current, attachments: result.attachments };
-    });
-  };
+  const addFiles = useAttachmentSelection(formState, setFormState, setPageError);
 
   const removeFile = (localId: string) => {
     setFormState((current) => ({

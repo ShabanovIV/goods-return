@@ -10,7 +10,7 @@ const attachmentType: AttachmentType = {
   mediaType: 'image',
 };
 
-test('shows the requirement and adds copied files to its attachment type', () => {
+test('shows the requirement and passes selected files to its attachment type', () => {
   const onFilesSelected = jest.fn();
   const file = new File(['photo'], 'damage.jpg', { type: 'image/jpeg' });
   render(
@@ -26,7 +26,7 @@ test('shows the requirement and adds copied files to its attachment type', () =>
   expect(screen.getByText('Минимум: 1')).toBeInTheDocument();
   expect(screen.getByText('Добавьте ещё файлов: 1.')).toBeInTheDocument();
   const input = screen.getByLabelText('Добавить файлы: Фото товара');
-  expect(input).not.toHaveAttribute('accept');
+  expect(input).toHaveAttribute('accept', 'image/*');
   expect(input).toHaveAttribute('multiple');
   const cameraInput = screen.getByLabelText('Сфотографировать: Фото товара');
   expect(cameraInput).toHaveAttribute('accept', 'image/*');
@@ -35,6 +35,7 @@ test('shows the requirement and adds copied files to its attachment type', () =>
 
   fireEvent.change(input, { target: { files: [file] } });
   expect(onFilesSelected).toHaveBeenCalledWith(attachmentType, [file]);
+  expect(onFilesSelected.mock.calls[0][1][0]).toBe(file);
 });
 
 test('restricts a video type to video files and offers video capture', () => {
@@ -55,7 +56,10 @@ test('restricts a video type to video files and offers video capture', () => {
     />,
   );
 
-  expect(screen.getByLabelText('Добавить файлы: Видео недостатка')).not.toHaveAttribute('accept');
+  expect(screen.getByLabelText('Добавить файлы: Видео недостатка')).toHaveAttribute(
+    'accept',
+    'video/*',
+  );
   const captureInput = screen.getByLabelText('Записать видео: Видео недостатка');
   expect(captureInput).toHaveAttribute('accept', 'video/*');
   expect(captureInput).toHaveAttribute('capture', 'environment');

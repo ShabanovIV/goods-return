@@ -1,16 +1,20 @@
-// Read sequentially in the attachment queue so large files are not copied concurrently.
 export const readAttachmentFile = (file: File, signal: AbortSignal): Promise<File> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     const abort = () => reader.abort();
-    const cleanup = () => signal.removeEventListener('abort', abort);
+    const timer = setTimeout(abort, 30_000);
+    const cleanup = () => {
+      clearTimeout(timer);
+      signal.removeEventListener('abort', abort);
+    };
+
     reader.onload = () => {
       cleanup();
-      if (!(reader.result instanceof ArrayBuffer) || reader.result.byteLength !== file.size) {
-        reject(new Error('Не удалось прочитать файл полностью.'));
-        return;
-      }
       try {
+        if (!(reader.result instanceof ArrayBuffer) || reader.result.byteLength !== file.size) {
+          reject(new Error('Не удалось прочитать файл полностью.'));
+          return;
+        }
         resolve(
           new File([reader.result], file.name, {
             type: file.type,
@@ -23,18 +27,20 @@ export const readAttachmentFile = (file: File, signal: AbortSignal): Promise<Fil
     };
     reader.onerror = () => {
       cleanup();
-      reject(reader.error ?? new Error('Не удалось прочитать файл.'));
+      reject(reader.error ?? new Error('Не удалось прочитать файл'));
     };
     reader.onabort = () => {
       cleanup();
-      reject(new DOMException('Чтение отменено.', 'AbortError'));
+      reject(new DOMException('Чтение отменено или превышено время ожидания', 'AbortError'));
     };
     if (signal.aborted) {
-      reject(new DOMException('Чтение отменено.', 'AbortError'));
+      cleanup();
+      reject(new DOMException('Чтение отменено', 'AbortError'));
       return;
     }
     signal.addEventListener('abort', abort, { once: true });
     try {
+      // Start reading before accessing metadata: Android providers can return stale snapshots.
       reader.readAsArrayBuffer(file);
     } catch (error) {
       cleanup();

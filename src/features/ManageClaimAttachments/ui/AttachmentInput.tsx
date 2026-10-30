@@ -30,8 +30,8 @@ export const AttachmentInput = ({
       multiple={multiple}
       onChange={(event) => {
         const files = Array.from(event.currentTarget.files ?? []);
-        event.currentTarget.value = '';
         if (files.length) onFilesSelected(files);
+        event.currentTarget.value = '';
       }}
     />
   </label>

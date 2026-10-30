@@ -45,6 +45,7 @@ export const AttachmentTypeRow = ({
         </div>
         <div className={styles.attachmentActions}>
           <AttachmentInput
+            accept={accept}
             ariaLabel={`Добавить файлы: ${attachmentType.name}`}
             className={styles.addButton}
             multiple

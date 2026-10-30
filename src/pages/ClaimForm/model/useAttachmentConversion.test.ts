@@ -6,23 +6,20 @@ import {
   isPersistedClaimDraft,
 } from './claimDraft';
 import { useClaimFormState } from './useClaimFormState';
-
 jest.mock('src/features/ManageClaimAttachments/lib/heic', () => ({
   ...jest.requireActual('src/features/ManageClaimAttachments/lib/heic'),
   convertHeic: jest.fn(),
 }));
-
 const heic = (name: string) => new File(['heic'], name, { type: '', lastModified: 123 });
 const jpeg = new File(['jpeg data'], 'one.jpg', { type: 'image/jpeg', lastModified: 123 });
-
 beforeEach(() => {
   jest.clearAllMocks();
   jest.mocked(convertHeic).mockReset();
   jest.spyOn(window, 'scrollTo').mockImplementation();
 });
 afterEach(() => jest.restoreAllMocks());
-
 test('converts sequentially across selections and retains source duplicate detection', async () => {
+  const read = jest.spyOn(FileReader.prototype, 'readAsArrayBuffer');
   const deferred: { finish?: (file: File) => void } = {};
   jest
     .mocked(convertHeic)
@@ -43,6 +40,7 @@ test('converts sequentially across selections and retains source duplicate detec
     expect(result.current.formState.attachments.every((a) => a.status === 'selected')).toBe(true),
   );
   expect(convertHeic).toHaveBeenCalledTimes(2);
+  expect(read).toHaveBeenCalledTimes(2);
   expect(result.current.formState.attachments[0]).toMatchObject({
     file: jpeg,
     fileName: 'one.jpg',
@@ -91,11 +89,13 @@ test('aborts removed photos and does not reinsert their late results', async () 
 });
 
 test('ordinary JPEG files are copied without loading the converter', async () => {
+  const read = jest.spyOn(FileReader.prototype, 'readAsArrayBuffer');
   const { result } = renderHook(useClaimFormState);
   act(() => result.current.addFiles([jpeg]));
   expect(convertHeic).not.toHaveBeenCalled();
   await waitFor(() => expect(result.current.formState.attachments[0].status).toBe('selected'));
   expect(result.current.formState.attachments[0].file).not.toBe(jpeg);
+  expect(read).toHaveBeenCalledTimes(1);
   expect(convertHeic).not.toHaveBeenCalled();
 });
 
