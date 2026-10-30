@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { exceedsAttachmentsLimit } from 'src/shared/lib/attachmentSize';
 import { isLoginRedirecting } from 'src/shared/lib/auth';
 import { Alert } from 'src/shared/ui/Alert';
 import { ErrorMessage } from 'src/shared/ui/ErrorMessage';
@@ -96,9 +97,12 @@ const ClaimFormPage = () => {
         <ClaimFormStep data={data} state={state} />
       </main>
       <ClaimFormFooter
-        attachmentsBlocked={state.formState.attachments.some(
-          (item) => item.status === 'processing' || item.status === 'error',
-        )}
+        attachmentsBlocked={
+          exceedsAttachmentsLimit(state.formState.attachments) ||
+          state.formState.attachments.some(
+            (item) => item.status === 'processing' || item.status === 'error',
+          )
+        }
         isCreatingClaim={navigation.isCreatingClaim}
         onBack={state.formState.step === 0 ? returnToDocument : navigation.goBack}
         onNext={navigation.goNext}

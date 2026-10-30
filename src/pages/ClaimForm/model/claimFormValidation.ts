@@ -1,5 +1,6 @@
 import type { AttachmentType, ClaimFlaw } from 'src/entities/Claim';
 import type { DocumentDetail } from 'src/entities/Document';
+import { exceedsAttachmentsLimit } from 'src/shared/lib/attachmentSize';
 import type { ClaimFormState, ClaimStep } from '../types/claimForm';
 
 type ClaimValidationContext = {
@@ -60,6 +61,7 @@ export const isClaimStepValid = (step: ClaimStep, context: ClaimValidationContex
     );
     return Boolean(
       areAttachmentTypesReady &&
+      !exceedsAttachmentsLimit(formState.attachments) &&
       requirementsMet &&
       formState.attachments.every(
         (item) => item.status === 'selected' || item.status === 'uploaded',

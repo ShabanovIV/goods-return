@@ -21,3 +21,35 @@ test('edits claim options through the details section', () => {
   fireEvent.click(within(card).getByRole('button', { name: 'Изменить' }));
   expect(onEdit).toHaveBeenCalledWith('details');
 });
+
+test('shows the combined attachment size and configured maximum before submission', () => {
+  render(
+    <ReviewStep
+      products={[]}
+      selectedLines={{}}
+      description="Описание"
+      isLeftAddress={false}
+      isOpenClient={false}
+      onEdit={jest.fn()}
+      attachments={[
+        {
+          localId: 'a',
+          fileName: 'a.jpg',
+          size: 1024 * 1024,
+          mimeType: 'image/jpeg',
+          lastModified: 1,
+          status: 'selected',
+        },
+        {
+          localId: 'b',
+          fileName: 'b.jpg',
+          size: 1024 * 1024,
+          mimeType: 'image/jpeg',
+          lastModified: 1,
+          status: 'selected',
+        },
+      ]}
+    />,
+  );
+  expect(screen.getByText('Общий размер вложений: 2 МБ из 100 МБ')).toBeInTheDocument();
+});

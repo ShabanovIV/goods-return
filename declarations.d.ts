@@ -1,4 +1,6 @@
 declare const __API_URL__: string;
+declare const __CLAIM_CREATE_TIMEOUT_MS__: number;
+declare const __MAX_ATTACHMENTS_SIZE_BYTES__: number;
 declare const __HEIC_JPEG_QUALITY__: number;
 declare const __AUTH_LOGIN_URL__: string | undefined;
 declare const __AUTH_RETURN_URL_ABSOLUTE__: boolean;

@@ -8,6 +8,7 @@ const submitClaimApi = claimApi.injectEndpoints({
       query: (params) => ({
         url: 'claim/create',
         method: 'POST',
+        timeout: __CLAIM_CREATE_TIMEOUT_MS__,
         body: createClaimFormData(params),
       }),
     }),

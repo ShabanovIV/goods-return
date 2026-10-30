@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import type { ClaimAttachment, ClaimDictionaryItem, ClaimFlaw } from 'src/entities/Claim';
 import type { DocumentDetail } from 'src/entities/Document';
+import { getAttachmentsSize } from 'src/shared/lib/attachmentSize';
+import { AttachmentsSize } from 'src/shared/ui/AttachmentsSize';
 import { Button } from 'src/shared/ui/Button';
 import { FormStep } from 'src/shared/ui/FormStep';
 import { List } from 'src/shared/ui/List';
@@ -85,6 +87,7 @@ export const ReviewStep = ({
           <ClaimOptionsReview isLeftAddress={isLeftAddress} isOpenClient={isOpenClient} />
         </ReviewCard>
         <ReviewCard title="Вложения" onEdit={() => onEdit('attachments')}>
+          <AttachmentsSize bytes={getAttachmentsSize(attachments)} />
           {attachments.length ? (
             <ul className={styles.reviewItems}>
               <List

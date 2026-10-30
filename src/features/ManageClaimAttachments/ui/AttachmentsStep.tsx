@@ -1,5 +1,7 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
+import { getAttachmentsSize } from 'src/shared/lib/attachmentSize';
 import { Alert } from 'src/shared/ui/Alert';
+import { AttachmentsSize } from 'src/shared/ui/AttachmentsSize';
 import { Button } from 'src/shared/ui/Button';
 import { ErrorMessage, type ErrorNotice } from 'src/shared/ui/ErrorMessage';
 import { FormStep } from 'src/shared/ui/FormStep';
@@ -34,6 +36,7 @@ export const AttachmentsStep = ({
     title="Добавьте подтверждающие файлы"
     titleId="attachments-title"
   >
+    <AttachmentsSize bytes={getAttachmentsSize(attachments)} />
     {typesError && (
       <Alert
         action={

@@ -90,3 +90,29 @@ test('rejects a successful response without a claim number', async () => {
     });
   });
 });
+
+test('blocks oversized restored attachments before calling the API', async () => {
+  const createClaim = jest.fn();
+  jest
+    .mocked(useCreateClaimMutation)
+    .mockReturnValue([createClaim, { isLoading: false }] as unknown as ReturnType<
+      typeof useCreateClaimMutation
+    >);
+  const { result } = renderHook(useSubmitClaim);
+  await expect(
+    result.current.submitClaim({
+      ...submitArguments,
+      attachments: [
+        {
+          localId: 'large',
+          fileName: 'large.mp4',
+          size: __MAX_ATTACHMENTS_SIZE_BYTES__ + 1,
+          mimeType: 'video/mp4',
+          lastModified: 1,
+          status: 'selected',
+        },
+      ],
+    }),
+  ).rejects.toThrow('Общий размер вложений превышает');
+  expect(createClaim).not.toHaveBeenCalled();
+});

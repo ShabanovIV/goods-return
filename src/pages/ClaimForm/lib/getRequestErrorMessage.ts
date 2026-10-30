@@ -47,9 +47,12 @@ export const getRequestErrorMessage = (error: unknown): ErrorNotice => {
     .join('\n\n');
   return {
     source: apiResponse ? 'api' : 'request',
-    message: technical
-      ? 'Не удалось получить корректный ответ сервера. Исходная ошибка доступна в подробностях.'
-      : originalMessage || 'Не удалось выполнить запрос.',
+    message:
+      request.status === 'TIMEOUT_ERROR'
+        ? 'Время ожидания ответа сервера истекло. Исходная ошибка доступна в подробностях.'
+        : technical
+          ? 'Не удалось получить корректный ответ сервера. Исходная ошибка доступна в подробностях.'
+          : originalMessage || 'Не удалось выполнить запрос.',
     details: details || undefined,
   };
 };

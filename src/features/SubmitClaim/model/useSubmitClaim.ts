@@ -1,4 +1,5 @@
 import { type ClaimAttachment, useCreateClaimMutation } from 'src/entities/Claim';
+import { exceedsAttachmentsLimit, getAttachmentsLimitMessage } from 'src/shared/lib/attachmentSize';
 
 type SubmitClaimArguments = {
   documentId: string;
@@ -30,6 +31,7 @@ export const useSubmitClaim = () => {
       throw new Error('Дождитесь подготовки файлов и удалите файлы с ошибками перед отправкой.');
     }
     const files = attachments.flatMap((attachment) => (attachment.file ? [attachment.file] : []));
+    if (exceedsAttachmentsLimit(attachments)) throw new Error(getAttachmentsLimitMessage());
 
     const response = await createClaim({
       documentId,

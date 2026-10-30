@@ -1,4 +1,5 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
+import { exceedsAttachmentsLimit, getAttachmentsLimitMessage } from 'src/shared/lib/attachmentSize';
 import { getAttachmentFingerprint, getFileFingerprint } from './attachmentFingerprint';
 import { getAttachmentMediaType, isFileAllowed } from '../lib/attachmentMedia';
 
@@ -24,6 +25,7 @@ export const addSelectedFiles = ({
   const nextAttachments = [...attachments];
   const duplicateNames: string[] = [];
   const invalidNames: string[] = [];
+  const oversizedNames: string[] = [];
   const mediaType = attachmentType ? getAttachmentMediaType(attachmentType) : 'file';
 
   files.forEach((file) => {
@@ -39,6 +41,11 @@ export const addSelectedFiles = ({
 
     if (existing || processedFingerprints.has(fingerprint)) {
       duplicateNames.push(file.name);
+      return;
+    }
+
+    if (exceedsAttachmentsLimit([...nextAttachments, { size: file.size }])) {
+      oversizedNames.push(file.name);
       return;
     }
 
@@ -62,13 +69,15 @@ export const addSelectedFiles = ({
 
   return {
     attachments: nextAttachments,
-    error: invalidNames.length
-      ? `Файл «${invalidNames[invalidNames.length - 1]}» не соответствует типу «${
-          attachmentType?.name ?? 'Файл'
-        }».`
-      : duplicateNames.length
-        ? `Файл «${duplicateNames[duplicateNames.length - 1]}» уже добавлен.`
-        : undefined,
+    error: oversizedNames.length
+      ? `Не добавлены файлы: ${oversizedNames.join(', ')}. ${getAttachmentsLimitMessage()}`
+      : invalidNames.length
+        ? `Файл «${invalidNames[invalidNames.length - 1]}» не соответствует типу «${
+            attachmentType?.name ?? 'Файл'
+          }».`
+        : duplicateNames.length
+          ? `Файл «${duplicateNames[duplicateNames.length - 1]}» уже добавлен.`
+          : undefined,
   };
 };
 

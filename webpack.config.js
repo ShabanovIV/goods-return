@@ -9,6 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const envPath = path.resolve(__dirname, '.env');
 
+const positiveEnvNumber = (name, fallback, max = Number.MAX_SAFE_INTEGER) => {
+  const raw = process.env[name]?.trim();
+  const value = raw ? Number(raw) : fallback;
+  if (!Number.isFinite(value) || value <= 0 || value > max) {
+    throw new Error(`${name} должен быть положительным числом не больше ${max}.`);
+  }
+  return value;
+};
+
 const { error: dotenvError } = dotenv.config({ path: envPath, quiet: true });
 
 if (dotenvError && dotenvError.code !== 'ENOENT') {
@@ -19,6 +28,17 @@ if (dotenvError && dotenvError.code !== 'ENOENT') {
 
 export default (_, argv) => {
   const isProd = argv.mode === 'production';
+  const claimCreateTimeout = positiveEnvNumber('CLAIM_CREATE_TIMEOUT_MS', 120000, 2147483647);
+  if (!Number.isInteger(claimCreateTimeout)) {
+    throw new Error('CLAIM_CREATE_TIMEOUT_MS должен быть целым числом миллисекунд.');
+  }
+  const maxAttachmentsSize = Math.floor(
+    positiveEnvNumber('MAX_ATTACHMENTS_SIZE_MB', 100, Number.MAX_SAFE_INTEGER / (1024 * 1024)) *
+      1024 *
+      1024,
+  );
+  if (maxAttachmentsSize < 1)
+    throw new Error('MAX_ATTACHMENTS_SIZE_MB должен задавать хотя бы 1 байт.');
   const heicJpegQualityValue = process.env.HEIC_JPEG_QUALITY?.trim();
   const heicJpegQuality = Number(heicJpegQualityValue);
   if (
@@ -226,6 +246,8 @@ export default (_, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         __API_URL__: JSON.stringify(apiUrl),
+        __CLAIM_CREATE_TIMEOUT_MS__: JSON.stringify(claimCreateTimeout),
+        __MAX_ATTACHMENTS_SIZE_BYTES__: JSON.stringify(maxAttachmentsSize),
         __HEIC_JPEG_QUALITY__: JSON.stringify(heicJpegQuality),
         __AUTH_LOGIN_URL__: JSON.stringify(authLoginUrl),
         __AUTH_RETURN_URL_ABSOLUTE__: JSON.stringify(absoluteReturnUrl),
