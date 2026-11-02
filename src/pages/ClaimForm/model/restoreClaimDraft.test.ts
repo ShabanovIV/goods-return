@@ -1,117 +1,56 @@
 import { configHelperFactory } from 'src/shared/lib/configurations';
-import {
-  getDraftKey,
-  getLegacyDraftKey,
-  getPreviousDraftKey,
-  getSwitchDraftKey,
-  isPersistedClaimDraft,
-  toPersistedClaimDraft,
-} from './claimDraft';
+import { getDraftKey, isPersistedClaimDraft, toPersistedClaimDraft } from './claimDraft';
 import { createEmptyClaimForm } from './claimFormState';
 import { restoreClaimDraft } from './restoreClaimDraft';
 
 const configuration = configHelperFactory();
-
 afterEach(async () => {
   const keys = await configuration.getConfigurationKeys();
   await Promise.all(keys.map((key) => configuration.removeConfiguration(key)));
 });
 
-test('preserves version 5 answers, current step and other data', async () => {
-  const draft = {
-    ...toPersistedClaimDraft(createEmptyClaimForm()),
-    version: 5,
-    step: 3,
+test.each([3, 4, 5, 6])(
+  'discards version %i without migrating old fingerprints',
+  async (version) => {
+    const key = 'goods-return:claim-draft:v' + version + ':document-1';
+    const draft = { ...toPersistedClaimDraft(createEmptyClaimForm()), version };
+    await configuration.setConfiguration(key, draft);
+    expect(isPersistedClaimDraft(draft)).toBe(false);
+    expect(await restoreClaimDraft('document-1')).toBeNull();
+    expect(await configuration.getConfigurationKeys()).not.toContain(key);
+    expect(await configuration.getConfigurationKeys()).not.toContain(getDraftKey('document-1'));
+  },
+);
+
+test('restores version 7 files and fingerprints and removes only older drafts of this document', async () => {
+  const file = new File(['photo'], 'photo.jpg', { type: 'image/jpeg', lastModified: 123 });
+  const state = {
+    ...createEmptyClaimForm(),
     description: 'Saved description',
-    selectedLines: { 'line-1': 2 },
-    isLeftAddress: true,
-    isOpenClient: false,
-  };
-  await configuration.setConfiguration(getSwitchDraftKey('document-1'), draft);
-  const restored = await restoreClaimDraft('document-1');
-  expect(restored).toMatchObject({
-    step: 3,
-    isLeftAddress: true,
-    isOpenClient: false,
-    description: draft.description,
-    selectedLines: draft.selectedLines,
-  });
-  expect(await configuration.getConfigurationKeys()).not.toContain(getSwitchDraftKey('document-1'));
-  expect(await restoreClaimDraft('document-1')).toEqual(restored);
-});
-
-test('still migrates a version 3 draft with attachment files', async () => {
-  const file = new File(['photo'], 'older.jpg', { type: 'image/jpeg', lastModified: 123 });
-  await configuration.setConfiguration(getLegacyDraftKey('document-1'), {
-    version: 3,
-    savedAt: new Date().toISOString(),
-    step: 2,
-    selectedLines: { 'line-1': 1 },
-    reasonId: 'reason-1',
-    clientDemandId: 'demand-1',
-    flawId: 'flaw-1',
     attachments: [
       {
-        localId: 'attachment-1',
+        localId: 'file',
         fileName: file.name,
         size: file.size,
         mimeType: file.type,
         lastModified: file.lastModified,
-        status: 'selected',
-        file,
-      },
-    ],
-  });
-
-  const restored = await restoreClaimDraft('document-1');
-
-  expect(restored).toMatchObject({
-    step: 2,
-    description: '',
-    isLeftAddress: null,
-    isOpenClient: null,
-    attachments: [{ file }],
-  });
-});
-
-test('migrates a version 4 draft with default options without losing files', async () => {
-  const file = new File(['photo'], 'legacy.jpg', { type: 'image/jpeg', lastModified: 321 });
-  const previousDraft = {
-    version: 4,
-    savedAt: new Date().toISOString(),
-    step: 2,
-    selectedLines: { 'line-1': 1 },
-    reasonId: 'reason-1',
-    clientDemandId: 'demand-1',
-    flawId: 'flaw-1',
-    description: 'Описание',
-    attachments: [
-      {
-        localId: 'attachment-1',
-        fileName: file.name,
-        size: file.size,
-        mimeType: file.type,
-        lastModified: file.lastModified,
-        status: 'selected',
+        status: 'selected' as const,
+        sourceFingerprint: 'photo.jpg:5',
         file,
       },
     ],
   };
-  await configuration.setConfiguration(getPreviousDraftKey('document-1'), previousDraft);
-
-  const restored = await restoreClaimDraft('document-1');
-
-  expect(restored).toMatchObject({
-    step: 2,
-    description: 'Описание',
-    isLeftAddress: null,
-    isOpenClient: null,
-    attachments: [{ file }],
-  });
-  expect(
-    await configuration.getConfiguration(getDraftKey('document-1'), null, isPersistedClaimDraft),
-  ).toMatchObject({ version: 6, attachments: [{ file }] });
+  const draft = toPersistedClaimDraft(state);
+  expect(draft.version).toBe(7);
+  expect(getDraftKey('document-1')).toBe('goods-return:claim-draft:v7:document-1');
+  await configuration.setConfiguration(getDraftKey('document-1'), draft);
+  await configuration.setConfiguration('goods-return:claim-draft:v6:document-1', {});
+  await configuration.setConfiguration('goods-return:claim-draft:v6:document-2', {});
+  expect(await restoreClaimDraft('document-1')).toEqual(state);
   expect(await configuration.getConfigurationKeys()).not.toContain(
-    getPreviousDraftKey('document-1'),
+    'goods-return:claim-draft:v6:document-1',
+  );
+  expect(await configuration.getConfigurationKeys()).toContain(
+    'goods-return:claim-draft:v6:document-2',
   );
 });

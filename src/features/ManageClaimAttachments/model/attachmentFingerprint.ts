@@ -1,10 +1,8 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
 
-export const getFileFingerprint = (file: Pick<File, 'lastModified' | 'name' | 'size'>) =>
-  `${file.name}:${file.size}:${file.lastModified}`;
+export const getFileFingerprint = (file: Pick<File, 'name' | 'size'>) =>
+  `${file.name}:${file.size}`;
 
 export const getAttachmentFingerprint = (
-  attachment: Pick<ClaimAttachment, 'fileName' | 'lastModified' | 'size' | 'sourceFingerprint'>,
-) =>
-  attachment.sourceFingerprint ??
-  `${attachment.fileName}:${attachment.size}:${attachment.lastModified}`;
+  attachment: Pick<ClaimAttachment, 'fileName' | 'size' | 'sourceFingerprint'>,
+) => attachment.sourceFingerprint ?? `${attachment.fileName}:${attachment.size}`;

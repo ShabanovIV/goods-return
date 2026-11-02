@@ -15,7 +15,7 @@ export type ClaimFormState = {
 };
 
 export type PersistedClaimDraft = {
-  version: 6;
+  version: 7;
   savedAt: string;
   step: ClaimStep;
   selectedLines: Record<string, number>;
@@ -26,17 +26,4 @@ export type PersistedClaimDraft = {
   isLeftAddress: boolean | null;
   isOpenClient: boolean | null;
   attachments: ClaimAttachment[];
-};
-
-export type PreviousPersistedClaimDraft = Omit<
-  PersistedClaimDraft,
-  'isLeftAddress' | 'isOpenClient' | 'version'
-> &
-  ({ version: 4 } | { version: 5; isLeftAddress: boolean; isOpenClient: boolean });
-
-export type LegacyPersistedClaimDraft = Omit<
-  PreviousPersistedClaimDraft,
-  'description' | 'version'
-> & {
-  version: 3;
 };
