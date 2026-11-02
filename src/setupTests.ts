@@ -27,6 +27,7 @@ Object.assign(globalThis, { TextDecoder, TextEncoder });
 Object.assign(globalThis, { structuredClone: cloneForIndexedDb });
 Object.assign(globalThis, {
   __API_URL__: '/',
+  __SHOW_API_ERROR_DETAILS__: false,
   __CLAIM_CREATE_TIMEOUT_MS__: 120000,
   __MAX_ATTACHMENTS_SIZE_BYTES__: 100 * 1024 * 1024,
   __AUTH_LOGIN_URL__: undefined,

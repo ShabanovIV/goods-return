@@ -17,7 +17,7 @@ export const ErrorMessage = ({ notice }: { notice: ErrorNotice | string }) => {
     <div className={styles.message}>
       <strong>{titles[value.source]}</strong>
       <div>{value.message}</div>
-      {value.details && (
+      {(value.source !== 'api' || __SHOW_API_ERROR_DETAILS__) && value.details && (
         <details>
           <summary>Технические подробности</summary>
           <pre>{value.details}</pre>

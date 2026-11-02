@@ -28,6 +28,11 @@ if (dotenvError && dotenvError.code !== 'ENOENT') {
 
 export default (_, argv) => {
   const isProd = argv.mode === 'production';
+  const showApiErrorDetailsValue = process.env.SHOW_API_ERROR_DETAILS?.trim().toLowerCase();
+  if (showApiErrorDetailsValue && !['true', 'false'].includes(showApiErrorDetailsValue)) {
+    throw new Error('SHOW_API_ERROR_DETAILS должен быть true или false.');
+  }
+  const showApiErrorDetails = showApiErrorDetailsValue === 'true';
   const claimCreateTimeout = positiveEnvNumber('CLAIM_CREATE_TIMEOUT_MS', 120000, 2147483647);
   if (!Number.isInteger(claimCreateTimeout)) {
     throw new Error('CLAIM_CREATE_TIMEOUT_MS должен быть целым числом миллисекунд.');
@@ -246,6 +251,7 @@ export default (_, argv) => {
     plugins: [
       new webpack.DefinePlugin({
         __API_URL__: JSON.stringify(apiUrl),
+        __SHOW_API_ERROR_DETAILS__: JSON.stringify(showApiErrorDetails),
         __CLAIM_CREATE_TIMEOUT_MS__: JSON.stringify(claimCreateTimeout),
         __MAX_ATTACHMENTS_SIZE_BYTES__: JSON.stringify(maxAttachmentsSize),
         __HEIC_JPEG_QUALITY__: JSON.stringify(heicJpegQuality),

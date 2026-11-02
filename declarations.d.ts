@@ -1,4 +1,5 @@
 declare const __API_URL__: string;
+declare const __SHOW_API_ERROR_DETAILS__: boolean;
 declare const __CLAIM_CREATE_TIMEOUT_MS__: number;
 declare const __MAX_ATTACHMENTS_SIZE_BYTES__: number;
 declare const __HEIC_JPEG_QUALITY__: number;
