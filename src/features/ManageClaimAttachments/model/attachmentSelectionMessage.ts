@@ -22,7 +22,7 @@ export const getAttachmentSelectionMessage = (
     duplicates.length
       ? duplicates.length === 1
         ? `Файл ${duplicates[0]} уже добавлен.`
-        : `Уже добавлены: ${duplicates.join(', ')}.`
+        : `Добавлены ранее: ${duplicates.join(', ')}.`
       : '',
     invalid.length
       ? invalid.length === 1
@@ -30,12 +30,11 @@ export const getAttachmentSelectionMessage = (
         : `Не соответствуют типу «${typeName}»: ${invalid.join(', ')}.`
       : '',
     oversized.length ? `Не помещаются в общий лимит ${limit}: ${oversized.join(', ')}.` : '',
-    oversized.length
-      ? 'Чтобы добавить эти файлы, удалите часть вложений или выберите файлы меньшего размера.'
-      : '',
   ].filter(Boolean);
   if (rejected.length > 1) {
-    messages.unshift(addedCount ? 'Некоторые файлы не добавлены.' : 'Файлы не добавлены.');
+    messages.unshift(
+      addedCount ? 'Некоторые файлы не прикреплены.' : 'Выбранные файлы не прикреплены.',
+    );
   }
   return messages.join('\n');
 };

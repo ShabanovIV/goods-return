@@ -25,7 +25,7 @@ beforeEach(() => {
 });
 afterEach(() => jest.restoreAllMocks());
 
-test('validates once and groups every rejection reason without repeating size advice', () => {
+test('validates once and groups every rejection reason without size advice', () => {
   const { result } = renderHook(useClaimFormState);
   const files = [
     photo('same.jpg', __MAX_ATTACHMENTS_SIZE_BYTES__),
@@ -47,7 +47,7 @@ test('validates once and groups every rejection reason without repeating size ad
   ]);
   expect(result.current.pageError).toMatchObject({
     origin: 'attachmentSelection',
-    message: expect.stringContaining('Некоторые файлы не добавлены.'),
+    message: expect.stringContaining('Некоторые файлы не прикреплены.'),
   });
   const notice = result.current.pageError;
   if (typeof notice === 'string') throw new Error('Expected selection notice');
@@ -55,7 +55,7 @@ test('validates once and groups every rejection reason without repeating size ad
     expect(notice.message).toContain(name);
   }
   expect(notice.message.match(/общий лимит/g)).toHaveLength(1);
-  expect(notice.message.match(/удалите часть/g)).toHaveLength(1);
+  expect(notice.message).not.toContain('удалите часть');
 });
 
 test('matches reads by index when names repeat and keeps a later smaller file', async () => {
