@@ -3,6 +3,7 @@ export type ErrorNotice = {
   source: 'api' | 'request' | 'form';
   message: string;
   details?: string;
+  origin?: 'attachmentSelection';
 };
 const titles = {
   api: 'Ответ сервиса',

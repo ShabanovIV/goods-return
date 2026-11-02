@@ -1,6 +1,10 @@
 import type { AttachmentType, ClaimAttachment } from 'src/entities/Claim';
-import { exceedsAttachmentsLimit, getAttachmentsLimitMessage } from 'src/shared/lib/attachmentSize';
+import { exceedsAttachmentsLimit } from 'src/shared/lib/attachmentSize';
 import { getAttachmentFingerprint, getFileFingerprint } from './attachmentFingerprint';
+import {
+  getAttachmentSelectionMessage,
+  type RejectedAttachment,
+} from './attachmentSelectionMessage';
 import { getAttachmentMediaType, isFileAllowed } from '../lib/attachmentMedia';
 
 type AddSelectedFilesArguments = {
@@ -11,26 +15,26 @@ type AddSelectedFilesArguments = {
 
 type AddSelectedFilesResult = {
   attachments: ClaimAttachment[];
+  added: { inputIndex: number; attachment: ClaimAttachment }[];
+  rejected: RejectedAttachment[];
   error?: string;
 };
 
 const createLocalId = () => crypto.randomUUID?.() ?? `file-${Date.now()}-${Math.random()}`;
 
-export const addSelectedFiles = ({
+export const prepareSelectedAttachments = ({
   attachments,
   files,
   attachmentType,
 }: AddSelectedFilesArguments): AddSelectedFilesResult => {
-  const processedFingerprints = new Set<string>();
   const nextAttachments = [...attachments];
-  const duplicateNames: string[] = [];
-  const invalidNames: string[] = [];
-  const oversizedNames: string[] = [];
+  const added: AddSelectedFilesResult['added'] = [];
+  const rejected: RejectedAttachment[] = [];
   const mediaType = attachmentType ? getAttachmentMediaType(attachmentType) : 'file';
 
-  files.forEach((file) => {
+  files.forEach((file, inputIndex) => {
     if (!isFileAllowed(file, mediaType)) {
-      invalidNames.push(file.name);
+      rejected.push({ inputIndex, fileName: file.name, reason: 'invalidType' });
       return;
     }
 
@@ -39,13 +43,13 @@ export const addSelectedFiles = ({
       (attachment) => getAttachmentFingerprint(attachment) === fingerprint,
     );
 
-    if (existing || processedFingerprints.has(fingerprint)) {
-      duplicateNames.push(file.name);
+    if (existing) {
+      rejected.push({ inputIndex, fileName: file.name, reason: 'duplicate' });
       return;
     }
 
     if (exceedsAttachmentsLimit([...nextAttachments, { size: file.size }])) {
-      oversizedNames.push(file.name);
+      rejected.push({ inputIndex, fileName: file.name, reason: 'sizeLimit' });
       return;
     }
 
@@ -63,21 +67,15 @@ export const addSelectedFiles = ({
       file,
     };
 
-    processedFingerprints.add(fingerprint);
+    added.push({ inputIndex, attachment });
     nextAttachments.push(attachment);
   });
 
   return {
     attachments: nextAttachments,
-    error: oversizedNames.length
-      ? `Не добавлены файлы: ${oversizedNames.join(', ')}. ${getAttachmentsLimitMessage()}`
-      : invalidNames.length
-        ? `Файл «${invalidNames[invalidNames.length - 1]}» не соответствует типу «${
-            attachmentType?.name ?? 'Файл'
-          }».`
-        : duplicateNames.length
-          ? `Файл «${duplicateNames[duplicateNames.length - 1]}» уже добавлен.`
-          : undefined,
+    added,
+    rejected,
+    error: getAttachmentSelectionMessage(rejected, added.length, attachmentType?.name),
   };
 };
 

@@ -1,12 +1,12 @@
 import type { ClaimAttachment } from 'src/entities/Claim';
-import { addSelectedFiles, removeAttachment } from './updateAttachments';
+import { prepareSelectedAttachments, removeAttachment } from './updateAttachments';
 
 test('adds selected files with attachment type metadata', () => {
   const file = new File(['photo'], 'damage.jpg', {
     type: 'image/jpeg',
     lastModified: 123,
   });
-  const result = addSelectedFiles({
+  const result = prepareSelectedAttachments({
     attachments: [],
     files: [file],
     attachmentType: {
@@ -43,7 +43,7 @@ test('rejects the same physical file for another type and removes it locally', (
     type: 'image/jpeg',
     lastModified: 123,
   });
-  const result = addSelectedFiles({
+  const result = prepareSelectedAttachments({
     attachments: [existing],
     files: [file],
     attachmentType: {
@@ -63,7 +63,7 @@ test('rejects the same physical file for another type and removes it locally', (
 
 test('rejects an image selected for a video attachment type', () => {
   const file = new File(['photo'], 'damage.jpg', { type: 'image/jpeg' });
-  const result = addSelectedFiles({
+  const result = prepareSelectedAttachments({
     attachments: [],
     files: [file],
     attachmentType: {
@@ -81,7 +81,7 @@ test('rejects an image selected for a video attachment type', () => {
 
 test('accepts a video selected for a video attachment type', () => {
   const file = new File(['video'], 'damage.mp4', { type: 'video/mp4' });
-  const result = addSelectedFiles({
+  const result = prepareSelectedAttachments({
     attachments: [],
     files: [file],
     attachmentType: {

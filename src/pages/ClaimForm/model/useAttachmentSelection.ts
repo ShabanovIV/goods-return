@@ -35,30 +35,32 @@ export const useAttachmentSelection = (
   }, []);
 
   return (files: readonly File[], attachmentType?: AttachmentType) => {
-    const errors = new Set<string>();
+    if (!files.length) return;
     // Start the entire batch before inspecting metadata of any selected file.
     const pending = files.map((file) => {
       const controller = new AbortController();
       const reading = readAttachmentFile(file, controller.signal);
       return { file, controller, reading };
     });
-    for (const { file, controller, reading } of pending) {
-      const result = addSelectedFiles({
-        attachments: attachments.current,
-        files: [file],
-        attachmentType,
-      });
-      if (result.error) errors.add(result.error);
-      if (result.attachments.length === attachments.current.length) {
-        controller.abort();
-        void reading.catch(() => {});
-        continue;
-      }
-      const added = { ...result.attachments[result.attachments.length - 1], file: undefined };
-      // Reserve space synchronously, including selections made before React commits the state.
-      attachments.current = [...attachments.current, added];
+    const result = addSelectedFiles({ attachments: attachments.current, files, attachmentType });
+    const accepted = result.added.map(({ inputIndex, attachment }) => ({
+      inputIndex,
+      attachment: { ...attachment, file: undefined },
+    }));
+    // Reserve the whole batch before React commits, including rapid subsequent selections.
+    if (accepted.length) {
+      const added = accepted.map((item) => item.attachment);
+      attachments.current = [...attachments.current, ...added];
+      setFormState((current) => ({ ...current, attachments: [...current.attachments, ...added] }));
+    }
+    for (const { inputIndex } of result.rejected) {
+      const { controller, reading } = pending[inputIndex];
+      controller.abort();
+      void reading.catch(() => {});
+    }
+    for (const { inputIndex, attachment: added } of accepted) {
+      const { controller, reading } = pending[inputIndex];
       reads.current.set(added.localId, controller);
-      setFormState((current) => ({ ...current, attachments: [...current.attachments, added] }));
 
       void reading
         .then(
@@ -99,6 +101,6 @@ export const useAttachmentSelection = (
         )
         .finally(() => reads.current.delete(added.localId));
     }
-    if (errors.size) setError([...errors].join(' '));
+    setError(result.error ?? '');
   };
 };

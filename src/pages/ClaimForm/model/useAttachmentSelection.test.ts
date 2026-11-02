@@ -34,7 +34,9 @@ test('starts reading before metadata and reserves the global limit across select
     status: 'processing',
     file: undefined,
   });
-  expect(result.current.pageError).toContain('Общий размер');
+  expect(result.current.pageError).toMatchObject({
+    message: expect.stringContaining('общий лимит'),
+  });
   expect(read.mock.calls[1][1].aborted).toBe(true);
   expect(read.mock.calls[0][1].aborted).toBe(false);
   unmount();

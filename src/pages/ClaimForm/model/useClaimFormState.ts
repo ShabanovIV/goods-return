@@ -31,7 +31,16 @@ export const useClaimFormState = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const addFiles = useAttachmentSelection(formState, setFormState, setPageError);
+  const setSelectionError = (message: string) => {
+    if (message) {
+      setPageError({ source: 'form', origin: 'attachmentSelection', message });
+    } else {
+      setPageErrorValue((current) =>
+        typeof current !== 'string' && current.origin === 'attachmentSelection' ? '' : current,
+      );
+    }
+  };
+  const addFiles = useAttachmentSelection(formState, setFormState, setSelectionError);
 
   const removeFile = (localId: string) => {
     setFormState((current) => ({
